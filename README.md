@@ -1,3 +1,3 @@
-# miloib
+# Milolib
 
-Site pour MDEF
+App Milolib pour la MDEF
