@@ -1,11 +1,28 @@
-Login System with JWT and NodeJS
+ROUTES POSTMAN:
 
-Make sure that you mongodb is running in your system
-(systemctl start mongod.service)
+POST http://localhost:1407/auth/login
+  ->get a token
 
-'npm install'
-'cp env-example .env'
+        body: email
+        password
+        
+POST http://localhost:1407/auth/register
+  ->register a new user
 
-You have to use Postman as a Front end
+        body: email
+        password
 
-'npm start' to lauch the app
+-- Below routes require
+
+        header: Authorization: token
+
+GET http://localhost:1407/users
+  ->get the list of all users
+
+
+GET http://localhost:1407/messages
+  ->get the list of your messages
+
+
+
+DON'T FORGET TO DO: 'cp env-example .env'

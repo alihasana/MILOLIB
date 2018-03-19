@@ -19,7 +19,6 @@ dotEnv.config()
 //  Routes imports
 import auth from './routes/auth/auth'
 import users from './routes/users/users'
-import messages from './routes/messages/messages'
 
 // APP INIT
 let app = express();
@@ -86,7 +85,7 @@ let verifyToken = (req, res, next) => {
       else {
         // le req.anas est un rajout pour avoir acces au token décodé sur d'autres routes
         // une fois qu'on a passé cette étape de verification
-        req.anas = decode
+        req.milo = decode
         next()
       }
     });
@@ -104,7 +103,6 @@ app.use(verifyToken)
 // Voici nos routes qui necessitent un token pour être accessibles.
 // la route /users aura comme prefix /users et renvoi vers la routes du router 'users' importé au début.
 app.use('/users', users)
-app.use('/messages', messages)
 
 // Fin des routes, on renvoi un 404 not found pour tout le reste
 app.use('/*', (req, res) => {

@@ -10,6 +10,7 @@ let UserSchema = new mongoose.Schema({
     lowercase: true
   },
   hash_password: { type: String, required: true },
+  role: { type: String, required: true},
   created: { type: Date, default: Date.now },
   last_updated: { type: Date, default:Date.now }
 });
