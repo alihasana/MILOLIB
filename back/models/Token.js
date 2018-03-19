@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
 
 let TokenSchema = new mongoose.Schema({
   token: {

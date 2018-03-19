@@ -1,0 +1,4 @@
+PORT=1407
+SECRETKEY=secretanas
+AUTHBEARER=Bearanas
+MONGOURL=mongodb://localhost:27017/login_messages
