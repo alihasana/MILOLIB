@@ -16,7 +16,7 @@ auth.post('/login', (req, res) => {
     // On appelle le model USER defini dans mongoose et importé plus haut
     // avec la methode findOne qui cherche un objet avec la propriété 'email' correspondant à notre requete
     // cette methode renvoi le premier utilisateur trouvé ou rien
-    User.findOne({ email: req.body.email }, function (err, user) {
+    User.findOne({ email: rer.body.email }, function (err, user) {
       if (err) res.status(500).json({success: false, message: err.message})
       if (!user) {
         res.status(401).json({success: false, message: 'Authentication failed. User not found..' })
