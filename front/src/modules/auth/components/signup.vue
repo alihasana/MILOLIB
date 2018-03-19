@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form>
+    <form v-on:submit.prevent>
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
           <h1>{{ title }}</h1>
@@ -59,7 +59,7 @@ export default {
     },
     post: function() {
       this.$http
-        .post("http://localhost:8000/auth/signup", {
+        .post("auth/signup", {
           username: this.user.username,
           password: this.user.password,
           firstName: this.user.firstName,

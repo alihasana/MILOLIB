@@ -8,14 +8,14 @@
 /* eslint-disable */
 
 export default {
-  name: "availabilitySetting",
-  data() {
-    return {
-      msg: "availabilitySetting Vue"
-    };
-  },
-  components: {},
-  methods: {}
+	name: "availabilitySetting",
+	data() {
+		return {
+			msg: "availabilitySetting Vue"
+		};
+	},
+	components: {},
+	methods: {}
 };
 </script>
 

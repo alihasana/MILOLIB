@@ -1,17 +1,16 @@
 <template>
-	<div>
-		<h1>{{ msg }}</h1>
-		<datePicker></datePicker>
-		<availabilitySetting></availabilitySetting>
+  <div>
+    <h1>{{ msg }}</h1>
+    <datePicker></datePicker>
+    <availabilitySetting></availabilitySetting>
 
-	</div>
+  </div>
 </template>
 
 <script>
 /* eslint-disable */
-import availabilitySetting from './components/availabilitySetting';
-import datePicker from './components/datePicker';
-
+import availabilitySetting from "./components/availabilitySetting";
+import datePicker from "./components/datePicker";
 
 export default {
   name: "calendar",
@@ -21,8 +20,8 @@ export default {
     };
   },
   components: {
-  	availabilitySetting,
-  	datePicker
+    availabilitySetting,
+    datePicker
   },
   methods: {}
 };

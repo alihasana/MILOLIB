@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <form >
+    <form v-on:submit.prevent>
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 
@@ -41,14 +41,13 @@ export default {
     },
     post: function() {
       this.$http
-        .post("http://localhost:8000/auth/login", {
+        .post("auth/login", {
           username: this.user.username,
           password: this.user.password
         })
-        .then(function(data) {
-          let token = data.body.content.token;
+        .then(function(res) {
+          let token = res.data.content.token;
           localStorage.setItem("Clef", token);
-          console.log(token);
           if (token) this.$router.push("/home");
           else this.$router.go("/");
         });

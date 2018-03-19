@@ -12,13 +12,16 @@ import auth from "@/modules/auth/auth";
 import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
+import calendar from "@/modules/calendar/calendar";
+
 export default {
   name: "App",
   components: {
     auth,
     dashboard,
     listUser,
-    profileUser
+    profileUser,
+    calendar
   }
 };
 </script>

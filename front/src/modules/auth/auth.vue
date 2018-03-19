@@ -22,12 +22,7 @@ export default {
     signup,
     login
   },
-  methods: {
-    functionDEmerde: function() {
-      console.log("loginStatus");
-      loginStatus = false;
-    }
-  }
+  methods: {}
 };
 </script>
 
