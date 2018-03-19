@@ -5,6 +5,7 @@ import auth from "@/modules/auth/auth";
 import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
+import calendar from "@/modules/calendar/calendar";
 
 Vue.use(Router);
 
@@ -29,6 +30,12 @@ export default new Router({
 			path: "/profileUser",
 			name: "profileUser",
 			component: profileUser
-		}
+		},
+		{
+			path: "/calendar",
+			name: "calendar",
+			component: calendar
+		},
+
 	]
 });
