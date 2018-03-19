@@ -20,9 +20,6 @@ GET http://localhost:1407/users
   ->get the list of all users
 
 
-GET http://localhost:1407/messages
-  ->get the list of your messages
-
 
 
 DON'T FORGET TO DO: 'cp env-example .env'

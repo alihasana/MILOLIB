@@ -85,7 +85,7 @@ let verifyToken = (req, res, next) => {
       else {
         // le req.anas est un rajout pour avoir acces au token décodé sur d'autres routes
         // une fois qu'on a passé cette étape de verification
-        req.milo = decode
+        req.milo = decode;
         next()
       }
     });
