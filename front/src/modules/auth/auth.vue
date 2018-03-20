@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
   <login  v-on:switching="loginStatus = !loginStatus" v-if="loginStatus"/>
   <signup v-on:switching="loginStatus = !loginStatus" v-else/>
   </div>

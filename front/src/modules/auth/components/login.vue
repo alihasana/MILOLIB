@@ -14,8 +14,8 @@
         <label for="password">Password</label>
         <input v-model="user.password" id="password" class="form-control" name="password" type="password" placeholder="Enter your password" required>
         </div>
-        <button class="btn btn-lg btn-primary" v-on:click="post">Login</button>
-        <button class="btn btn-lg btn-primary" v-on:click="switching">Signup</button>
+        <button class="btn btn-lg btn-primary" v-on:click="send">Login</button>
+        <!-- <button class="btn btn-lg btn-primary" v-on:click="switching">Signup</button> -->
         </div>
       </div>
     </form>
@@ -39,7 +39,7 @@ export default {
     switching() {
       this.$emit("switching");
     },
-    post: function() {
+    send() {
       this.$http
         .post("auth/login", {
           username: this.user.username,
@@ -47,8 +47,8 @@ export default {
         })
         .then(function(res) {
           let token = res.data.content.token;
-          localStorage.setItem("Clef", token);
-          if (token) this.$router.push("/home");
+          localStorage.setItem("token", token);
+          if (token) this.$router.push("/dashboard");
           else this.$router.go("/");
         });
     }

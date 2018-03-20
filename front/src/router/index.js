@@ -6,6 +6,7 @@ import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
+import example from "@/sharedComponents/example";
 
 Vue.use(Router);
 
@@ -36,6 +37,10 @@ export default new Router({
 			name: "calendar",
 			component: calendar
 		},
-
+		{
+			path: "/example",
+			name: "example",
+			component: example
+		}
 	]
 });

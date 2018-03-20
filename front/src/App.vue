@@ -11,6 +11,7 @@ import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
+import example from "@/sharedComponents/example";
 
 export default {
   name: "App",
@@ -19,7 +20,8 @@ export default {
     dashboard,
     listUser,
     profileUser,
-    calendar
+    calendar,
+    example
   }
 };
 </script>
