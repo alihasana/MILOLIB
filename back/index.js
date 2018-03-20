@@ -112,4 +112,19 @@ app.use('/*', (req, res) => {
 // LAUNCHING SERVER TO THE MOON
 // On défini un port depuis le fichier de config .env  sinon si la variable n'existe pas on utilise le port 8080
 let port = process.env.PORT || 1407;
+
+// Joue un son quand l'app crash
+process.on('uncaughtException', err => {
+    console.log('\u0007');
+    console.error(err, 'Uncaught Exception thrown');
+    process.exit(1);
+  })
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log('\u0007');
+    console.error(err, 'Unhandled Exception thrown');
+    res.status(500).json({success: false, message: 'An unexpected error occured..'})
+  }
+})
+
 app.listen(port, () => console.log('App listen on port: ' + port + ' ...'))

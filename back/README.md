@@ -1,16 +1,22 @@
 ROUTES POSTMAN:
 
+      RESPONSE FORMAT:
+        success: Boolean (true or false),
+        message: String,
+        content (optional): direct content or object with different keys
+
 POST http://localhost:1407/auth/login
   ->get a token
 
-        body:
+      body:
         email
         password
         
 
 -- Below routes require
 
-        header: Authorization: token
+        header:
+          Authorization: token
 
 GET http://localhost:1407/users
   ->get the list of all users
@@ -18,7 +24,7 @@ GET http://localhost:1407/users
 POST http://localhost:1407/users
   ->register a new user
 
-        body:
+      body:
         email
         password
 
@@ -28,7 +34,7 @@ GET http://localhost:1407/users/self
 PATCH http://localhost:1407/users/self
   ->update your own profile
 
-        body:
+      body:
         email
         password
         ++etc...
@@ -40,7 +46,7 @@ GET http://localhost:1407/users/:id
 PATCH http://localhost:1407/users/:id
   ->update a user profile with his id (admin)
 
-        body:
+      body:
         email
         password
         ++etc...
@@ -49,3 +55,5 @@ DELETE http://localhost:1407/users/:id
   ->delete a user (admin)
 
 DON'T FORGET TO DO: 'cp env-example .env'
+ALSO 'node seeder/admin.babel.js' to create the first admin,
+  which credentials are admin:admin
