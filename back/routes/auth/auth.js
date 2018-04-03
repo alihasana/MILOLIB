@@ -11,8 +11,7 @@ let router = express.Router()
 router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
     User.findOne({ email: req.body.email }, function (err, user) {
-    console.log("One",req.body.email )
-    console.log("Two",req.body.password )
+    // console.log("Two ",err.message )
       if (err) res.status(500).json({ success: false, message: err.message })
       if (!user) {
         res.status(401).json({ success: false, message: 'User not found.' })
@@ -36,24 +35,24 @@ router.post('/login', (req, res) => {
   }
 })
 
-// router.post('/signup', (req, res) => {
-//   if (req.body.email && req.body.password) {
-//     if (helper.regexEmail.test(req.body.email)) {
-//       User.findOne({ email: helper.caseInsensitive(req.body.email) }, function (err, result) {
-//         if (result === null) {
-//           let newUser = new User(req.body)
-//           newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
-//           newUser.save(function (err, user) {
-//             if (err) res.status(500).json({ success: false, message: err.message })
-//             else {
-//               helper.beforeSendUser(user)
-//               res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
-//             }
-//           })
-//         } else res.status(412).json({ success: false, message: 'email already used.' })
-//       })
-//     } else res.status(412).json({ success: false, message: 'Email required.' })
-//   } else res.status(412).json({ success: false, message: 'Email and/or password are missing.' })
-// })
+router.post('/signup', (req, res) => {
+  if (req.body.email && req.body.password) {
+    if (helper.regexEmail.test(req.body.email)) {
+      User.findOne({ email: helper.caseInsensitive(req.body.email) }, function (err, result) {
+        if (result === null) {
+          let newUser = new User(req.body)
+          newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
+          newUser.save(function (err, user) {
+            if (err) res.status(500).json({ success: false, message: err.message })
+            else {
+              helper.beforeSendUser(user)
+              res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+            }
+          })
+        } else res.status(412).json({ success: false, message: 'email already used.' })
+      })
+    } else res.status(412).json({ success: false, message: 'Email required.' })
+  } else res.status(412).json({ success: false, message: 'Email and/or password are missing.' })
+})
 
 export default router
