@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Vue from "vue";
 import Router from "vue-router";
-import auth from "@/modules/auth/auth";
+import Login from "@/modules/auth/Login";
 import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
@@ -14,8 +14,8 @@ export default new Router({
 	routes: [
 		{
 			path: "/",
-			name: "auth",
-			component: auth
+			name: "login",
+			component: Login
 		},
 		{
 			path: "/dashboard",
