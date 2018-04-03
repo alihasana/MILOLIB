@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt'
 import dotEnv from 'dotenv'
 dotEnv.config()
 
-mongoose.connect(process.env.MONGOURL, {}, function (err) {
+mongoose.connect(process.env.DB, {}, function (err) {
     if (err) { throw err; } else {
-        console.log('Connection to the Database etablished (' + process.env.MONGOURL + ')...');
+        console.log('Connection to the Database etablished (' + process.env.DB + ')...');
     }
 })
 
@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGOURL, {}, function (err) {
 let admins = [
     new User({
         email: 'admin',
-        hash_password: bcrypt.hashSync('admin', 10),
+        hashPassword: bcrypt.hashSync('admin', 10),
         role: 'admin'  
     })
 ];

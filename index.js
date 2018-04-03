@@ -2,6 +2,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 // DotEnv permet d'utiliser un fichier de config .env (à la racine)
@@ -16,6 +17,8 @@ dotEnv.config()
 //  Routes Imports
 import auth from './routes/auth/auth'
 import users from './routes/users/users'
+import messages from './routes/messages/messages'
+import products from './routes/products/products'
 import profile from './routes/profile/profile'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
@@ -44,6 +47,7 @@ app.use(function (req, res, next) {
     next();
   }
 })
+// app.use(cors())
 
 // BODY PARSER
 app.use(bodyParser.urlencoded({
@@ -63,9 +67,12 @@ router.use(verifyToken)
 
 // Protected routes
 router.use('/users', users)
+router.use('/messages', messages)
+router.use('/products', products)
 router.use('/profile', profile)
 
-app.use(router)
+// ROUTER PREFIX API USED BY APP
+app.use('/api', router)
 
 // Fin des routes, on renvoi un 404 not found pour tout le reste
 app.use('/*', (req, res) => {
@@ -75,7 +82,7 @@ app.use('/*', (req, res) => {
 
 // MONGOOSE MONGODB CONNECT
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.DB, {}, function (err) {
+mongoose.connect(process.env.MONGOURL, {}, function (err) {
   if (err) { throw err; }
   else {
     console.log('Connection to the Database etablished...')
