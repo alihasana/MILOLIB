@@ -1,4 +1,0 @@
-PORT=1407
-SECRETKEY=secretmilo
-AUTHBEARER=MILO
-MONGOURL=mongodb://localhost:27017/milolib

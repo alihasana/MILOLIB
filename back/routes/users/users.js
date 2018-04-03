@@ -21,7 +21,7 @@ users.get('/', (req, res) => {
   })
 })
 
-// Route pour nregister un utilisateur
+// Route pour enregister un utilisateur
 users.post('/', (req, res) => {
   if (req.milo && req.milo.role == 'admin') {
     if (req.body.email && req.body.password && req.body.role) {
