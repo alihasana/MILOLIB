@@ -37,19 +37,19 @@ export default {
         });
     },
     sendMessages(idToSendTo) {
-      this.$router
-        .push({
-          name: "sendMessages",
-          params: { userID: idToSendTo }
-        })
-        .catch(error => {
-          if (error)
-            swal({
-              type: "error",
-              title: "Oh no ...",
-              text: error.response.data.message
-            });
-        });
+      // this.$router
+      //   .push({
+      //     name: "sendMessages",
+      //     params: { userID: idToSendTo }
+      //   })
+        // .catch(error => {
+        //   if (error)
+        //     swal({
+        //       type: "error",
+        //       title: "Oh no ...",
+        //       text: error.response.data.message
+        //     });
+        // });
     }
   },
   beforeMount() {
