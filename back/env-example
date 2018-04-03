@@ -1,0 +1,4 @@
+PORT=yourport
+DB=mongodb://localhost:27017/milolib
+SECRETKEY=cuillere
+AUTHBEARER=Bearmilolib

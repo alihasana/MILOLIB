@@ -3,7 +3,6 @@
     <h1>{{ msg }}</h1>
     <datePicker></datePicker>
     <availabilitySetting></availabilitySetting>
-
   </div>
 </template>
 

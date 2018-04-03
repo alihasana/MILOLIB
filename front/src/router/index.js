@@ -1,9 +1,11 @@
 /* eslint-disable */
 import Vue from "vue";
 import Router from "vue-router";
-import auth from "@/modules/auth/auth";
+import Login from "@/modules/auth/Login";
 import dashboard from "@/modules/dashboard/dashboard";
-import listUser from "@/modules/listUser/listUser";
+import Users from "@/modules/users/Users";
+import UserList from "@/modules/users/components/UserList";
+import UserDetail from "@/modules/users/components/UserDetail";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
@@ -14,8 +16,8 @@ export default new Router({
 	routes: [
 		{
 			path: "/",
-			name: "auth",
-			component: auth
+			name: "login",
+			component: Login
 		},
 		{
 			path: "/dashboard",
@@ -23,9 +25,21 @@ export default new Router({
 			component: dashboard
 		},
 		{
-			path: "/listUser",
-			name: "listUser",
-			component: listUser
+			path: "/users",
+			name: "users",
+			component: Users,
+			children: [
+				{
+					path: "",
+					name: "userList",
+					component: UserList
+				},
+				{
+					path: ":id",
+					name: "userDetail",
+					component: UserDetail
+				}
+			]
 		},
 		{
 			path: "/profileUser",
