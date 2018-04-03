@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import helper from './../../helpers/helper';
+import helper from './../../helpers/helper'
 import User from './../users/model'
 
 let router = express.Router()

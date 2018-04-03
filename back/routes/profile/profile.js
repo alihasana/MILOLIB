@@ -2,10 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import User from './../users/model'
-import helper from '../../helpers/helper';
-const ObjectId = mongoose.Types.ObjectId;
+import helper from '../../helpers/helper'
+const ObjectId = mongoose.Types.ObjectId
 
-let router = express.Router();
+let router = express.Router()
 
 router.get('/', (req, res) => {
   helper.beforeSendUser(res.locals.user)

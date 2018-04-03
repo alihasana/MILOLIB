@@ -21,7 +21,7 @@ import profile from './routes/profile/profile'
 import verifyToken from './middlewares/verifyToken'
 
 // APP INIT
-let app = express();
+let app = express()
 
 // Morgan
 // A partir d'ici, toute les routes utilisent le middleware morgan
@@ -37,8 +37,8 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
   res.header('Access-Control-Max-Age', '86400')
   // intercept OPTIONS method
-  if ('OPTIONS' == req.method) res.sendStatus(200);
-  else next();
+  if ('OPTIONS' == req.method) res.sendStatus(200)
+  else next()
 })
 
 // BODY PARSER
@@ -77,7 +77,7 @@ mongoose.connect(process.env.DB, {}, function (err) {
     console.log('Connection to the Database etablished...')
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
-    let port = process.env.PORT || 1407;
+    let port = process.env.PORT || 1407
     app.listen(port, () => console.log('App listen on port: ' + port))
   }
 })
