@@ -1,26 +1,70 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <dashHeader style="border: thick solid black; background-color: purple;"/>
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark"> <!-- navbar-expand-sm définit à partir de quand les liens seront remplacés par le toggle -->
+      <div class="row">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">MILOLIB</a>
+        <!-- <button type="button" class="btn btn-link navbar-brand navbar-toggle" data-toggle="collapse" data-target="#aside">Dashboard</button> -->
+
+        <!-- Toggler/collapsibe Button -->
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header">
+          <span class="navbar-toggler-icon"></span>
+        </button> -->
+        
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="header">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><span><i class="far fa-address-book"></i></span>User's list</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><span><i class="far fa-calendar-alt"></i></span>Calendar</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+              <span><i class="fa fa-cog"></i></span>
+              Profile
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Home</a>
+                <a class="dropdown-item" href="#">Parameters</a>
+                <a class="dropdown-item" href="#">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
+      <!-- Toggler/collapsibe Button -->
+      <button class="navbar-toggler nav" type="button" data-toggle="collapse" data-target="#header" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+
+    <nav class="navbar bg-dark navbar-dark aside">
+    <button type="button" class="btn btn-link navbar-brand navbar-toggle" data-toggle="collapse" data-target="#aside"><i class="fa fa-tachometer-alt"></i>Dashboard</button>
+    <!-- Aside -->
+    <div class="row collapse navbar-collapse" id="aside">
+      <nav class="navbar bg-dark">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span><i class="fa fa-user"></i></span>Create User</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span><i class="fa fa-envelope"></i></span>Messages</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span><i class="fa fa-ban"></i></span>Access denied</a>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <div class="row" id="main">
-      <div class="col-md-3">
-        <dashAside style="background-color: orange;"/>
-      </div>
-      <div class="col-md-9">
-        <dashSection style="background-color: cyan;"/>
-      </div>
-    </div>
+    </nav>
   </div>
 </template>
 
 <script>
-import dashHeader from "./components/dashHeader";
-import dashAside from "./components/dashAside";
-import dashSection from "./components/dashSection";
-
 /* eslint-disable */
 export default {
   name: "dashboard",
@@ -29,46 +73,25 @@ export default {
       // msg: "Here we are ..."
     };
   },
-  components: {
-    dashHeader,
-    dashAside,
-    dashSection
-  },
+  components: {},
   methods: {}
 };
 </script>
 
 <style scoped>
-.main-color-bg{
-  background-color: #e74c3c !important;
-  border-color: #c0392b !important;
-  color:#ffffff !important;
+.container-fluid {
+  padding: 0 !important;
 }
 
-#header{
-  background:#333333;
-  color:#ffffff;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+.navbar-brand {
+  padding-left: 10px;
 }
 
-#header .create{
-  padding-top: 20px;
+.aside {
+  width: 200px;
 }
 
-@media (max-width: 767px) {
-  .dropdown-menu>li>a {
-    color: #ecf0f1;
-  }
-  .dropdown-menu>li>a:hover,
-  .dropdown-menu>li>a:focus {
-    color: #ffbbbc;
-  }
-  .dropdown-menu>.active>a,
-  .dropdown-menu>.active>a:hover,
-  .dropdown-menu>.active>a:focus {
-    color: #ffbbbc;
-    background-color: #c0392b;
-  }
+#header {
+  /* padding-left: 100px; */
 }
 </style>

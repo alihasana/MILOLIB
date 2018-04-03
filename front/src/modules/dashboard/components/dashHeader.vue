@@ -1,83 +1,23 @@
 <template>
-<!-- <div class="container-fluid" id="header">
-      <div class="row">
-        <div class="col-md-3 col-md-offset-6">
-          <div class="dropdown create">
-            <button class="btn btn-default dropdown-toggle glyphicon glyphicon-user" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Créer un utilisateur
-              <span class="caret"></span>
-            </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a type="button" data-toggle="modal" data-target="#addPage">Administrateur</a></li>
-                <li><a href="#">Chargé d'acceuil</a></li>
-                <li><a href="#">Conseiller</a></li>
-                <li><a href="#">Guest</a></li>
-                <li><a href="#">Demandeur</a></li>
-                <li><a href="#">Primo demandeur</a></li>
-              </ul>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="dropdown create">
-            <button class="btn btn-default dropdown-toggle glyphicon glyphicon-cog" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Menu
-              <span class="caret"></span>
-            </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li>
-                  <a type="button" data-toggle="modal" data-target="#">Profil</a>
-                </li>
-                <li>
-                  <a href="login.html">Déconnexion</a>
-                </li>
-              </ul>
-          </div>
-        </div>
-      </div>
-</div> -->
-<div class="container" id="header">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="dropdown create">
-            <button class="btn btn-default dropdown-toggle glyphicon glyphicon-user" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Créer un utilisateur
-              <span class="caret"></span>
-            </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a type="button" data-toggle="modal" data-target="#addPage">Administrateur</a></li>
-                <li><a href="#">Chargé d'acceuil</a></li>
-                <li><a href="#">Conseiller</a></li>
-                <li><a href="#">Guest</a></li>
-                <li><a href="#">Demandeur</a></li>
-                <li><a href="#">Primo demandeur</a></li>
-              </ul>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="dropdown create">
-            <button class="btn btn-default dropdown-toggle glyphicon glyphicon-cog" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Menu
-              <span class="caret"></span>
-            </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li>
-                  <a type="button" data-toggle="modal" data-target="#">Profil</a>
-                </li>
-                <li>
-                  <a href="login.html">Déconnexion</a>
-                </li>
-              </ul>
-          </div>
-        </div>
-      </div>
-</div>
+  <div class="header">
+    <!-- <div class="logo"> ne s'affiche que lorsque la résolution est < à 600px (vu que dashAside n'est plus affiché) -->
+		<div class="logo">
+			<i class="fa fa-tachometer-alt"></i>
+			<span>MILOLIB</span>
+		</div>
+		<a href="/#/dashboard" class="nav-trigger"><i class="fas fa-bars"></i></a>
+    <!-- <div class="logo"> ne s'affiche que lorsque la résolution est < à 600px (vu que dashAside n'est plus affiché)-->
+	</div>
 </template>
 
 <script>
+// POURQUOI NECESSAIRE ICI ET DANS LE PARENT ?
+$(document).ready(function() {
+	$('.nav-trigger').click(function() {
+		$('.side-nav').toggleClass('visible');
+	});
+});
+
 /* eslint-disable */
 export default {
   name: "dashHeader",
@@ -91,36 +31,51 @@ export default {
 </script>
 
 <style scoped>
-.main-color-bg{
-  background-color: #e74c3c !important;
-  border-color: #c0392b !important;
-  color:#ffffff !important;
+.header {
+  /* nécessaire pour que le aside s'affiche sur le header */
+  position: absolute;
+	width: 100%;
+  z-index: 3;
+  /* nécessaire pour que le aside s'affiche sur le header */
+	height: 42px;
+	background-color: #fff;
+  /* border-bottom: 3px solid #2d3d51; */
+  border-bottom: 4px solid #333333;
 }
-
-#header{
-  background:#333333;
-  color:#ffffff;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+.header .logo {
+  float: left;
+	/* height: 44px; */
+	/* z-index: 1; */
+	padding: 10px;
+	font-weight: bold;
+  /* color: #233245; */
+  color: #2d3d51;
 }
-
-#header .create{
-  padding-top: 20px;
+.nav-trigger {
+	/* position: relative; */
+  float: right;
+  /* padding: 2px 5px 10px 10px; */
+	/* width: 20px; */
+	/* height: 44px; */
+	/* right: 30px; */
+  /* display: block;	 */
 }
-
-@media (max-width: 767px) {
-  .dropdown-menu>li>a {
-    color: #ecf0f1;
-  }
-  .dropdown-menu>li>a:hover,
-  .dropdown-menu>li>a:focus {
-    color: #ffbbbc;
-  }
-  .dropdown-menu>.active>a,
-  .dropdown-menu>.active>a:hover,
-  .dropdown-menu>.active>a:focus {
-    color: #ffbbbc;
-    background-color: #c0392b;
-  }
+.nav-trigger i {
+  color: #2d3d51;
+  font-size: 20px;
+  padding: 10px;
+}
+@media screen and (min-width: 600px) {
+	.header {
+    /* background-color: #35475e; */
+    background-color: #333333;
+		z-index: 1;
+	}
+	.header .logo {
+		display: none;
+	}
+	.nav-trigger {
+		display: none;
+	}
 }
 </style>

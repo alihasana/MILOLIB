@@ -1,32 +1,39 @@
 <template>
-    <!-- <div class="container" id="main">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="list-group">
-            <a href="index.html" class="list-group-item active main-color-bg">
-              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Dashboard
-            </a>
-            <a href="pages.html" class="list-group-item"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Calendrier</a>
-            <a href="posts.html" class="list-group-item"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Évènements </a>
-            <a href="users.html" class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Liste des profils </a>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div class="container" id="main">
-      <div class="row">
-        <div class="col-md-3"> -->
-          <div class="list-group">
-            <a href="index.html" class="list-group-item active main-color-bg">
-              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Dashboard
-            </a>
-            <a href="pages.html" class="list-group-item"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Calendrier</a>
-            <a href="posts.html" class="list-group-item"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Évènements </a>
-            <a href="users.html" class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Liste des profils </a>
-          </div>
-        <!-- </div>
-      </div>
-    </div> -->
+  <div class="side-nav">
+		<div class="logo">
+			<i class="fa fa-tachometer-alt"></i>
+			<span>MILOLIB</span>
+		</div>
+		<nav>
+			<ul>
+				<li>
+					<a href="#">
+						<span><i class="fa fa-user"></i></span>
+						<span>Users</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span><i class="fa fa-envelope"></i></span>
+						<span>Messages</span>
+					</a>
+				</li>
+				<!-- <li class="active"> -->
+          <li>
+					<a href="#">
+						<span><i class="fa fa-chart-bar"></i></span>
+						<span>Analytics</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span><i class="fas fa-credit-card"></i></span>
+						<span>Payments</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </template>
 
 <script>
@@ -43,36 +50,115 @@ export default {
 </script>
 
 <style scoped>
-.main-color-bg{
-  background-color: #e74c3c !important;
-  border-color: #c0392b !important;
-  color:#ffffff !important;
+.logo {
+	height: 42px;
+	padding: 10px;
+	font-weight: bold;
 }
-
-#header{
-  background:#333333;
-  color:#ffffff;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+.logo  i {
+	font-size: 22px;
 }
-
-#header .create{
-  padding-top: 20px;
+.logo span {
+	margin-left: 5px;
+	/* text-transform: uppercase; */
 }
-
-@media (max-width: 767px) {
-  .dropdown-menu>li>a {
-    color: #ecf0f1;
+.side-nav .logo {
+  /* background-color: #233245; */
+  background-color: #111111;
+	color: #fff;
+}
+.side-nav {
+	position: absolute;
+	width: 100%;
+	height: 100vh;
+  /* background-color: #35475e; */
+  background-color: #333333;
+	z-index: 1;
+	display: none;
+}
+.side-nav.visible {
+	display: block;
+}
+.side-nav ul {
+	margin: 0;
+	padding: 0;
+}
+.side-nav ul li {
+	padding: 16px 16px;
+  /* border-bottom: 1px solid #3c506a; */
+  border-bottom: 1px solid #006eff;
+	position: relative;
+}
+.side-nav ul li.active:before {
+	content: '';
+	position: absolute;
+	width: 4px;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+}
+.side-nav ul li a {
+	color: #fff;
+	display: block;
+	text-decoration: none;
+}
+.side-nav ul li i {
+	color: #0497df;
+	min-width: 20px;
+	text-align: center;
+}
+.side-nav ul li span:nth-child(2) {
+	margin-left: 10px;
+	font-size: 14px;
+	font-weight: 600;
+}
+@media screen and (min-width: 600px) {
+	.side-nav {
+		display: block;
+		width: 70px;
+		z-index: 2;
+	}
+	.side-nav ul li span:nth-child(2) {
+		display: none;
+	}
+	.side-nav .logo i {
+		text-align: center;
+	}
+	.side-nav .logo span {
+		display: none;
+	}
+	.side-nav ul li i {
+		font-size: 26px;
+	}
+	.side-nav ul li a {
+		text-align: center;
+	}
+}
+@media screen and (min-width: 800px) {
+	.side-nav {
+		width: 200px;
+	}
+	.side-nav ul li span:nth-child(2) {
+		display: inline-block;
+	}
+	.side-nav ul li i {
+		font-size: 16px;
+	}
+	.side-nav ul li a {
+		text-align: left;
+	}
+	.side-nav .logo i {
+    padding-left: 0;
+    float: left;
+	}
+	.side-nav .logo span {
+    display: inline-block;
+    
+    float: left;
   }
-  .dropdown-menu>li>a:hover,
-  .dropdown-menu>li>a:focus {
-    color: #ffbbbc;
-  }
-  .dropdown-menu>.active>a,
-  .dropdown-menu>.active>a:hover,
-  .dropdown-menu>.active>a:focus {
-    color: #ffbbbc;
-    background-color: #c0392b;
+  .side-nav .logo {
+    
   }
 }
 </style>
