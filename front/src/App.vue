@@ -1,27 +1,27 @@
 <template>
   <div id="app">
-    <div class="container">
       <router-view></router-view>
-    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import auth from "@/modules/auth/auth";
+import Login from "@/modules/auth/Login";
 import dashboard from "@/modules/dashboard/dashboard";
-import listUser from "@/modules/listUser/listUser";
+import Users from "@/modules/users/Users";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
+import example from "@/sharedComponents/example";
 
 export default {
   name: "App",
   components: {
-    auth,
+    Login,
     dashboard,
-    listUser,
+    Users,
     profileUser,
-    calendar
+    calendar,
+    example
   }
 };
 </script>
@@ -33,6 +33,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
