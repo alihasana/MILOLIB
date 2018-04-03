@@ -10,8 +10,7 @@ let router = express.Router()
 
 router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
-    User.findOne({ email: req.body.email }, function (err, user) {
-    // console.log("Two ",err.message )
+    User.findOne({ email: helper.caseInsensitive(req.body.email) }, function (err, user) {
       if (err) res.status(500).json({ success: false, message: err.message })
       if (!user) {
         res.status(401).json({ success: false, message: 'User not found.' })
