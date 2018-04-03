@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {
       if (err) res.status(500).json({ success: false, message: err.message })
       if (!user) {
         res.status(401).json({ success: false, message: 'User not found.' })
-      } else if (user) {
+      } else {
         if (!user.comparePasswords(req.body.password)) {
           res.status(401).json({ success: false, message: 'Wrong password.' })
         } else {
