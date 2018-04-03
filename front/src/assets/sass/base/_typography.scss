@@ -12,7 +12,7 @@ body {
 	background: linear-gradient(
 		to right bottom,
 		$color-primary,
-		$color-primary-dark
+		$color-secondary
 	);
 	position: relative;
 }
@@ -23,11 +23,7 @@ body {
 	// Use inline-block to limit the background on the side
 	display: inline-block;
 	//Use the color = transpa
-	background-image: linear-gradient(
-		to right,
-		$color-tertiary-light,
-		$color-tertiary-dark
-	);
+	background-image: linear-gradient(to right, $color-black, $color-black);
 	//Clip the background to the text
 	-webkit-background-clip: text;
 	//Render the color to transparent to see the background color
@@ -42,11 +38,7 @@ body {
 	// Use inline-block to limit the background on the side
 	display: inline-block;
 	//Use the color = transpa
-	background-image: linear-gradient(
-		to right,
-		$color-secondary-light,
-		$color-secondary-dark
-	);
+	background-image: linear-gradient(to right, $color-black, $color-black);
 	//Clip the background to the text
 	-webkit-background-clip: text;
 	//Render the color to transparent to see the background color
@@ -60,11 +52,7 @@ body {
 	// Use inline-block to limit the background on the side
 	display: inline-block;
 	//Use the color = transpa
-	background-image: linear-gradient(
-		to right,
-		$color-tertiary-light,
-		$color-tertiary-dark
-	);
+	background-image: linear-gradient(to right, $color-black, $color-black);
 	//Clip the background to the text
 	-webkit-background-clip: text;
 	//Render the color to transparent to see the background color
