@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
       for(let i=0; i<users.length; i++) {
         helper.beforeSendUser(users[i])
       }
-      res.status(200).json({ success: true, message: 'Вот список пользователей! Here is the list of users!', content: users})
+      res.status(200).json({ success: true, message: 'Here is the list of users!', content: users})
     }
   })
 })
@@ -23,13 +23,13 @@ router.get('/:id', (req, res) => {
   if (ObjectId.isValid(req.params.id)) {
     User.findById(req.params.id, (err, user) => {
       if (err) res.status(500).json({ success: false, message: err.message })
-      if (!user) res.status(404).json({ success: false, message: 'Пользователь не найден. User not found.' })
+      if (!user) res.status(404).json({ success: false, message: 'User not found.' })
       else {
         helper.beforeSendUser(user)
-        res.status(200).json({ success: true, message: 'Вот профиль пользователя! Here is the user profile!', content: user })
+        res.status(200).json({ success: true, message: 'Here is the user profile!', content: user })
       }
     })
-  } else res.status(400).json({ success: false, message: 'Неверный ID. Invalid ID' })
+  } else res.status(400).json({ success: false, message: 'Invalid ID' })
 })
 
 // router.put('/:id', (req, res) => {
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
 //     if (ObjectId.isValid(req.params.id)) {
 //       User.findById(req.params.id, function (err, user) {
 //         if (!user) {
-//           res.status(404).json({ success: false, message: 'Пользователь не найден. User not found..' })
+//           res.status(404).json({ success: false, message: 'User not found..' })
 //         } else {
 //           if (err) res.status(500).json({success: false, message: err.message})
 //           else {
@@ -48,16 +48,16 @@ router.get('/:id', (req, res) => {
 //                 res.status(500).json({success: false, message: err.message})
 //               } else {
 //                 updatedUser.hashPassword = undefined
-//                 res.status(200).json({ success: true, message: 'Пользователь обновлен! User updated!', content: updatedUser}) }
+//                 res.status(200).json({ success: true, message: 'User updated!', content: updatedUser}) }
 //             })
 //           }
 //         }
 //       })
 //     } else {
-//       res.status(400).json({ success: false, message: 'Неверный ID. Invalid ID' })
+//       res.status(400).json({ success: false, message: 'Invalid ID' })
 //     }
 //   } else {
-//     res.status(400).json({ success: false, message: 'Отсутствуют данные. Data is missing..'})
+//     res.status(400).json({ success: false, message: 'Data is missing..'})
 //   }
 // })
 
@@ -67,18 +67,18 @@ router.get('/:id', (req, res) => {
 //       if (err) {
 //         res.status(500).json({success: false, message: err.message})
 //       } else if (!user) {
-//         res.status(404).json({ success: false, message: 'Пользователь не найден. User not found..'})
+//         res.status(404).json({ success: false, message: 'User not found..'})
 //       } else {
 //         User.remove({ _id: req.params.id }, function (err) {
 //           if (err) res.status(500).json({success: false, message: err.message})
 //           else {
-//             res.status(200).json({ success: true, message: 'Пользователь удален! User deleted!'})
+//             res.status(200).json({ success: true, message: 'User deleted!'})
 //           }
 //         })
 //       }
 //     })
 //   } else {
-//     res.status(400).json({ success: false, message: 'Неверный ID. Invalid ID' })
+//     res.status(400).json({ success: false, message: 'Invalid ID' })
 //   }
 // })
 
