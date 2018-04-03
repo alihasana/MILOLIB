@@ -34,6 +34,27 @@ router.post('/login', (req, res) => {
   }
 })
 
+router.post('/signup', (req, res) => {
+  if (req.body.email && req.body.password) {
+    if (helper.regexEmail.test(req.body.email)) {
+      let newUser = new User(req.body)
+      newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
+      newUser.save(function (err, user) {
+        if (err)  {
+          if (err.message.match(/^E11000 duplicate key error index.+/)) {
+            res.status(400).json({ success: false, message: 'Email already used'})
+          } else 
+          res.status(500).json({ success: false, message: err.message })
+        } else {
+          helper.beforeSendUser(user)
+          res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+        }
+      })
+    } else res.status(412).json({ success: false, message: 'Email required.' })
+  } else res.status(412).json({ success: false, message: 'Email and/or password are missing.' })
+})
+
+// OLD ROUTE WITH USER FIND
 // router.post('/signup', (req, res) => {
 //   if (req.body.email && req.body.password) {
 //     if (helper.regexEmail.test(req.body.email)) {
@@ -48,26 +69,11 @@ router.post('/login', (req, res) => {
 //               res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
 //             }
 //           })
-//         } else res.status(412).json({ success: false, message: 'email already used.' })
+//         } else res.status(412).json({ success: false, message: 'Email already used.' })
 //       })
 //     } else res.status(412).json({ success: false, message: 'Email required.' })
 //   } else res.status(412).json({ success: false, message: 'Email and/or password are missing.' })
 // })
 
-router.post('/signup', (req, res) => {
-  if (req.body.email && req.body.password) {
-    if (helper.regexEmail.test(req.body.email)) {
-          let newUser = new User(req.body)
-          newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
-          newUser.save(function (err, user) {
-            if (err) res.status(500).json({ success: false, message: err.message })
-            else {
-              helper.beforeSendUser(user)
-              res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
-            }
-          })
-    } else res.status(412).json({ success: false, message: 'Email required.' })
-  } else res.status(412).json({ success: false, message: 'Email and/or password are missing.' })
-})
 
 export default router
