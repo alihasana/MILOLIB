@@ -2,6 +2,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 // DotEnv permet d'utiliser un fichier de config .env (à la racine)
@@ -16,12 +17,14 @@ dotEnv.config()
 //  Routes Imports
 import auth from './routes/auth/auth'
 import users from './routes/users/users'
+import messages from './routes/messages/messages'
+import products from './routes/products/products'
 import profile from './routes/profile/profile'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
 
 // APP INIT
-let app = express()
+let app = express();
 
 // Morgan
 // A partir d'ici, toute les routes utilisent le middleware morgan
@@ -37,9 +40,14 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
   res.header('Access-Control-Max-Age', '86400')
   // intercept OPTIONS method
-  if ('OPTIONS' == req.method) res.sendStatus(200)
-  else next()
+  if ('OPTIONS' == req.method) {
+    res.sendStatus(200);
+  }
+  else {
+    next();
+  }
 })
+// app.use(cors())
 
 // BODY PARSER
 app.use(bodyParser.urlencoded({
@@ -59,25 +67,28 @@ router.use(verifyToken)
 
 // Protected routes
 router.use('/users', users)
+router.use('/messages', messages)
+router.use('/products', products)
 router.use('/profile', profile)
 
-app.use(router)
+// ROUTER PREFIX API USED BY APP
+app.use('/api', router)
 
 // Fin des routes, on renvoi un 404 not found pour tout le reste
 app.use('/*', (req, res) => {
-  res.status(404).json({ success: false, message: 'This route does not exists.'})
+  res.status(404).json({ success: false, message: 'Этот маршрут не существует. This route does not exists.'})
 })
 
 
 // MONGOOSE MONGODB CONNECT
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.DB, {}, function (err) {
+mongoose.connect(process.env.MONGOURL, {}, function (err) {
   if (err) { throw err; }
   else {
     console.log('Connection to the Database etablished...')
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
-    let port = process.env.PORT || 1407
+    let port = process.env.PORT || 1407;
     app.listen(port, () => console.log('App listen on port: ' + port))
   }
 })

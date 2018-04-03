@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>{{ content }}</h1>
+    <h1 class="heading-primary">{{ content }}</h1>
   </div>
 </template>
 
