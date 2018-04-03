@@ -2,10 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import User from './model'
-import helper from '../../helpers/helper';
-const ObjectId = mongoose.Types.ObjectId;
+import helper from '../../helpers/helper'
+const ObjectId = mongoose.Types.ObjectId
 
-let router = express.Router();
+let router = express.Router()
 
 router.get('/', (req, res) => {
   User.find({}, (err, users) => {
@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 //         } else {
 //           if (err) res.status(500).json({success: false, message: err.message})
 //           else {
-//             user.email = req.body.email;
+//             user.email = req.body.email
 //             user.hashPassword = bcrypt.hashSync(req.body.password, 10)
 //             user.save(function (err, updatedUser) {
 //               if (err) {

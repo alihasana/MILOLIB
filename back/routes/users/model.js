@@ -9,10 +9,10 @@ let UserSchema = new mongoose.Schema({
   lastName: { type: String },
   creationDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default:Date.now },
-});
+})
 
 UserSchema.methods.comparePasswords = function(password) {
-  return bcrypt.compareSync(password, this.hashPassword);
+  return bcrypt.compareSync(password, this.hashPassword)
 }
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema)

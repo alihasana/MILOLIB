@@ -20,4 +20,4 @@ var helper = {
   
 }
 
-export default helper;
+export default helper
