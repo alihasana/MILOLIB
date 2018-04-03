@@ -8,7 +8,7 @@
 /* eslint-disable */
 import Login from "@/modules/auth/Login";
 import dashboard from "@/modules/dashboard/dashboard";
-import listUser from "@/modules/listUser/listUser";
+import Users from "@/modules/users/Users";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
@@ -18,7 +18,7 @@ export default {
   components: {
     Login,
     dashboard,
-    listUser,
+    Users,
     profileUser,
     calendar,
     example

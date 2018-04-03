@@ -1,18 +1,21 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import helper from './../../helpers/helper';
-import User from './../users/model'
+import express from "express";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import helper from "./../../helpers/helper";
+import User from "./../users/model";
 
-let router = express.Router()
+let router = express.Router();
 
-
-router.post('/login', (req, res) => {
+router.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
-    User.findOne({ email: helper.caseInsensitive(req.body.email)}, function (err, user) {
-      if (err) res.status(500).json({success: false, message: err.message})
+    User.findOne({ email: helper.caseInsensitive(req.body.email) }, function(
+      err,
+      user
+    ) {
+      if (err) res.status(500).json({ success: false, message: err.message });
       if (!user) {
+
         res.status(401).json({ success: false, message: 'User not found.' })
       } else if (user) {
         if (!user.comparePasswords(req.body.password)) {
@@ -25,24 +28,28 @@ router.post('/login', (req, res) => {
             } else {
               res.status(200).json({ success: true, message: 'Welcome !', content: {token: process.env.AUTHBEARER + ' ' + result}})
             }
-          })
+          );
         }
       }
-    })
+    });
   } else {
     res.status(412).json({ success: false, message: 'email and/or password are missing.'})
   }
-})
+});
 
-router.post('/signup', (req, res) => {
+router.post("/signup", (req, res) => {
   if (req.body.email && req.body.password) {
     if (helper.regexEmail.test(req.body.email)) {
-      User.findOne({ email: helper.caseInsensitive(req.body.email)}, function (err, result) {
+      User.findOne({ email: helper.caseInsensitive(req.body.email) }, function(
+        err,
+        result
+      ) {
         if (result === null) {
-          let newUser = new User(req.body)
-          newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
-          newUser.save(function (err, user) {
-            if (err) res.status(500).json({success: false, message: err.message})
+          let newUser = new User(req.body);
+          newUser.hashPassword = bcrypt.hashSync(req.body.password, 10);
+          newUser.save(function(err, user) {
+            if (err)
+              res.status(500).json({ success: false, message: err.message });
             else {
               helper.beforeSendUser(user)
               res.status(200).json({ success: true, message: 'New user registered successfully!', content: user})
@@ -54,4 +61,4 @@ router.post('/signup', (req, res) => {
   } else res.status(412).json({ success: false, message: 'Email and/or password are missing.'})
 })
 
-export default router
+export default router;
