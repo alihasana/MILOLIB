@@ -11,6 +11,7 @@ let auth = express.Router();
 
 // La route pour se logger et recevoir un token
 auth.post("/login", (req, res) => {
+  console.log("ICI", req.body);
   // On verifie que l'utilisateur a envoyé l'email et le password dans le req.body
   if (req.body && req.body.email && req.body.password) {
     // On appelle le model USER defini dans mongoose et importé plus haut

@@ -1,0 +1,73 @@
+body {
+	font-family: "Lato", Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	/* font-size: 16px; */
+	line-height: 1.7;
+	color: $color-black;
+	text-align: center;
+	/* padding: 3rem; */
+	height: 100vh;
+	background: linear-gradient(
+		to right bottom,
+		$color-primary,
+		$color-primary-dark
+	);
+	position: relative;
+}
+.heading-primary {
+	font-size: 3.5rem;
+	// text-transform: uppercase;
+	font-weight: 900;
+	// Use inline-block to limit the background on the side
+	display: inline-block;
+	//Use the color = transpa
+	background-image: linear-gradient(
+		to right,
+		$color-tertiary-light,
+		$color-tertiary-dark
+	);
+	//Clip the background to the text
+	-webkit-background-clip: text;
+	//Render the color to transparent to see the background color
+	color: transparent;
+	letter-spacing: 0.2rem;
+}
+
+.heading-secondary {
+	font-size: 3.5rem;
+	// text-transform: uppercase;
+	font-weight: 700;
+	// Use inline-block to limit the background on the side
+	display: inline-block;
+	//Use the color = transpa
+	background-image: linear-gradient(
+		to right,
+		$color-secondary-light,
+		$color-secondary-dark
+	);
+	//Clip the background to the text
+	-webkit-background-clip: text;
+	//Render the color to transparent to see the background color
+	color: transparent;
+	letter-spacing: 0.2rem;
+}
+.heading-tertiary {
+	font-size: 3.5rem;
+	// text-transform: uppercase;
+	font-weight: 700;
+	// Use inline-block to limit the background on the side
+	display: inline-block;
+	//Use the color = transpa
+	background-image: linear-gradient(
+		to right,
+		$color-tertiary-light,
+		$color-tertiary-dark
+	);
+	//Clip the background to the text
+	-webkit-background-clip: text;
+	//Render the color to transparent to see the background color
+	color: transparent;
+	letter-spacing: 0.2rem;
+}

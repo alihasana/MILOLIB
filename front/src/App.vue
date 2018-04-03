@@ -6,7 +6,7 @@
 
 <script>
 /* eslint-disable */
-import auth from "@/modules/auth/auth";
+import Login from "@/modules/auth/Login";
 import dashboard from "@/modules/dashboard/dashboard";
 import listUser from "@/modules/listUser/listUser";
 import profileUser from "@/modules/profileUser/profileUser";
@@ -16,7 +16,7 @@ import example from "@/sharedComponents/example";
 export default {
   name: "App",
   components: {
-    auth,
+    Login,
     dashboard,
     listUser,
     profileUser,

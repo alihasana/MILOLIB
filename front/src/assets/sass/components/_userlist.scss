@@ -1,0 +1,31 @@
+.userlist {
+	// border: solid 1px black;
+	width: 50vw;
+	margin: 8vh auto;
+	background-color: $color-primary-dark;
+	box-shadow: 0 1.5rem 4rem rgba($color-black, 0.5);
+	padding: 2rem;
+	transition: transform 1s;
+
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	&__list {
+		background-color: $color-white;
+		// display: inline-table;
+		max-width: 25rem;
+		margin: 1rem;
+		box-shadow: 0 1.5rem 4rem rgba($color-black, 0.15);
+		border-radius: 1rem;
+		word-wrap: break-word;
+		// text-align: center;
+		// vertical-align: center;
+
+		&:hover {
+			transform: translateY(-0.5rem) scale(1.03);
+		}
+	}
+}

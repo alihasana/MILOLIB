@@ -1,0 +1,17 @@
+.userdetails {
+	width: 50vw;
+	margin: 8vh auto;
+	font-size: 3rem;
+	background-color: $color-primary-dark;
+	box-shadow: 0 1.5rem 4rem rgba($color-black, 0.5);
+	padding: 2rem;
+	transition: transform 1s;
+
+	p span {
+		text-decoration: underline;
+	}
+
+	&:hover {
+		transform: translateY(-1.5rem) scale(1.03);
+	}
+}
