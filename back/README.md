@@ -1,59 +1,59 @@
-ROUTES POSTMAN:
+# ROUTES:
 
-      RESPONSE FORMAT:
-        success: Boolean (true or false),
-        message: String,
-        content (optional): direct content or object with different keys
+    RESPONSE FORMAT:  
+      success: Boolean (true or false),  
+      message: String,  
+      content (optional): direct content or object with different keys  
 
-POST http://localhost:1407/auth/login
-  ->get a token
+* POST http://localhost:1407/auth/login
+  >get a token
 
       body:
         email
         password
-        
 
--- Below routes require
+## -- Below routes require:
 
         header:
           Authorization: token
 
-GET http://localhost:1407/users
-  ->get the list of all users
+* GET http://localhost:1407/users
+  >get the list of all users  
 
-POST http://localhost:1407/users
-  ->register a new user
+* POST http://localhost:1407/users
+  >register a new user  
 
       body:
         email
         password
 
-GET http://localhost:1407/users/self
-  ->get your own profile
+* GET http://localhost:1407/users/profile
+  >get your own profile  
 
-PATCH http://localhost:1407/users/self
-  ->update your own profile
+* PUT http://localhost:1407/users/profile
+  >update your own profile  
+
+      body:
+        email
+        oldPassword
+        password
+        ++etc...
+
+* GET http://localhost:1407/users/:id
+  >get a user profile with his id (admin)  
+
+
+* PUT http://localhost:1407/users/:id
+  >update a user profile with his id (admin)  
 
       body:
         email
         password
         ++etc...
 
-GET http://localhost:1407/users/:id
-  ->get a user profile with his id (admin)
+* DELETE http://localhost:1407/users/:id
+  >delete a user (admin)  
 
-
-PATCH http://localhost:1407/users/:id
-  ->update a user profile with his id (admin)
-
-      body:
-        email
-        password
-        ++etc...
-
-DELETE http://localhost:1407/users/:id
-  ->delete a user (admin)
-
-DON'T FORGET TO DO: 'cp env-example .env'
-ALSO 'node seeder/admin.babel.js' to create the first admin,
-  which credentials are admin:admin
+DON'T FORGET TO DO: 'cp env-example .env'  
+ALSO 'node seeder/admin.babel.js'  
+To create the first admin,  which credentials are admin:admin
