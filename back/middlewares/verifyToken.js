@@ -10,13 +10,13 @@ const ObjectId = mongoose.Types.ObjectId
 // on appelle next() pour dire que tout s'est bien passé et qu'on peut passer à la suite (circulez svp!)
 let verifyToken = (req, res, next) => {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === process.env.AUTHBEARER) {
-    jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRETKEY, function (err, decode) {
+    jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRETKEY, (err, decode) => {
       if (err) res.status(500).json({ success: false, message: err.message })
       else {
         // res.locals permet de stocker des datas utilisable dans la requête en cours
         res.locals.decode = decode
         if (ObjectId.isValid(decode._id)) {
-          User.findById(decode._id, function (err, user) {
+          User.findById(decode._id, (err, user) => {
             if (err) res.status(500).json({ success: false, message: err.message })
             if (!user) res.status(403).json({ success: false, message: 'Unauthozired' })
             else {
