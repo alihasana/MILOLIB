@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import swal from "sweetalert2";
 import "./assets/sass/main.scss";
+import 'material-design-icons/iconfont/material-icons.css';
 
 Vue.config.productionTip = false;
 

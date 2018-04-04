@@ -1,66 +1,37 @@
 <template>
-  <div class="container-fluid">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark"> <!-- navbar-expand-sm définit à partir de quand les liens seront remplacés par le toggle -->
-      <div class="row">
-
-        <!-- Brand -->
-        <a class="navbar-brand" href="#">MILOLIB</a>
-        <!-- <button type="button" class="btn btn-link navbar-brand navbar-toggle" data-toggle="collapse" data-target="#aside">Dashboard</button> -->
-
-        <!-- Toggler/collapsibe Button -->
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header">
-          <span class="navbar-toggler-icon"></span>
-        </button> -->
-        
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse" id="header">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#"><span><i class="far fa-address-book"></i></span>User's list</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><span><i class="far fa-calendar-alt"></i></span>Calendar</a>
-            </li>
-            <!-- Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-              <span><i class="fa fa-cog"></i></span>
-              Profile
-              </a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Home</a>
-                <a class="dropdown-item" href="#">Parameters</a>
-                <a class="dropdown-item" href="#">Logout</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- Toggler/collapsibe Button -->
-      <button class="navbar-toggler nav" type="button" data-toggle="collapse" data-target="#header" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </nav>
-
-    <nav class="navbar bg-dark navbar-dark aside">
-    <button type="button" class="btn btn-link navbar-brand navbar-toggle" data-toggle="collapse" data-target="#aside"><i class="fa fa-tachometer-alt"></i>Dashboard</button>
-    <!-- Aside -->
-    <div class="row collapse navbar-collapse" id="aside">
-      <nav class="navbar bg-dark">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#"><span><i class="fa fa-user"></i></span>Create User</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><span><i class="fa fa-envelope"></i></span>Messages</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><span><i class="fa fa-ban"></i></span>Access denied</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-    </nav>
+  <div>
+    <b-navbar toggleable="sm" type="dark" variant="dark"> <!-- color: primary, success, info, warning, danger, dark, or light. -->
+      <b-navbar-brand href="#"><span><i class="material-icons">home</i></span>MILOLIB</b-navbar-brand>
+      <b-navbar-toggle target="header_collapse"></b-navbar-toggle>
+      <b-collapse is-nav id="header_collapse">
+        <b-navbar-nav>
+          <b-nav-item href="#"><span><i class="material-icons">assignment_ind</i></span>User's list</b-nav-item>
+          <b-nav-item href="#"><span><i class="material-icons">date_range</i></span>Calendar</b-nav-item>
+        </b-navbar-nav>
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown right>
+            <!-- Using button-content slot -->
+            <template slot="button-content">
+              <em><span><i class="material-icons">account_circle</i></span>Profile</em>
+            </template>
+            <b-dropdown-item href="#"><span><i class="material-icons">settings</i></span>Settings</b-dropdown-item> <!-- <i class="material-icons">perm_data_setting</i> -->
+            <b-dropdown-item href="#"><span><i class="material-icons">power_settings_new</i></span>Logout</b-dropdown-item> <!-- <i class="material-icons">exit_to_app</i> -->
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <b-navbar type="dark" variant="dark" id="aside_collapse">
+    <b-navbar-toggle target="aside_collapse"><span><i class="material-icons">dashboard</i></span>Dashboard</b-navbar-toggle>
+    <b-collapse is-nav id="aside_collapse">
+        <b-navbar-nav>
+          <b-nav-item href="#"><span><i class="material-icons">face</i></span>Create user</b-nav-item>
+          <b-nav-item href="#"><span><i class="material-icons">question_answer</i></span>Messages</b-nav-item>
+          <b-nav-item href="#"><span><i class="material-icons">folder</i></span>Module</b-nav-item>
+          <b-nav-item href="#" disabled><span><i class="material-icons">lock</i></span>Access denied</b-nav-item>
+        </b-navbar-nav>
+    </b-collapse>
+    </b-navbar>
   </div>
 </template>
 
@@ -79,19 +50,20 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid {
-  padding: 0 !important;
-}
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
 
-.navbar-brand {
-  padding-left: 10px;
-}
-
-.aside {
+#aside_collapse {
   width: 200px;
 }
 
-#header {
-  /* padding-left: 100px; */
+#header_collapse {
+  padding-left: 100px;
+}
+
+span {
+  padding-right: 4px;
 }
 </style>
