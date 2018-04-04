@@ -8,18 +8,18 @@ let users = express.Router();
 
 // Route pour récuperer tous les utilisateurs
 // On utilise la méthode find() du modèle mongoose 'User' qui renvoi ici tous les users
-users.get('/', (req, res) => {
-  User.find({}, (err, users) => {
-    if (err) res.status(500).json({success: false, message: err.message})
-    else {
-      for(let i=0; i<users.length; i++) {
-        users[i].hashPassword = undefined
-        users[i].__v = undefined
-      }
-      res.status(200).json({success: true, message: 'Here is the list of users!', content: users})
-    }
-  })
-})
+// users.get('/', (req, res) => {
+//   User.find({}, (err, users) => {
+//     if (err) res.status(500).json({success: false, message: err.message})
+//     else {
+//       for(let i=0; i<users.length; i++) {
+//         users[i].hashPassword = undefined
+//         users[i].__v = undefined
+//       }
+//       res.status(200).json({success: true, message: 'Here is the list of users!', content: users})
+//     }
+//   })
+// })
 
 // Route pour nregister un utilisateur
 users.post('/', (req, res) => {
@@ -52,20 +52,20 @@ users.post('/', (req, res) => {
 })
 
 // Route pour recuperer son propre profil
-users.get('/self', (req, res) => {
-  if (req.milo && ObjectId.isValid(req.milo._id)) {
-    User.findById(req.milo._id, function (err, self) {
-      if (err) res.status(500).json({success: false, message: err.message})
-      else {
-        self.hashPassword = undefined
-        self.__v = undefined
-        res.status(200).json({success: true, message: 'Here is your profile!', content: self})
-      }
-    })
-  } else {
-    res.status(404).json({success: false, message: 'User not found..'})
-  }
-})
+// users.get('/self', (req, res) => {
+//   if (req.milo && ObjectId.isValid(req.milo._id)) {
+//     User.findById(req.milo._id, function (err, self) {
+//       if (err) res.status(500).json({success: false, message: err.message})
+//       else {
+//         self.hashPassword = undefined
+//         self.__v = undefined
+//         res.status(200).json({success: true, message: 'Here is your profile!', content: self})
+//       }
+//     })
+//   } else {
+//     res.status(404).json({success: false, message: 'User not found..'})
+//   }
+// })
 
 users.patch('/self', (req, res) => {
   let _email = req.body.email;
@@ -102,55 +102,55 @@ users.patch('/self', (req, res) => {
 
 // Route pour recuperer le profil d'un utilisateur en particulier
 // on peut utiliser findById avec l'id en parametre
-users.get('/:id', (req, res) => {
-  // on verifie que req.params.id est bien de type ObjectId avant de passer à la recherche
-  if (ObjectId.isValid(req.params.id)) {
-    User.findById(req.params.id, function (err, user) {
-      if (err) res.status(500).json({success: false, message: err.message})
-      else {
-        user.hashPassword = undefined
-        user.__v = undefined
-        res.status(200).json({success: true, message: 'Here is the user profile!', content: user})
-      }
-    })
-  } else {
-    res.status(404).json({success: false, message: 'User not found..'})
-  }
-})
+// users.get('/:id', (req, res) => {
+//   // on verifie que req.params.id est bien de type ObjectId avant de passer à la recherche
+//   if (ObjectId.isValid(req.params.id)) {
+//     User.findById(req.params.id, function (err, user) {
+//       if (err) res.status(500).json({success: false, message: err.message})
+//       else {
+//         user.hashPassword = undefined
+//         user.__v = undefined
+//         res.status(200).json({success: true, message: 'Here is the user profile!', content: user})
+//       }
+//     })
+//   } else {
+//     res.status(404).json({success: false, message: 'User not found..'})
+//   }
+// })
 
 // Route pour update un user, on trouve le user avec findById puis on l'edit&save
-users.patch('/:id', (req, res) => {
-  if (req.milo && req.milo.role == 'admin') {
-    let _email = req.body.email;
-    let _password = req.body.password;
-    if (req.body && _email && _password) {
-      if (ObjectId.isValid(req.params.id)) {
-        User.findById(req.params.id, function (err, user) {
-          if (err) res.status(500).json({success: false, message: err.message})
-          else {
-            user.email = _email;
-            user.hashPassword = bcrypt.hashSync(_password, 10)
-            user.save(function (err, updatedUser) {
-              if (err) {
-                res.status(500).json({success: false, message: err.message})
-              } else {
-                updatedUser.hashPassword = undefined
-                updatedUser.__v = undefined
-                res.status(200).json({success: true, message: 'User updated!', content: updatedUser})
-              }
-            })
-          }
-        })
-      } else {
-        res.status(404).json({success: false, message: 'User not found..'})
-      }
-    } else {
-      res.status(400).json({success: false, message: 'Data is missing..'})
-    }
-  } else {
-    res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
-  }
-})
+// users.patch('/:id', (req, res) => {
+//   if (req.milo && req.milo.role == 'admin') {
+//     let _email = req.body.email;
+//     let _password = req.body.password;
+//     if (req.body && _email && _password) {
+//       if (ObjectId.isValid(req.params.id)) {
+//         User.findById(req.params.id, function (err, user) {
+//           if (err) res.status(500).json({success: false, message: err.message})
+//           else {
+//             user.email = _email;
+//             user.hashPassword = bcrypt.hashSync(_password, 10)
+//             user.save(function (err, updatedUser) {
+//               if (err) {
+//                 res.status(500).json({success: false, message: err.message})
+//               } else {
+//                 updatedUser.hashPassword = undefined
+//                 updatedUser.__v = undefined
+//                 res.status(200).json({success: true, message: 'User updated!', content: updatedUser})
+//               }
+//             })
+//           }
+//         })
+//       } else {
+//         res.status(404).json({success: false, message: 'User not found..'})
+//       }
+//     } else {
+//       res.status(400).json({success: false, message: 'Data is missing..'})
+//     }
+//   } else {
+//     res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
+//   }
+// })
 
 // Route pour delete un user, on utilise la méthode remove() du modele associé
 users.delete('/:id', (req, res) => {
