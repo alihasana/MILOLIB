@@ -32,7 +32,6 @@ router.get('/:id', (req, res) => {
   } else res.status(400).json({ success: false, message: 'Invalid ID' })
 })
 
-// Route pour update un user, on trouve le user avec findById puis on l'edit&save
 router.put('/:id', (req, res) => {
   if (res.locals.user.role == 'admin') {
     if (ObjectId.isValid(req.params.id)) {
@@ -66,7 +65,6 @@ router.put('/:id', (req, res) => {
   }
 })
 
-// Route pour delete un user, on utilise la méthode remove() du modele associé
 router.delete('/:id', (req, res) => {
   if (res.locals.user.role == 'admin') {
     if (ObjectId.isValid(req.params.id)) {

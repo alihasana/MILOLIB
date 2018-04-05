@@ -7,7 +7,6 @@ import User from './../users/model'
 
 let router = express.Router()
 
-
 router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
     User.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, user) => {
