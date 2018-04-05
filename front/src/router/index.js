@@ -9,7 +9,6 @@ import UserDetail from "@/modules/users/components/UserDetail";
 import profileUser from "@/modules/profileUser/profileUser";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
-
 import Header from "@/sharedComponents/Header";
 
 Vue.use(Router);
@@ -72,50 +71,3 @@ export default new Router({
 		}
 	]
 });
-
-// export default new Router({
-// 	routes: [
-// 		{
-// 			path: "/",
-// 			name: "login",
-// 			component: Login
-// 		},
-// 		{
-// 			path: "/dashboard",
-// 			name: "dashboard",
-// 			component: dashboard
-// 		},
-// 		{
-// 			path: "/users",
-// 			name: "users",
-// 			component: Users,
-// 			children: [
-// 				{
-// 					path: "",
-// 					name: "userList",
-// 					component: UserList
-// 				},
-// 				{
-// 					path: ":id",
-// 					name: "userDetail",
-// 					component: UserDetail
-// 				}
-// 			]
-// 		},
-// 		{
-// 			path: "/profileUser",
-// 			name: "profileUser",
-// 			component: profileUser
-// 		},
-// 		{
-// 			path: "/calendar",
-// 			name: "calendar",
-// 			component: calendar
-// 		},
-// 		{
-// 			path: "/example",
-// 			name: "example",
-// 			component: example
-// 		}
-// 	]
-// });
