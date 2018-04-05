@@ -8,7 +8,7 @@ let UserSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   creationDate: { type: Date, default: Date.now },
-  updatedDate: { type: Date, default:Date.now },
+  updatedDate: { type: Date, default: Date.now },
 })
 
 UserSchema.methods.comparePasswords = function(password) {

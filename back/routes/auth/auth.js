@@ -36,14 +36,13 @@ router.post('/signup', (req, res) => {
         if (err)  {
           if (err.message.match(/^E11000 duplicate key error index.+/)) {
             res.status(400).json({ success: false, message: 'Email already used'})
-          } else 
-            res.status(500).json({ success: false, message: err.message })
+          } else res.status(500).json({ success: false, message: err.message })
         } else {
           helper.beforeSendUser(user)
           res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
         }
       })
-    } else res.status(412).json({ success: false, message: 'Email required.' })
+    } else res.status(412).json({ success: false, message: 'Valid email required.' })
   } else res.status(412).json({ success: false, message: 'Missing email and/or password.' })
 })
 
