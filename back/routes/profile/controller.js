@@ -4,28 +4,44 @@ import User from './../users/model'
 import helper from './../../helpers/helper';
 
 export default {
-  protectedUpdate: () => {
-    // les 'res.status' ne sont peut-être pas correct (vue que l'on referra un plus tard dans la route), a voir.
-    if (req.body.password || req.body.hashPassword) {
-      if ( !(req.body.oldPassword && req.body.oldPassword == res.locals.user.comparePasswords(req.body.oldPassword)) ) {
-        res.locals.user.unmarkModified('hashPassword')
-        res.status(401).json({ success: false, message: 'Actual password incorrect' })
-        resMessage1 = 'lol'
+  protectedUpdate: (body, user, messageArray) => {
+    if (body.password) {
+      if ( !(body.oldPassword && user.comparePasswords(body.oldPassword)) ) {
+        messageArray[0] = 'Profile partialy updated because a part of your request are incorrect :'
+        messageArray[1] = ' Actual password incorrect. '
+      } else {
+        user.hashPassword = bcrypt.hashSync(body.password, 10)
       }
     }
-    if (req.body.email) {
-      if ( !(req.body.oldEmail == res.locals.user.email) ) {
-        res.locals.user.unmarkModified('email')
-        res.status(401).json({ success: false, message: 'Actual email incorrect' }) 
+
+    if (body.email) {
+      if ( !(body.oldEmail && body.oldEmail == user.email) ) {
+        user.unmarkModified('email')
+        messageArray[0] = 'Profile partialy updated because a part of your request are incorrect :'        
+        messageArray[2] = ' Actual email incorrect. '
+      } else {
+        console.log('flag 1')
       }
+    } else {
+      console.log('flag 3')
     }
-    if (req.body.role) {
+    
+    if (body.role) {
       // Pas de condition pour le moment, on ne peux simplement pas modifier le data.role
-      res.locals.user.unmarkModified('role')
+      user.unmarkModified('role')
+      messageArray[0] = 'Profile partialy updated because a part of your request are incorrect :'      
+      messageArray[3] = ' You can\'t modify your own role. '      
     }
   },
 
-  test: () => {
-    return res.locals.message.resMessage1 = 'Actual password incorrect.'
+  test: function (a) {
+    console.log('test executé')
+    // var leTest = Object.keys(a)
+    // console.log(leTest)
+    a[1] = ' Actual password incorrect. '
+    a[3] = ' Actual emadsdqdsdqdqsdsqdil incorrect. '
+    // a.errMessage1 = ' Actual password incorrect. '
+    // a.errMessage3 = ' Actual emadsdqdsdqdqsdsqdil incorrect. '
+    // return messageObj
   },
 }
