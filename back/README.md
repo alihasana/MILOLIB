@@ -17,6 +17,18 @@
         header:
           Authorization: token
 
+* GET http://localhost:1407/profile
+  >get your own profile  
+
+* PUT http://localhost:1407/profile
+  >update your own profile  
+
+      body:
+        email
+        oldPassword
+        password
+        ++etc...  
+
 * GET http://localhost:1407/users
   >get the list of all users  
 
@@ -26,18 +38,6 @@
       body:
         email
         password
-
-* GET http://localhost:1407/users/profile
-  >get your own profile  
-
-* PUT http://localhost:1407/users/profile
-  >update your own profile  
-
-      body:
-        email
-        oldPassword
-        password
-        ++etc...
 
 * GET http://localhost:1407/users/:id
   >get a user profile with his id (admin)  
