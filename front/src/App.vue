@@ -24,6 +24,8 @@ export default {
     example
   }
 };
+
+
 </script>
 
 <style>
