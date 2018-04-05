@@ -6,20 +6,18 @@
 					<b-list-group>
 						<b-list-group-item class="disposInDay">
 							<b-row class="periode">
-								<label :for="startDate">Date de départ:</label>
-								<b-col sm="3"><b-form-input id="startdate" v-on:change="getStartDate()" v-model ="startDate" type="date"></b-form-input></b-col>
-								<label :for="endDate">Date de fin:</label>
-								<b-col sm="3"><b-form-input id="enddate" v-on:change="getEndDate()" v-model ="endDate" type="date"></b-form-input></b-col>
+								<label :for="startDateInDP">Date de départ:</label>
+								<b-col sm="3"><b-form-input id="startDateInDP" v-on:change="getStartDate()" v-model ="startDateInDP" type="date"></b-form-input></b-col>
+								<label :for="endDateInDP">Date de fin:</label>
+								<b-col sm="3"><b-form-input id="endDateInDP" v-on:change="getEndDate()" v-model ="endDateInDP" type="date"></b-form-input></b-col>
 							</b-row>
 						</b-list-group-item>
 					</b-list-group>
-					<p>{{startDate}}</p>
-					<p>{{endDate}}</p>
-					<button v-on:click="createAgendaRange()" type="button">Creer mon Agenda</button>
+					<button v-on:click="createNewAgenda()" type="button">Creer mon Agenda</button>
 				</b-form-group>
 			</b-form>
 			<div>
-				<agenda :agendaRangeProp="agendaRangeInDP" :startDateProp="startDate" :endDateProp="endDate"></agenda>
+				<agenda :agendaRangeProp="agendaRangeInDP" :startDateProp="startDateInDP" :endDateProp="endDateInDP" :agendaSlotProp="slotsInDP"></agenda>
 			</div>
 		</div>
 	</template>
@@ -33,11 +31,17 @@ import 'moment/locale/fr';
 import * as cHelpers from '.././calendarHelpers';
 import agenda from "./agenda";
 
-//setting our local timezone
+//setting local format and language
 moment.locale('fr');
 
 
 export default {
+
+	//description of component
+	//This component anable to select a range pariod, and on clik, it generates:
+	//- a list of days ( moment object)
+	//- a list of slots objects of 15 minutes.
+	// these list are passed to Agenda component via props
 
 
 	name: "datePicker",
@@ -46,10 +50,10 @@ export default {
 	data() {
 		return {
 			msg: "datePicker Vue",
-			startDate: '',
-			endDate:'',
+			startDateInDP: '',
+			endDateInDP:'',
 			agendaRangeInDP:'',
-			slot:''
+			slotsInDP:[]
 		};
 	},
 	components: {
@@ -57,28 +61,35 @@ export default {
 	},
 	methods:{
 		getStartDate: function(){
-			console.log('this.startDate:', this.startDate);
+			console.log('this.startDateInDP:', this.startDateInDP);
 		},
 		getEndDate: function(){
-			console.log('this.endDate:', this.endDate);
+			console.log('this.endDate:', this.endDateInDP);
 		},
 		createAgendaRange : function(){
-			console.log('je vais créer mon agenda de', this.startDate, 'à', this.endDate );
-			return this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDate,this.endDate);
-			//il faudra faire une fonction pour interdir de paramétrer en masse le calendrier
-			// lorsque celui ci a déjà des rdv sur la plage définie.
-			//voir aussi affichage de la semaine en cours, et update uniquement à partir des jours où il n'y a pas de rdv.
-			
+			console.log('je vais créer mon agenda de', this.startDateInDP, 'à', this.endDateInDP );
+			return this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDP,this.endDateInDP);
+		},
+		setSlots: function(){
+			let start = moment(this.startDateInDP);
+			let end = moment(this.endDateInDP);
+			for (let i=start; i.isBefore(end); i.add(15,'minutes')){
+				let builtslot = cHelpers.createSlotObject(i);
+				this.slotsInDP.push(builtslot);
+			}
+			console.log('this.slots:', this.slotsInDP);
+		},
+		createNewAgenda: function(){
+			this.createAgendaRange();
+			this.setSlots()
 		}
-	}
+	}	
 };
+
+
 </script>
 
 
-
 <style scoped>
-
-.periode {
-}
 
 </style>

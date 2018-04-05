@@ -7,22 +7,38 @@
   <div class="availabilitySetting">
     <availabilitySetting></availabilitySetting>
   </div>
-  <!-- <div class="agenda">
-    <agenda></agenda>
-  </div> -->
   </div>
 </template>
 
 <script>
+
 /* eslint-disable */
 import availabilitySetting from "./components/availabilitySetting";
-import datePickerAgenda from "./components/datePickerAgenda";
+// import datePickerAgenda from "./components/datePickerAgenda";
 import datePicker from "./components/datePicker";
 import agenda from "./components/agenda";
 import * as cHelpers from './calendarHelpers';
 
 
-// ------------- these function are tests for now in console ---------------
+export default {
+  name: "calendar",
+  data() {
+    return {
+      msg: "Calendar Vue"
+    };
+  },
+  components: {
+    availabilitySetting,
+    // datePickerAgenda,
+    datePicker,
+    agenda
+  },
+  methods: {}
+};
+
+
+
+// ------------- these function are tests in console Do NOT supress for now  ---------------
 
 // let now = cHelpers.getCurrentDate();
 // console.log('now:', now);
@@ -52,23 +68,9 @@ import * as cHelpers from './calendarHelpers';
 // console.log('daysOfTheTimeRange:', daysOfTheTimeRange);
 
 
-
-export default {
-  name: "calendar",
-  data() {
-    return {
-      msg: "Calendar Vue"
-    };
-  },
-  components: {
-    availabilitySetting,
-    datePickerAgenda,
-    datePicker,
-    agenda
-  },
-  methods: {}
-};
 </script>
+
+
 
 <style scoped>
 
@@ -76,15 +78,15 @@ export default {
   display: block;
 }
 
-.datePicker {
-  /*position: absolute;
-  float: left;*/
-}
+/*.datePicker {
+  position: absolute;
+  float: left;
+}*/
 
-.datePickerAgenda {
- /* position: relative;*/
-  /*float: left;*/
-}
+/*.datePickerAgenda {
+  position: relative;
+  /*float: left;
+}*/
 
 .agenda {
   margin-left: 20%;

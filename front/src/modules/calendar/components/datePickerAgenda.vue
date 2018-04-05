@@ -1,4 +1,8 @@
-<template>
+<!-- this component is trial for date picker, do not use, but do not supress please -->
+
+
+
+<!-- <template>
 	<div>
 		<h5>{{msg}}</h5>
 		<div class="datepicker_agenda">
@@ -15,99 +19,97 @@
 					<div v-for="day in days" track-by="$index" class="datepicker_agenda_weekdays">
 						{{day}}
 					</div>
-					<div class="datepicker_agenda_daysInMonth" v-for="dayNumber in daysInMonth">
+					<div class="datepicker_agenda_daysInMonth" v-for="dayNumber in daysInMonth"> -->
 						<!-- <div class="datepicker_agenda_daysInMonth" v-bind:class="{selected: isSelected(now)}" v-for="dayNumber in daysInMonth"> -->
-						<div class="spacer" v-bind:style="{ width: spacer}"></div>
+						<!-- <div class="spacer" v-bind:style="{ width: spacer}"></div>
 						<span class="datepicker_agenda_daysInMonth_effect"></span>
-						<span class="datepicker_agenda_daysInMonth_text">{{dayNumber | dateFormatDayNumber}}</span>
+						<span class="datepicker_agenda_daysInMonth_text">{{dayNumber | dateFormatDayNumber}}</span> -->
 						
-					</div>
-				</div>
-			</div>
+					<!-- </div> -->
+				<!-- </div> -->
+			<!-- </div>
 		</div>
 	</div>
-</template>
+</template> -->
 
-<script>
-/* eslint-disable */
+// <script>
+// /* eslint-disable */
 
-import moment from 'moment';
-// import 'moment-timezone';
-// moment.tz.setDefault('Europe/Paris');
-import * as cHelpers from '.././calendarHelpers';
+// import moment from 'moment';
+// import * as cHelpers from '.././calendarHelpers';
 
 
 
-export default {
+// export default {
 
-	name: "datePickerAgenda",
-	data() {
-		return {
-			msg: "datePickerAgenda Vue",
-			now: '',
-			days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
-			startDayInMonth: '',
-			endDayInMonth: '',
-			daysInMonth: '',
-			WeekFirstDayPosition:'',
-			spacer: ''
-		}
-	},
-	components: {},
-    created(){
-    	this.now = cHelpers.getCurrentDate();
-    		console.log('this.now', this.now);
-    	this.startDayInMonth = cHelpers.getMonthFirstDate(this.now);
-    		console.log('this.startDayInMonth:', this.startDayInMonth);
-    	this.endDayInMonth = cHelpers.getMonthLastDate(this.now);
-    		console.log('this.endDayInMonth:', this.endDayInMonth);
-    	this.daysInMonth = cHelpers.getDaysOfTheTimeRange(this.startDayInMonth,this.endDayInMonth);
-    		console.log('this.daysInMonth:', this.daysInMonth);
-    	this.WeekFirstDayPosition = cHelpers.getWeekFirstDayPosition(this.now);
-    		console.log('this.WeekFirstDayPosition:', this.WeekFirstDayPosition);
-    	this.spacer = this.getSpacer();
-    	},
-	methods: {
-		moment: function (){
-    		return moment();
-    	},
-    	// le spacer ne fonctionne pas pour l instant // this.WeekFirstDayPosition is undefined
-    	getSpacer: function(){
-    		let s = this.WeekFirstDayPosition;
-    		console.log(s);
-    		let space = this.WeekFirstDayPosition*41;
-    		console.log('space:', space);
-    		return this.spacer = space+'px';
-    		console.log('this.spacer: ', this.spacer);
-    	}
-    	// ICI on veut une méthode qui vérifie que le jour (entré dans l'input) affiché dans le header du date picker apparaisse bien comme sélectionné en bleu.
-    	// attention pour l'instant c'est now qui s'affiche ds la header. il faudra le changer en date quand l'input sera fonctionnel
-    	// isSelected: function(this.now){
-    	// 	return this.dayNumber.unix() === this.now.unix();
-    	// },
-    	//ICI on veut une méthode qui permet de sélectionner un nouveau jour.
-    	// on mettra un événement on click dans le v-for auquel on ratachera cette méthode,
-    	// la date sera également changée dans le header
-	},
-	//creer un fichier filters, que l'on pourra utiliser dans toute l'app.
-	filters: {
-		dateFormatFull : function (date) {
-    return moment(date).format('DD/MM/YYYY');
-		},
-		dateFormatYear : function (date) {
-    return moment(date).format('YYYY');
-		},
-		dateFormatText : function (date) {
-    return moment(date).format('dddd DD MMM');
-		},
-		dateFormatDayNumber: function (date) {
-    return moment(date).format('D');
-		}
-	}
-};
+// 	name: "datePickerAgenda",
+// 	data() {
+// 		return {
+// 			msg: "datePickerAgenda Vue",
+// 			now: '',
+// 			days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
+// 			startDayInMonth: '',
+// 			endDayInMonth: '',
+// 			daysInMonth: '',
+// 			WeekFirstDayPosition:'',
+// 			spacer: ''
+// 		}
+// 	},
+// 	components: {},
+//     created(){
+//     	this.now = cHelpers.getCurrentDate();
+//     		console.log('this.now', this.now);
+//     	this.startDayInMonth = cHelpers.getMonthFirstDate(this.now);
+//     		console.log('this.startDayInMonth:', this.startDayInMonth);
+//     	this.endDayInMonth = cHelpers.getMonthLastDate(this.now);
+//     		console.log('this.endDayInMonth:', this.endDayInMonth);
+//     	this.daysInMonth = cHelpers.getDaysOfTheTimeRange(this.startDayInMonth,this.endDayInMonth);
+//     		console.log('this.daysInMonth:', this.daysInMonth);
+//     	this.WeekFirstDayPosition = cHelpers.getWeekFirstDayPosition(this.now);
+//     		console.log('this.WeekFirstDayPosition:', this.WeekFirstDayPosition);
+//     	this.spacer = this.getSpacer();
+//     	},
+// 	methods: {
+// 		moment: function (){
+//     		return moment();
+//     	},
+//     	// le spacer ne fonctionne pas pour l instant // this.WeekFirstDayPosition is undefined
+//     	getSpacer: function(){
+//     		let s = this.WeekFirstDayPosition;
+//     		console.log(s);
+//     		let space = this.WeekFirstDayPosition*41;
+//     		console.log('space:', space);
+//     		return this.spacer = space+'px';
+//     		console.log('this.spacer: ', this.spacer);
+//     	}
+//     	// ICI on veut une méthode qui vérifie que le jour (entré dans l'input) affiché dans le header du date picker apparaisse bien comme sélectionné en bleu.
+//     	// attention pour l'instant c'est now qui s'affiche ds la header. il faudra le changer en date quand l'input sera fonctionnel
+//     	// isSelected: function(this.now){
+//     	// 	return this.dayNumber.unix() === this.now.unix();
+//     	// },
+//     	//ICI on veut une méthode qui permet de sélectionner un nouveau jour.
+//     	// on mettra un événement on click dans le v-for auquel on ratachera cette méthode,
+//     	// la date sera également changée dans le header
+// 	},
+// 	//creer un fichier filters, que l'on pourra utiliser dans toute l'app.
+// 	filters: {
+// 		dateFormatFull : function (date) {
+//     return moment(date).format('DD/MM/YYYY');
+// 		},
+// 		dateFormatYear : function (date) {
+//     return moment(date).format('YYYY');
+// 		},
+// 		dateFormatText : function (date) {
+//     return moment(date).format('dddd DD MMM');
+// 		},
+// 		dateFormatDayNumber: function (date) {
+//     return moment(date).format('D');
+// 		}
+// 	}
+// };
 
 
-</script>
+// </script>
 
 
 

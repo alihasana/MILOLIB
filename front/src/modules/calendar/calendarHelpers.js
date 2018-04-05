@@ -1,9 +1,6 @@
 //importing momentJs library //
 import moment from 'moment';
 
-// import 'moment-timezone';
-// moment.tz.setDefault('Europe/Paris');
-
 //local setting
 import 'moment/locale/fr';
 moment.locale('fr');
@@ -20,7 +17,7 @@ function getCurrentDate (){
 	return moment();
 };
 
-//return moment object for a date given as parameter. the date is string
+//return moment object for a date given as parameter. the date is string or moment
 function getDate(date) {
 	return moment(date);
 };
@@ -35,6 +32,7 @@ function getMonthFirstDate(date){
 	return moment(date).startOf('month');
 };
 
+//return the last day of the month(moment object) for a date given as parameter
 function getMonthLastDate(date){
 	return moment(date).endOf('month');
 }
@@ -43,6 +41,11 @@ function getMonthLastDate(date){
 function getWeekFirstDate(date){
 	return moment(date).startOf('week');
 };
+
+//return the day of the date moment object.
+function getDayFirstHour(date){
+	return moment(date).startOf('day');
+}
 
 //return the day position in the week of the 1st day of the month
 function getWeekFirstDayPosition(date){
@@ -72,6 +75,7 @@ function getDaysOfTheTimeRange(start,end){
 //create a slot Object 
 function createSlotObject(start){
 	let slotObject = Object.create(null);
+	slotObject.isInDay = getDayFirstHour(start);
 	slotObject.start = moment(start);
 	slotObject.end = moment(start).add(15, 'minutes');
 	slotObject.status = 'NotAvailable';
@@ -86,6 +90,7 @@ export {
 	getMonthFirstDate,
 	getMonthLastDate,
 	getWeekFirstDate,
+	getDayFirstHour,
 	getWeekNumber,
 	getTimeRange,
 	getDaysOfTheTimeRange,

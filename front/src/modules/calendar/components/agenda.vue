@@ -12,12 +12,15 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="slot in slots">
-							<!-- <tr v-for="hour in day.hours" class="hour" :class="{ selected: hour.selected }">
-								<td v-on:click="select(hour)">>{{hour.index}}</td> -->
+							<tr class="slotIsInDay(day)" v-for="slot in slotsInA" >
+								<!-- <tr v-for="slot in slotsInA" v-if="day == slot.isInDay"> -->
+								day: {{day | dateFormatFull}}
+								slot.isInDay: {{slot.isInDay | dateFormatFull}}
+								slot.start {{ slot.start | formatDayHour}}
 							</tr>
 						</tbody>
 					</table>
+				<!-- 	<button v-on:click="slotIsInDay(day)">click me</button> -->
 				</div>
 			</div>
 		</div>
@@ -33,7 +36,7 @@ import * as cHelpers from '.././calendarHelpers';
 export default {
 
 	name: "agenda",
-	props:['agendaRangeProp', 'startDateProp', 'endDateProp'],
+	props:['agendaRangeProp', 'startDateProp', 'endDateProp', 'agendaSlotProp'],
 	data() {
 		return {
 			msg: "agenda Vue",
@@ -41,45 +44,33 @@ export default {
       		days: '',
       		startDateInA: '',
       		endDateInA:'',
-      		slots:[]
-  //     		.map(
-  //     			dayname => ({
-  //     				name: dayname._d,
-  //       	// Each hour has an index and a selected property.
-		// 			hours: Array(13).fill(0)
-		// 			.map(
-		// 				(e, i) => ({
-		// 					index: i + 8,
-		// 					selected: false})
-		// 				)
-  //     			})
-  //     		)
+      		slotsInA:[]
+		}
+	},
+	computed:{
+		slotIsInDay: function(){
+			return this.agendaRangeProp.filter(function(sl) {
+        	return sl.isInDay == this.day;
+			})
 		}
 	},
 	components: {},
+	created (){
+		//before created, check with backend that the range time has not already been booked.
+		// requete axios, j'envoie dans le back la rangeTime, 
+		// le back vérifie if there is not 'booked' status'
+		// if no 'booked status': set up agenda
+		// if any 'booked status' display message that the time range has already booking, (give which one)
+		//and that user should handle them before planning new settings
+	},
 	updated(){
 		this.startDateInA = this.startDateProp;
 		this.endDateInA = this.endDateProp;
 		this.days = this.agendaRangeProp;
-		console.log('this.days:', this.days);
-		// this.setSlots();
-
-
+		this.slotsInA = this.agendaSlotProp;
 	},
 	methods: {
-		// setSlots: function(){
-		// 	let start = moment(this.startDateInA);
-		// 	let end = moment(this.endDateInA);
-
-		// 	for (let i=start; i.isBefore(end); i.add(15,'minutes')){
-		// 		console.log(i.format('llll'));
-		// 		let slotObject = cHelpers.createSlotObject(i);
-		// 		this.slots.push(slotObject);
-		// 		}
-		// 	}
-  		// select(e) {
-    // e.selected = !e.selected;
-  		// }
+		
 	},
 	filters: {
 		dateFormatFull : function (date) {
@@ -96,9 +87,13 @@ export default {
 		},
 		formatTime : function(date) {
 	return moment(date).format('LT');
+		},
+		formatDayHour : function(date){
+	return moment(date).format('lll');
 		}
 	}
 };
+
 
 </script>
 
