@@ -1,8 +1,8 @@
-<!-- Dashboard V2 : 
-- Problèmes :
+<!-- Dashboard V2 (⌐■_■) : 
+- Problèmes : 
 1) Les items sont en fill/justify [<b-navbar-nav justified id="items">] et occupe donc tous l'espace dispo mais le dropdown est décalé dû à l'agrandissement des divs.
 2) Le clic sur les dropdowns n'est pas parfait : marche si click sur l'icon ou le texte mais en dehors d'un certains périmètre le click fail et ne route pas.
--->
+(∩܍◡܍)⊃━☆ﾟ.* -->
 <template>
   <div>
     <b-navbar toggleable="sm" type="dark" variant="dark">
