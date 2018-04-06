@@ -38,7 +38,7 @@
   /* eslint-disable */
   import axios from "axios"
   export default {
-    name: "userProfile",
+    name: "profileDetails",
     data() {
       return {
         profileDetails: "Détails du profil utilisateur",

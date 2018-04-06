@@ -1,14 +1,15 @@
 <template>
   <div>
-    <create-user @userCreated='createNewUser($event)'></create-user>
-    <user-profile @completeProfile="updateUserProfile($event)"></user-profile>
+    <!-- <create-user @userCreated='createNewUser($event)'></create-user> -->
+    <profileDetails @completeProfile="updateUserProfile($event)"></profileDetails>
+    <!-- <user-profile @completeProfile="updateUserProfile($event)"></user-profile> -->
   </div>
 </template>
 
 <script>
   /* eslint-disable */
-  import createUser from "./components/createUser";
-  import userProfile from "./components/userProfile";
+  // import createUser from "./components/createUser";
+  import ProfileDetails from "./components/ProfileDetails";
   import axios from "axios";
   
   
@@ -20,16 +21,9 @@
       };
     },
     methods: {
-      createNewUser: function(newUser) {
-        console.log(newUser.email, newUser.role);
-        axios.post('http://localhost:1407/users', newUser)
-          .then(function(res) {
-            console.log('New user created:', res.data);
-          })
-          .catch(function(error) {
-            console.log("Error", error)
-          })
-      }, 
+      //save details 
+      
+      //update profile details 
       updateUserProfile: function(updateProfile) {
         axios.post('http://localhost:1407/users/self', updateProfile)
           .then(function(res) {
@@ -41,8 +35,8 @@
       } 
     },
     components: {
-      createUser,
-      userProfile
+      // createUser,
+      ProfileDetails
     }
   }
 </script>

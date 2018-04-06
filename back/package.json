@@ -12,13 +12,8 @@
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
-<<<<<<< HEAD
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
-=======
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
->>>>>>> 5b446b966acde3e3df2885a9d901b19c38982c8d
     "jsonwebtoken": "^8.1.1",
     "mongoose": "^5.0.7"
   },
