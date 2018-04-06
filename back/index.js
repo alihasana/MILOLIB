@@ -31,7 +31,7 @@ app.use(morgan('dev'))
 // A partir d'ici, toute les routes utilisent le middleware pour les cross-origin
 // Cela permet d'accepter certaines requetes qui seraient autrement invalides car
 // bloquées par le navigateur ou autre..
-app.use(function (req, res, next) {
+app.use( (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
@@ -68,16 +68,15 @@ app.use('/*', (req, res) => {
   res.status(404).json({ success: false, message: 'This route does not exists.'})
 })
 
-
 // MONGOOSE MONGODB CONNECT
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.DB, {}, function (err) {
+mongoose.connect(process.env.DB, {}, (err) => {
   if (err) { throw err; }
   else {
     console.log('Connection to the Database etablished...')
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
     let port = process.env.PORT || 1407
-    app.listen(port, () => console.log('App listen on port: ' + port))
+    app.listen(port, () => console.log('App listen on port: ' + port + '\u0007'))
   }
 })

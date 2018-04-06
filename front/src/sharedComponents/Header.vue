@@ -1,10 +1,10 @@
-<!-- Dashboard V2 (⌐■_■) : 
-- Problèmes : 
+<!-- Dashboard V2 : 
+- Problèmes :
 1) Les items sont en fill/justify [<b-navbar-nav justified id="items">] et occupe donc tous l'espace dispo mais le dropdown est décalé dû à l'agrandissement des divs.
 2) Le clic sur les dropdowns n'est pas parfait : marche si click sur l'icon ou le texte mais en dehors d'un certains périmètre le click fail et ne route pas.
-(∩܍◡܍)⊃━☆ﾟ.* -->
+-->
 <template>
-  <div id="background">
+  <div>
     <b-navbar toggleable="sm" type="dark" variant="dark">
       <b-navbar-brand><span id="dashboard">DASHBOARD</span></b-navbar-brand>
       <b-navbar-toggle target="header_collapse"></b-navbar-toggle>
@@ -48,7 +48,7 @@
 <script>
 /* eslint-disable */
 export default {
-  name: "dashboard",
+  name: "Header",
   data() {
     return {
       // msg: "Here we are ..."
@@ -93,13 +93,4 @@ span:hover {
   color: #16181B;
   text-decoration: none;
 } */
-
-#background {
-  height: 100vh;
-  margin:0;
-  padding:0;
-  background: url("https://wallpaperscraft.com/image/squirrel_stands_grass_animal_blur_120316_1280x1024.jpg") no-repeat center fixed; 
-  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-  background-size: cover; /* version standardisée */
-}
 </style>

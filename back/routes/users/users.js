@@ -32,55 +32,61 @@ router.get('/:id', (req, res) => {
   } else res.status(400).json({ success: false, message: 'Invalid ID' })
 })
 
-// router.put('/:id', (req, res) => {
-//   if (req.body && req.body.email && req.body.password) {
-//     if (ObjectId.isValid(req.params.id)) {
-//       User.findById(req.params.id, function (err, user) {
-//         if (!user) {
-//           res.status(404).json({ success: false, message: 'User not found..' })
-//         } else {
-//           if (err) res.status(500).json({success: false, message: err.message})
-//           else {
-//             user.email = req.body.email
-//             user.hashPassword = bcrypt.hashSync(req.body.password, 10)
-//             user.save(function (err, updatedUser) {
-//               if (err) {
-//                 res.status(500).json({success: false, message: err.message})
-//               } else {
-//                 updatedUser.hashPassword = undefined
-//                 res.status(200).json({ success: true, message: 'User updated!', content: updatedUser}) }
-//             })
-//           }
-//         }
-//       })
-//     } else {
-//       res.status(400).json({ success: false, message: 'Invalid ID' })
-//     }
-//   } else {
-//     res.status(400).json({ success: false, message: 'Data is missing..'})
-//   }
-// })
+router.put('/:id', (req, res) => {
+  if (res.locals.user.role == 'admin') {
+    if (ObjectId.isValid(req.params.id)) {
+      User.findById(req.params.id, (err, user) => {
+        if (err) res.status(500).json({ success: false, message: err.message })
+        else {
+          if (req.body.hashPassword) res.status(400).json({message: 'Really?'})
+          else {
+            if (req.body.password && req.body.oldPassword) {
+              if (!user.comparePasswords(req.body.oldPassword)) {
+                res.status(401).json({ success: false, message: 'Old password not matching.' })
+              } else {
+                req.body.hashPassword = bcrypt.hashSync(req.body.password, 10)
+              }
+            }
+            User.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
+              if (err) {
+                res.status(500).json({ success: false, message: err.message })
+              } else {
+                res.status(200).json({ success: true, message: 'User updated!' })
+              }
+            })
+          }
+        }
+      })
+    } else {
+      res.status(404).json({ success: false, message: 'User not found..' })
+    }
+  } else {
+    res.status(401).json({ success: false, message: 'You are not authorized to do this action..' })
+  }
+})
 
-// router.delete('/:id', (req, res) => {
-//   if (ObjectId.isValid(req.params.id)) {
-//     User.findById(req.params.id, function (err, user) {
-//       if (err) {
-//         res.status(500).json({success: false, message: err.message})
-//       } else if (!user) {
-//         res.status(404).json({ success: false, message: 'User not found..'})
-//       } else {
-//         User.remove({ _id: req.params.id }, function (err) {
-//           if (err) res.status(500).json({success: false, message: err.message})
-//           else {
-//             res.status(200).json({ success: true, message: 'User deleted!'})
-//           }
-//         })
-//       }
-//     })
-//   } else {
-//     res.status(400).json({ success: false, message: 'Invalid ID' })
-//   }
-// })
+router.delete('/:id', (req, res) => {
+  if (res.locals.user.role == 'admin') {
+    if (ObjectId.isValid(req.params.id)) {
+      User.findById(req.params.id, (err, user) => {
+        if (err) {
+          res.status(500).json({success: false, message: err.message})
+        } else {
+          User.remove({ _id: req.params.id }, (err) => {
+            if (err) res.status(500).json({success: false, message: err.message})
+            else {
+              res.status(200).json({success: true, message: 'The user has been deleted!'})
+            }
+          })
+        }
+      })
+    } else {
+      res.status(404).json({success: false, message: 'User not found..'})
+    }
+  } else {
+    res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
+  }
+})
 
 export default router
 
