@@ -14,7 +14,7 @@
   
   
   export default {
-    name: "profileUser",
+    name: "ProfileUser",
     data() {
       return {
         msg: "Hello main profileUser message"

@@ -6,7 +6,8 @@ import dashboard from "@/modules/dashboard/dashboard";
 import Users from "@/modules/users/Users";
 import UserList from "@/modules/users/components/UserList";
 import UserDetail from "@/modules/users/components/UserDetail";
-import CreateUser from "@/modules/users/components/CreateUser"; 
+import CreateUser from "@/modules/users/components/CreateUser";
+import ProfileUser from "@/modules/profileUser/ProfileUser";
 import ProfileDetails from "@/modules/profileUser/components/ProfileDetails";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
@@ -43,7 +44,7 @@ export default new Router({
 					path: ":id",
 					name: "userDetail",
 					component: UserDetail
-				}, 
+				},
 				{
 					path: "/create-user",
 					name: "createUser",
@@ -52,13 +53,10 @@ export default new Router({
 			]
 		},
 		{
-			path: "/profile-details",
-			name: "profileDetails",
-			component: ProfileDetails
-			path: "/profileUser",
-			name: "profileUser",
+			path: "/profile-user",
+			name: "ProfileUser",
 			components: {
-				default: profileUser,
+				default: ProfileUser,
 				header: Header
 			},
 		},
