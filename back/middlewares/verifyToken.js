@@ -21,6 +21,7 @@ let verifyToken = (req, res, next) => {
             if (!user) res.status(403).json({ success: false, message: 'Unauthozired' })
             else {
               res.locals.user = user
+              res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
               next()
             }
           })

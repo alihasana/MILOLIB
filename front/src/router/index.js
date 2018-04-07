@@ -6,9 +6,12 @@ import dashboard from "@/modules/dashboard/dashboard";
 import Users from "@/modules/users/Users";
 import UserList from "@/modules/users/components/UserList";
 import UserDetail from "@/modules/users/components/UserDetail";
-import profileUser from "@/modules/profileUser/profileUser";
+import CreateUser from "@/modules/users/components/CreateUser";
+import ProfileUser from "@/modules/profileUser/ProfileUser";
+import ProfileDetails from "@/modules/profileUser/components/ProfileDetails";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
+import Header from "@/sharedComponents/Header";
 
 Vue.use(Router);
 
@@ -27,10 +30,13 @@ export default new Router({
 		{
 			path: "/users",
 			name: "users",
-			component: Users,
+			components: {
+				default: Users,
+				header: Header
+			},
 			children: [
 				{
-					path: "",
+					path: "/list",
 					name: "userList",
 					component: UserList
 				},
@@ -38,23 +44,37 @@ export default new Router({
 					path: ":id",
 					name: "userDetail",
 					component: UserDetail
+				},
+				{
+					path: "/create-user",
+					name: "createUser",
+					component: CreateUser
 				}
 			]
 		},
 		{
-			path: "/profileUser",
-			name: "profileUser",
-			component: profileUser
+			path: "/profile-user",
+			name: "ProfileUser",
+			components: {
+				default: ProfileUser,
+				header: Header
+			},
 		},
 		{
 			path: "/calendar",
 			name: "calendar",
-			component: calendar
+			components: {
+				default: calendar,
+				header: Header
+			},
 		},
 		{
 			path: "/example",
 			name: "example",
-			component: example
+			components: {
+				default: example,
+				header: Header
+			}
 		}
 	]
 });

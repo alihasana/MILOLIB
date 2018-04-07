@@ -68,7 +68,6 @@ app.use('/*', (req, res) => {
   res.status(404).json({ success: false, message: 'This route does not exists.'})
 })
 
-
 // MONGOOSE MONGODB CONNECT
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.DB, {}, (err) => {
