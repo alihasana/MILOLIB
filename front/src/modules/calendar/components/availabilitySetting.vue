@@ -8,28 +8,21 @@
 						<b-list-group-item class="disposInDay">
 							<b-row>
 								<b-col sm="2">
-								<b-form-checkbox value="lundi">Lundi</b-form-checkbox>
+									<b-form-checkbox value="lundi">Lundi</b-form-checkbox>
 								</b-col>
-									<label for="input-morning-start">de:</label>
-								
+								<label for="input-morning-start">de:</label>
 								<b-col sm="2">
 									<b-form-input size="sm" id="input-morning-start" v-model ="startMorningTime" type="time"></b-form-input>
 								</b-col>
-								
-									<label for="input-morning-end">à:</label>
-								
+								<label for="input-morning-end">à:</label>
 								<b-col sm="2">
 									<b-form-input size="sm" id="input-morning-end" v-model ="endMorningTime" type="time"></b-form-input>
 								</b-col>
-								
-									<label for="input-afternoon-start">Et de:</label>
-								
+								<label for="input-afternoon-start">Et de:</label>
 								<b-col sm="2">
 									<b-form-input  size="sm" id="input-afternoon-start" v-model ="startAfternoonTime" type="time"></b-form-input>
 								</b-col>
-								
-									<label for="input-afternoon-end">à:</label>
-								
+								<label for="input-afternoon-end">à:</label>
 								<b-col sm="2">
 									<b-form-input size="sm" id="input-afternoon-end" v-model ="endAfternoonTime" type="time"></b-form-input>
 								</b-col>
@@ -57,7 +50,8 @@
 				</b-form-checkbox-group>
 			</b-form-group>
 			<hr>
-			<button v-on:click="getDisposInWeek()" type="button">Mettre à jour mes dispos sur mon Agenda</button>
+			<button v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</button>
+			<hr>
 			<div>Selected: <strong>{{ selected }}</strong></div>
 		</b-form>
 	</div>
@@ -65,28 +59,88 @@
 
 <script>
 /* eslint-disable */
+import moment from 'moment';
+import 'moment/locale/fr';
+import * as cHelpers from '.././calendarHelpers';
 
+//description of component
+	//This component anable to pre-set availabilities periods recurrent in the week
+	//from the period selected in the datePicker:
+	//it will convert all the selected days and available times to slots with status'available',
+	//it will return:
+	//- a list of days ( moment object) in which the conseiller will have availabilities
+	//- a list of slots objects of 15 minutes, with status 'available'
+
+//To do:
+// - test only done for the monday. the day of the week should be dynamic.
+// - this component should open only after clicking on create my agenda in datePicker component
+// - the hours selection should only be visible when the day is selected
+// - the hours selection should be filled with 
+// - error handeling: if the range not suitable
+
+	
 export default {
 	name: "availabilitySetting",
+	props:['agendaRangeProp'],
 	data() {
 		return {
 			msg: "availabilitySetting Vue",
+			weekDays:['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
 			selected:[],
 			startMorningTime:'',
 			endMorningTime: '',
 			startAfternoonTime: '',
-			endAfternoonTime:''
-
-		};
+			endAfternoonTime:'',
+			agendaRangeInAS:[],
+			agendaRangeFilteredInAS:[],
+			slotsInAS:[],
+		}
 	},
 	components: {},
+	updated(){
+		this.agendaRangeInAS = this.agendaRangeProp;
+		// console.log('this.agendaRangeInAS:', this.agendaRangeInAS);
+	},
 	methods: {
-		getDisposInWeek: function(){
-			console.log('here are the availabilities selected:', this.selected);
-			console.log('startMorningTime:',this.startMorningTime)
+		getDisposInWeek: function(sel) {
+			if(sel.length){
+				//if at least one day is selected, i check if this day is in the agendaRange.
+				for (let i=0; i<sel.length; i++){
+					for(let j=0; j<this.agendaRangeInAS.length; j++){
+						let dayName = cHelpers.getNameOfDay(this.agendaRangeInAS[j]);
+						if (dayName == sel[i]) {
+							// if so i push the matching date in agendaRangeFiltered.
+							this.agendaRangeFilteredInAS.push(this.agendaRangeInAS[j]);
+							//and i create slots of availabilities for these days:
+								//for this i need to get starting and ending for eachperiod in Day
+								if(this.startMorningTime && this.endMorningTime){
+									let startAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.startMorningTime), 'minutes');
+									let endAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.endMorningTime), 'minutes');
+									// console.log('startAM:', startAM);
+									// console.log('endAM:', endAM);
+									this.slotsInAS.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
+								}
+								if(this.startAfternoonTime && this.endAfternoonTime){
+									let startPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.startAfternoonTime), 'minutes');
+									let endPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.endAfternoonTime), 'minutes');
+									// console.log('startPM:', startPM);
+									// console.log('endPM:', endPM);
+									this.slotsInAS.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
+								}
+						}
+					}
+				}
+			}
+			console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
+			console.log('slotsInAS:', this.slotsInAS)
+			// pass the this.slotsInAS to backend, so that backend check that these slots are not already booked.
 		}
+		
 	}
+
+		
 };
+
 </script>
 
 <style scoped>
