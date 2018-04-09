@@ -7,16 +7,19 @@
 						<b-list-group-item class="disposInDay">
 							<b-row class="periode">
 								<label :for="startDateInDP">Date de départ:</label>
-								<b-col sm="3"><b-form-input id="startDateInDP" v-on:change="getStartDate()" v-model ="startDateInDP" type="date"></b-form-input></b-col>
+								<b-col sm="3"><b-form-input id="startDateInDP" v-model ="startDateInDP" type="date"></b-form-input></b-col>
 								<label :for="endDateInDP">Date de fin:</label>
-								<b-col sm="3"><b-form-input id="endDateInDP" v-on:change="getEndDate()" v-model ="endDateInDP" type="date"></b-form-input></b-col>
+								<b-col sm="3"><b-form-input id="endDateInDP" v-model ="endDateInDP" type="date"></b-form-input></b-col>
 							</b-row>
 						</b-list-group-item>
 					</b-list-group>
 					<button v-on:click="createNewAgenda()" type="button">Creer mon Agenda</button>
 				</b-form-group>
 			</b-form>
-			<div>
+			<div class="availabilitySetting">
+				<availabilitySetting :agendaRangeProp="agendaRangeInDP"></availabilitySetting>
+			</div>
+			<div class="agenda">
 				<agenda :agendaRangeProp="agendaRangeInDP" :startDateProp="startDateInDP" :endDateProp="endDateInDP" :agendaSlotProp="slotsInDP"></agenda>
 			</div>
 		</div>
@@ -29,6 +32,7 @@
 import moment from 'moment';
 import 'moment/locale/fr';
 import * as cHelpers from '.././calendarHelpers';
+import availabilitySetting from "./availabilitySetting";
 import agenda from "./agenda";
 
 //setting local format and language
@@ -57,31 +61,18 @@ export default {
 		};
 	},
 	components: {
-		agenda
+		agenda,
+		availabilitySetting
 	},
 	methods:{
-		getStartDate: function(){
-			console.log('this.startDateInDP:', this.startDateInDP);
-		},
-		getEndDate: function(){
-			console.log('this.endDate:', this.endDateInDP);
-		},
 		createAgendaRange : function(){
 			console.log('je vais créer mon agenda de', this.startDateInDP, 'à', this.endDateInDP );
 			return this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDP,this.endDateInDP);
 		},
-		setSlots: function(){
-			let start = moment(this.startDateInDP);
-			let end = moment(this.endDateInDP);
-			for (let i=start; i.isBefore(end); i.add(15,'minutes')){
-				let builtslot = cHelpers.createSlotObject(i);
-				this.slotsInDP.push(builtslot);
-			}
-			console.log('this.slots:', this.slotsInDP);
-		},
 		createNewAgenda: function(){
 			this.createAgendaRange();
-			this.setSlots()
+			this.slotsInDP = cHelpers.setSlotsArray(this.startDateInDP,this.endDateInDP, 15, cHelpers.NotAvailable);
+			console.log('this.slotsInDP:', this.slotsInDP);
 		}
 	}	
 };

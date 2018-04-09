@@ -12,11 +12,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="slotIsInDay(day)" v-for="slot in slotsInA" >
-								<!-- <tr v-for="slot in slotsInA" v-if="day == slot.isInDay"> -->
+							<!-- <tr class="slotIsInDay(day)" v-for="slot in slotsInA" > -->
+							<!-- <tr v-for="slot in slotsInA" v-if="slotIsInDay(day, slot)">
 								day: {{day | dateFormatFull}}
 								slot.isInDay: {{slot.isInDay | dateFormatFull}}
-								slot.start {{ slot.start | formatDayHour}}
+							</tr> -->
+							<!-- <tr v-for="slot in slotsInA" :key="slot.isInDay">
+								<template v-if="slotIsInDay(day,slotsInA)">
+								day: {{day | dateFormatFull}}
+								slot.isInDay: {{slot.isInDay | dateFormatFull}}
+								</template>
+							</tr> -->
+							<tr v-for="slot in slotsInAFiltered" >
+								day: {{day | dateFormatFull}}
+								slot.isInDay: {{slot.isInDay | dateFormatFull}}
 							</tr>
 						</tbody>
 					</table>
@@ -33,6 +42,14 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import * as cHelpers from '.././calendarHelpers';
 
+
+//description of component
+	//This component vill set up an agenda, 
+	// - sets the days list in the agenda onclik action in datePicker component
+	// - sets the available slots in the agenda onclick action in availabilitySetting component
+	
+	//! WORK IN PROGRESS filter to display below each day the corresponding slots
+
 export default {
 
 	name: "agenda",
@@ -41,21 +58,17 @@ export default {
 		return {
 			msg: "agenda Vue",
 			day:'',
-      		days: '',
+      		agendaRangeInA: '',
       		startDateInA: '',
       		endDateInA:'',
-      		slotsInA:[]
-		}
-	},
-	computed:{
-		slotIsInDay: function(){
-			return this.agendaRangeProp.filter(function(sl) {
-        	return sl.isInDay == this.day;
-			})
+      		slot:'',
+      		slotsInA:[],
+      		slotsInAFiltered:[]
 		}
 	},
 	components: {},
 	created (){
+		// console.log('this.slotsInA at created:' , this.slotsInA)
 		//before created, check with backend that the range time has not already been booked.
 		// requete axios, j'envoie dans le back la rangeTime, 
 		// le back vérifie if there is not 'booked' status'
@@ -63,14 +76,37 @@ export default {
 		// if any 'booked status' display message that the time range has already booking, (give which one)
 		//and that user should handle them before planning new settings
 	},
+	mounted(){
+		// console.log('this.slotsInA at mounted:' , this.slotsInA)
+	},
+	beforeUpdate(){
+		// console.log('this.slotsInA at mounted:' , this.slotsInA)
+	},
 	updated(){
 		this.startDateInA = this.startDateProp;
 		this.endDateInA = this.endDateProp;
-		this.days = this.agendaRangeProp;
+		this.agendaRangeInA = this.agendaRangeProp;
 		this.slotsInA = this.agendaSlotProp;
+		console.log('this.slotsInA at updated:' , this.slotsInA);
+	// 	slotIsInDay(this.day,this.slotsInA);
 	},
 	methods: {
-		
+		// slotIsInDay: function(day,slot){
+		// 	console.log('japl slotIsInDay');
+		// 	return this.slotsInA.filter(function(day,slot) {
+		// 		// console.log('this.slotsInA:' , this.slotsInA);
+		// 		// console.log('slot.isInDay:' , this.slot.isInDay);
+		// 		// console.log('day:' , this.day);
+  //       	return this.slot.isInDay === this.day;
+		// 	})
+		// }
+		slotIsInDay: function(day,slotsInA){
+			console.log('japl slotIsInDay');
+			let slotsInAFiltered = slotsInA.filter(function(slot){
+				return this.slot.isInDay == day;
+			});
+			console.log('slotsInAFiltered: ', slotsInAFiltered);
+		}
 	},
 	filters: {
 		dateFormatFull : function (date) {
