@@ -9,6 +9,9 @@ let UserSchema = new mongoose.Schema({
   lastName: { type: String },
   creationDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
+  // WARNING WIP !!!
+  // calendar: CalendarSchema,
+  // rdv: RdvSchema
 })
 
 UserSchema.methods.comparePasswords = function(password) {

@@ -1,0 +1,105 @@
+BACK END DESCRIPTION
+
+  LOGIN
+  -----
+
+  Url: ’POST /auth/login’
+  Parameters (body):
+  {
+      username: String,
+      password: String
+  }
+  Return value:
+  {
+      success: Boolean,
+      token: JWT Token,
+  }
+  
+  SIGNUP
+  ------
+  
+  Url: ’POST /auth/signup’
+  Parameters (body):
+  {
+      username: String,
+      password: String,
+      firstName: String (optional),
+      lastName: String (optional)
+  }
+  Return value:
+  {
+      success: Boolean,
+      content: User Profile (User: see below)
+  }
+
+  USERS
+  -----
+  
+  Url: ’GET /users’ | Need authentication
+  Return value:
+  {
+      success: Boolean,
+      content: List of Users (User: see below {without password})
+  }
+  Url: ’GET /users/:id’ | Need authentication
+  Return value:
+  {
+      success: Boolean,
+      content: User (User: see below {without password})
+  }
+
+  MESSAGES
+  --------
+
+  Url: ’GET /messages’ | Need authentication
+  Return value:
+  {
+      success: Boolean,
+      content: List of Messages of the current user (Messages: see below)
+  }
+  Url: ’POST /messages’ | Need authentication
+  Parameters (body):
+  {
+      title: String,
+      content: String,
+      userID: ID or username of the User who will received the message
+  }
+  Return value:
+  {
+      success: Boolean,
+  }
+  Url: ’PUT /messages/:messageID’ | Need authentication
+  Parameters (body):
+  {
+      read: Booelan,
+      readDate: Date of read
+  }
+  Return value:
+  {
+      success: Boolean,
+  }
+
+  PROFILE
+  -------
+
+  Url: ’GET /profile’ | Need authentication
+  Return value:
+  {
+      success: Boolean,
+      content: Current connected user (User: see below {without password})
+  }
+  Url: ’GET /profile/products’ | Need authentication
+  Return value:
+  {
+      success: Boolean,
+      content: List of products of the current user (Products: see below)
+  }
+  Url: ’PUT /profile’ | Need authentication
+  Parameters (body):
+  {
+      … every field of the User object (except the username and id)
+  }
+  Return value:
+  {
+      success: Boolean,
+  }

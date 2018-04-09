@@ -13,6 +13,11 @@ router.get('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
 })
 
+router.get('/test', (req, res) => {
+  // helper.beforeSendUser(res.locals.user)
+  res.status(200).json({ success: true, message: 'Your res.', content: res.locals })
+})
+
 // {runValidators : true}
 // exploiter le contenue de "result" pour faire des réponses differentes
 
