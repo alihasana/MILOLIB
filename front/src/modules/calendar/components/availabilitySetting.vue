@@ -55,17 +55,12 @@ import * as cHelpers from '.././calendarHelpers';
 	//- a list of slots objects of 15 minutes, with status 'available'
 
 //To do:
-// - test only done for the monday. the day of the week should be dynamic.
 // - this component should open only after clicking on create my agenda in datePicker component
 // - the hours selection should only be visible when the day is selected
-// - the hours selection should be filled with 
+// - Should the hours selection pre-filled?
 // - error handeling: if the range not suitable
 
 
-// solve pb : https://stackoverflow.com/questions/43797010/dynamic-value-checkbox-vuejs-2?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-
-
-	
 export default {
 	name: "availabilitySetting",
 	props:['agendaRangeProp'],
@@ -74,19 +69,15 @@ export default {
 			msg: "availabilitySetting Vue",
 			day:'',
 			weekDays:[
-				{ dayname:'Lundi', index:0, startMorningTime:'12:00', endMorningTime: '14:00', startAfternoonTime: '', endAfternoonTime:'' },
+				{ dayname:'Lundi', index:0, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
 				{ dayname:'Mardi', index:1, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				// { dayname:'Mercredi', index:2},
-				// { dayname:'Jeudi', index:3},
-				// { dayname:'Vendredi', index:4},
-				// { dayname:'Samedi', index:5},
-				// { dayname:'Dimanche', index:6},
+				{ dayname:'Mercredi', index:2, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+				{ dayname:'Jeudi', index:3, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+				{ dayname:'Vendredi', index:4, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+				{ dayname:'Samedi', index:5, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+				{ dayname:'Dimanche', index:6, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' }
 			],
 			selected:[],
-			// startMorningTime:'',
-			// endMorningTime: '',
-			// startAfternoonTime: '',
-			// endAfternoonTime:'',
 			agendaRangeInAS:[],
 			agendaRangeFilteredInAS:[],
 			slotsInAS:[],
@@ -95,7 +86,6 @@ export default {
 	components: {},
 	updated(){
 		this.agendaRangeInAS = this.agendaRangeProp;
-		// console.log('this.agendaRangeInAS:', this.agendaRangeInAS);
 	},
 	methods: {
 		getDisposInWeek: function(sel) {
@@ -111,20 +101,20 @@ export default {
 							//and i create slots of availabilities for these days:
 								//for this i need to get starting and ending for eachperiod in Day
 								// and for this i need convert string collected in input to duration in minutes
-								if(this.day.startMorningTime && this.day.endMorningTime){
-									let startAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.day.startMorningTime), 'minutes');
-									let endAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.day.endMorningTime), 'minutes');
+								if(this.weekDays[i].startMorningTime && this.weekDays[i].endMorningTime){
+									let startAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].startMorningTime), 'minutes');
+									let endAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].endMorningTime), 'minutes');
 									// console.log('startAM:', startAM);
 									// console.log('endAM:', endAM);
 									this.slotsInAS.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
 								}
-								// if(this.startAfternoonTime && this.endAfternoonTime){
-								// 	let startPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.startAfternoonTime), 'minutes');
-								// 	let endPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.endAfternoonTime), 'minutes');
-								// 	// console.log('startPM:', startPM);
-								// 	// console.log('endPM:', endPM);
-								// 	this.slotsInAS.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
-								// }
+								if(this.weekDays[i].startAfternoonTime && this.weekDays[i].endAfternoonTime){
+									let startPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].startAfternoonTime), 'minutes');
+									let endPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].endAfternoonTime), 'minutes');
+									// console.log('startPM:', startPM);
+									// console.log('endPM:', endPM);
+									this.slotsInAS.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
+								}
 						}
 					}
 				}
