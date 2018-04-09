@@ -9,7 +9,7 @@ export default {
       // les mettres direct là evite les doublons mais,
       // oblige a refaire des 'locals.user.anything = body.anything'
     if (body.password) {
-      if (!(body.oldPassword && locals.userUnmodified.comparePasswords(body.oldPassword)) ) {        
+      if (!(body.oldPassword && locals.user.comparePasswords(body.oldPassword)) ) {        
         messageArray[1] = ' Actual password incorrect. '
       } else {
         locals.user.hashPassword = bcrypt.hashSync(body.password, 10)
