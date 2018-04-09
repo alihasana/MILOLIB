@@ -18,7 +18,7 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
 Vue.use(VueAxios, axios);
-axios.defaults.baseURL = "http://localhost:1408";
+axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] =
 	"application/x-www-form-urlencoded";
 
@@ -28,13 +28,14 @@ const reqInterceptor = axios.interceptors.request.use(config => {
 	console.log("Request Interceptor", config);
 	return config;
 });
+
 const resInterceptor = axios.interceptors.response.use(res => {
 	console.log("Response Interceptor", res);
 	return res;
 });
 
-// axios.interceptors.request.eject(reqInterceptor);
-// axios.interceptors.response.eject(resInterceptor);
+axios.interceptors.request.eject(reqInterceptor);
+axios.interceptors.response.eject(resInterceptor);
 /* eslint-disable no-new */
 new Vue({
 	el: "#app",

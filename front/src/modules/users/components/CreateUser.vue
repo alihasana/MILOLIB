@@ -1,23 +1,27 @@
 <template>
   <div>
     <h1>{{ title }}</h1>
-    <!-- Create user form -->
+    <!-- Create user Form -->
     <div class="form">
       <b-form>
+        <!-- Username/E-mail -->
         <b-form-group id="">
-          <b-form-input id="exampleInput1" type="email" v-model="form.userName" required placeholder="Entrer l'adresse e-mail d'un nouvel utilisateur">
+          <b-form-input id="" type="email" v-model="form.userName" required placeholder="Entrer l'adresse e-mail d'un nouvel utilisateur">
           </b-form-input>
         </b-form-group>
-  
+        <!-- User role -->
         <b-form-group id="">
           <b-form-select id="" :options="userRole" required v-model="form.userRole">
           </b-form-select>
         </b-form-group>
+        <!-- Password -->
+        <b-form-group>
+          <b-form-input v-model="form.userPassword" placeholder="Entrer un mot de passe"></b-form-input>
+        </b-form-group>
         <!-- Admin's actions buttons -->
         <b-button-group>
           <b-button v-on:click="createUser" type="submit" variant="success">Enregistrer</b-button>
-          <b-button type="submit" variant="primary">Modifier</b-button>
-          <b-button type="submit" variant="danger">Supprimer</b-button>
+          <b-button v-on:click="createUser" type="submit" variant="primary">Modifier</b-button>
         </b-button-group>
       </b-form>
     </div>
@@ -37,6 +41,7 @@
         title: "Créer le profil d'un nouvel utilisateur",
         form: {
           userName: '',
+          userPassword: '',
           userRole: null
         },
         userRole: [{
@@ -47,7 +52,8 @@
         ],
         newUser: {
           email: String, 
-          role: String
+          role: String, 
+          pswd: String
         }
       }
     },
@@ -55,16 +61,14 @@
    createUser: function() { 
         const newUser = {
           email: this.form.userName,
-          role: this.form.userRole
+          role: this.form.userRole,
+          pswd: this.form.userPassword
         }
         //emit sends data to parent file
         this.$emit('createNewUser', newUser)
-        console.log('Objet: newUser:', newUser);
+        console.log('Object from child: newUser:', newUser);
       }
-  
     }
-  
-  
   }
 </script>
 
