@@ -21,7 +21,6 @@
         <!-- Admin's actions buttons -->
         <b-button-group>
           <b-button v-on:click="createUser" type="submit" variant="success">Enregistrer</b-button>
-          <b-button v-on:click="createUser" type="submit" variant="primary">Modifier</b-button>
         </b-button-group>
       </b-form>
     </div>

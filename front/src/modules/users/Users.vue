@@ -9,6 +9,7 @@
 import CreateUser from "./components/CreateUser";
 import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList";
+import axios from "../../../helpers/http";
 
 export default {
   name: "Users",
@@ -30,13 +31,14 @@ export default {
     //Create user method
     createNewUser: function(newUser) {
         console.log('Object from parent: ', newUser);
-        // axios.post('http://localhost:1407/users', newUser)
-        //   .then(function(res) {
-        //     console.log('New user created:', res.data);
-        //   })
-        //   .catch(function(error) {
-        //     console.log("Error", error)
-        //   })
+        axios.post('/users', newUser)
+          .then(function(res) {
+            console.log('New user created:', res.data);
+          })
+          .catch(function(error) {
+            console.log("Error", error)
+            console.log("Erreur de connexion")
+          })
       },      
   },
 };

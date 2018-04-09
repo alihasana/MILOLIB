@@ -20,6 +20,7 @@ router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '', '']
   
   for (let key of Object.keys(req.body)) {
+    //res.locals.user = connected user
     res.locals.user[key] = req.body[key];
   }
   // possible d'ecrire plusieurs unmarkModified en 1 ligne ? 
