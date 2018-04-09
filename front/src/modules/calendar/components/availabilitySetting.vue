@@ -2,7 +2,7 @@
 	<div>
 		<h5>{{ msg }}</h5>
 		<b-form>
-			<b-form-group label="Mes disponibilités dans la semaine">
+			<b-form-group label="Paramétrage de mes disponibilités dans une semaine type">
 				<b-form-checkbox-group id="disposInWeek" name="disposInWeek" v-model="selected">
 					<b-list-group>
 						<b-list-group-item class="disposInDay" v-for="(day,index) in weekDays" :key="index">

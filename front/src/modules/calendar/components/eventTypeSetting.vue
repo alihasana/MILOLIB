@@ -2,18 +2,22 @@
   <div class="container">
     <h5>{{msg}}</h5>
     <b-form>
-      <b-form-group label="paramétrage de mes RDV">
+      <b-form-group label="Paramétrage de mes types de RDV">
         <b-form-checkbox-group id="eventSettings" name="eventSettings" v-model="selected">
           <b-list-group>
-            <b-list-group-item v-for="type in types" :key="type.index">
+            <b-list-group-item v-for="(type,index) in types" :key="index">
               <b-row>
                 <b-col sm="3" class="typesrdv">
-                  <b-form-checkbox :value="type.rdv">{{ type.rdv }}</b-form-checkbox>
+                  <b-form-checkbox :value="type.rdvType">{{ type.rdvType }}</b-form-checkbox>
                 </b-col>
                 <b-col sm="6">
-                    <b-button variant="link" size="sm" v-on:click="increaseDuration(type)"><i class="material-icons">add_circle_outline</i></b-button>
-                    <span>{{type.duration}} min</span>
-                    <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)"><i class="material-icons">remove_circle_outline</i></b-button>
+                  <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)">
+                    <i class="material-icons">remove_circle_outline</i>
+                  </b-button>
+                  <span>{{type.duration}} min</span>
+                  <b-button variant="link" size="sm" v-on:click="increaseDuration(type)">
+                    <i class="material-icons">add_circle_outline</i>
+                  </b-button>
                 </b-col>
               </b-row>
             </b-list-group-item>
@@ -35,36 +39,64 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import * as cHelpers from '.././calendarHelpers';
 
+//description of component
+//this component enable to set the type of meeting that will be allowed in calendar and their duration.
+
+//TODO
+//- would be greate to turn in color the selected type of meeting for better visualization
+
 export default {
   name: "eventTypeSetting",
   data() {
     return {
       msg: "Event Type Settings",
       types:[
-        { rdv:'Premier RDV individuel', index:0, duration:60},
-        { rdv:'Emploi', index:1, duration:45},
-        { rdv:'Formation', index:2, duration:45},
-        { rdv:'Projet professionnel', index:3, duration:45},
-        { rdv:'Aide Financiere', index:4, duration:30},
-        { rdv:'Apprentissage', index:5, duration:45},
-        { rdv:'Autre', index:6, duration:45}
+        { rdvType:'Premier RDV individuel', index:0, duration:0},
+        { rdvType:'Emploi', index:1, duration:0},
+        { rdvType:'Formation', index:2, duration:0},
+        { rdvType:'Projet professionnel', index:3, duration:0},
+        { rdvType:'Aide Financiere', index:4, duration:0},
+        { rdvType:'Apprentissage', index:5, duration:0},
+        { rdvType:'Autre', index:6, duration:0}
       ],
-      selected:[]
-    };
+      selected:[],
+      eventTypeFilteredInETV:[]
+    }
   },
   components: {
   },
   methods: {
-    confirmSelectedTypes: function(selected){
-      console.log('selected types are: ', this.selected)
+    confirmSelectedTypes: function(sel){
+      console.log('selected types are: ', this.selected);
+      if(sel.length) {
+        //if at least one type is selected, i get the value of duration and push it in array containing the enventType selection
+        for (let i=0; i<=sel.length; i++){
+          if(this.types[i].duration>0){
+            this.eventTypeFilteredInETV.push({
+              type: this.types[i].rdvType,
+              duration: this.types[i].duration
+            });
+            console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV)
+          }
+         }
+      }
     },
     increaseDuration: function(t){
-      return t.duration += 15;
+      if (t.duration>=0){
+        return t.duration += 15;
+      }
+      else{
+        console.log('Merci de sélectionner une durée valide');
+      }
     },
     decreaseDuration: function(t){
-      return t.duration -= 15;
+      if (t.duration>=15){
+        return t.duration -= 15;
+      }
+      else{
+        console.log('Merci de sélectionner une durée valide');
+      }
     }
-
   }
 };
 
