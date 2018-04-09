@@ -54,37 +54,37 @@
 <script>
 /* eslint-disable */
 export default {
-  name: "Header",
+  name: "Dashboard",
   data() {
     return {
-      token: localStorage.getItem("token")
+      // token: localStorage.getItem("token")
       // msg: "Here we are ..."
     };
   },
   components: {},
-  methods: {
-    routerLogout() {
-      localStorage.removeItem("token");
-      this.$router.push("/");
-    },
-    Token() {
-      let getToken = localStorage.getItem("token");
-      if (getToken === null) {
-        this.$router.push("/");
-      }
-    }
-  },
-  created() {
-    this.Token();
-  }
+  // methods: {
+  //   routerLogout() {
+  //     localStorage.removeItem("token");
+  //     this.$router.push("/");
+  //   },
+  //   Token() {
+  //     let getToken = localStorage.getItem("token");
+  //     if (getToken === null) {
+  //       this.$router.push("/");
+  //     }
+  //   }
+  // },
+  // created() {
+  //   this.Token();
+  // }
 };
 </script>
 
 <style scoped>
-.material-icons.md-18 { font-size: 18px; }
+/* .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
-.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-48 { font-size: 48px; } */
 
 #dashboard {
   /* color: yellow; */
@@ -92,17 +92,18 @@ export default {
 
 #items {
   /* background-color: red; */
-  width: 100%; /* comme les items sont en fill sur 100% de l'espace ils augmentent la taille de leur conteneur et décale ainsi le dropdown */
+  /* width: 100%;  */
+  /* comme les items sont en fill sur 100% de l'espace ils augmentent la taille de leur conteneur et décale ainsi le dropdown */
 
 }
 
 i {
   /* color: purple; */
-  padding-right: 4px;
+  /* padding-right: 4px; */
 }
 
 #logout {
-  color: red;
+  /* color: red; */
 }
 
 /* span {

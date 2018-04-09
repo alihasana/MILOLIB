@@ -19,7 +19,7 @@
             </template>
             <b-dropdown-item><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item> 
             <b-dropdown-item><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>User's list</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'userDetail'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <template slot="button-content">
