@@ -25,7 +25,10 @@ export default new Router({
 		{
 			path: "/dashboard",
 			name: "dashboard",
-			component: dashboard
+			components: {
+				default: dashboard,
+				header: Header
+			},
 		},
 		{
 			path: "/users",

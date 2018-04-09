@@ -48,7 +48,7 @@ export default {
             type: "success",
             text: "It's working"
           });
-          if (token) this.$router.push("/users");
+          if (token) this.$router.push("/dashboard");
           // else
           // swal({
           //   type: "error",
