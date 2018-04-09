@@ -3,6 +3,9 @@
   <div class="datePicker">
     <datePicker></datePicker>
   </div>
+  <div>
+    <eventTypeSetting></eventTypeSetting>
+  </div>
   </div>
 </template>
 
@@ -11,6 +14,7 @@
 /* eslint-disable */
 
 import datePicker from "./components/datePicker";
+import eventTypeSetting from "./components/eventTypeSetting";
 import * as cHelpers from './calendarHelpers';
 
 
@@ -22,7 +26,8 @@ export default {
     };
   },
   components: {
-    datePicker
+    datePicker,
+    eventTypeSetting
   },
   methods: {}
 };

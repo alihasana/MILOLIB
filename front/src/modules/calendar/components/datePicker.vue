@@ -13,7 +13,7 @@
 							</b-row>
 						</b-list-group-item>
 					</b-list-group>
-					<button v-on:click="createNewAgenda()" type="button">Creer mon Agenda</button>
+					<b-button variant="outline-primary" v-on:click="createNewAgenda()" type="button">Creer mon Agenda</b-button>
 				</b-form-group>
 			</b-form>
 			<div class="availabilitySetting">
