@@ -31,6 +31,7 @@
 <script>
   /* eslint-disable */
   import axios from "axios"
+  import http from "../../../../helpers/http";
   
   export default {
   
@@ -49,24 +50,30 @@
           },
           'Administrateur', 'Conseiller', 'Chargé d\'accueil', 'Invité'
         ],
-        newUser: {
-          email: String, 
-          role: String, 
+        User: {
+          email: String,
+          role: String,
           pswd: String
         }
       }
     },
     methods: {
-   createUser: function() { 
-        const newUser = {
+      createUser: function(newUser) {
+        const User = {
           email: this.form.userName,
           role: this.form.userRole,
           pswd: this.form.userPassword
         }
-        //emit sends data to parent file
-        this.$emit('createNewUser', newUser)
-        console.log('Object from child: newUser:', newUser);
-      }
+        console.log('Object from parent: ', User)
+        http.post('users/create-user', User)
+          .then(res => {
+            this.$router.push('/users/list')
+          console.log('Bingo', res);
+          })
+          .catch(function(error) {
+            console.log("Error", error)
+          })
+      },
     }
   }
 </script>

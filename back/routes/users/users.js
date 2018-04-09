@@ -92,3 +92,33 @@ export default router
 
 // ???
 // Gestion d'erreurs un peu different entre "router.get/put/delete" . A voir ce qui est le plus pertinent
+
+//Create New User
+router.post('/create-user', (req, res) => {
+  let body = req.body; 
+  console.log('body: ', body);
+  if (body.email && body.pswd) {
+      User.findOne({ email: body.email }, function (err, doc) {
+          if (doc == null) {
+              let newUser = new User;
+              newUser.email = req.body.email;
+              newUser.role = req.body.role;
+              newUser.hashPassword = req.body.pswd;
+              console.log('New User object', newUser);
+              newUser.save(function(err){
+                  if (err) {
+                      return err;
+                  } else {
+                      return res.status(200).send('New user has been created');
+                  }
+              }); 
+          } else {
+              console.log('This user has already been created'); 
+              return res.status(400).send({ message: 'This user has already been created' })
+          }
+      });
+  } else {
+      console.log('All the fields are required')
+      return res.status(412).send({ message: 'All the fields are required' })
+  }
+});
