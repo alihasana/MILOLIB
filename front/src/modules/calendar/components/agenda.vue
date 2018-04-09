@@ -12,24 +12,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<!-- <tr class="slotIsInDay(day)" v-for="slot in slotsInA" > -->
-							<!-- <tr v-for="slot in slotsInA" v-if="slotIsInDay(day, slot)">
+							<!-- <tr v-for="slot in agendaSlotProp" v-if="slotIsInDay(day,agendaSlotProp)">
 								day: {{day | dateFormatFull}}
 								slot.isInDay: {{slot.isInDay | dateFormatFull}}
 							</tr> -->
-							<!-- <tr v-for="slot in slotsInA" :key="slot.isInDay">
-								<template v-if="slotIsInDay(day,slotsInA)">
-								day: {{day | dateFormatFull}}
-								slot.isInDay: {{slot.isInDay | dateFormatFull}}
-								</template>
-							</tr> -->
-							<tr v-for="slot in slotsInAFiltered" >
-								day: {{day | dateFormatFull}}
-								slot.isInDay: {{slot.isInDay | dateFormatFull}}
-							</tr>
 						</tbody>
 					</table>
-				<!-- 	<button v-on:click="slotIsInDay(day)">click me</button> -->
 				</div>
 			</div>
 		</div>
@@ -88,22 +76,14 @@ export default {
 		this.agendaRangeInA = this.agendaRangeProp;
 		this.slotsInA = this.agendaSlotProp;
 		console.log('this.slotsInA at updated:' , this.slotsInA);
-	// 	slotIsInDay(this.day,this.slotsInA);
+		// this.slotIsInDay(this.day,this.slotsInA);
 	},
 	methods: {
-		// slotIsInDay: function(day,slot){
-		// 	console.log('japl slotIsInDay');
-		// 	return this.slotsInA.filter(function(day,slot) {
-		// 		// console.log('this.slotsInA:' , this.slotsInA);
-		// 		// console.log('slot.isInDay:' , this.slot.isInDay);
-		// 		// console.log('day:' , this.day);
-  //       	return this.slot.isInDay === this.day;
-		// 	})
-		// }
-		slotIsInDay: function(day,slotsInA){
-			console.log('japl slotIsInDay');
-			let slotsInAFiltered = slotsInA.filter(function(slot){
-				return this.slot.isInDay == day;
+		slotIsInDay: function(day,agendaSlotProp){
+			let slotsInAFiltered = agendaSlotProp.filter(function(sl){
+				let moment1 = moment(sl.isInDay);
+				let moment2 = moment(day);
+				return moment1.isSame(moment2, 'day');
 			});
 			console.log('slotsInAFiltered: ', slotsInAFiltered);
 		}
