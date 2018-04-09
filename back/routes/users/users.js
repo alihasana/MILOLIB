@@ -20,16 +20,16 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  if (ObjectId.isValid(req.params.id)) {
+  // if (ObjectId.isValid(req.params.id)) {
     User.findById(req.params.id, (err, user) => {
       if (err) res.status(500).json({ success: false, message: err.message })
-      if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
       else {
         helper.beforeSendUser(user)
         res.status(200).json({ success: true, message: 'Here is the user profile!', content: user })
       }
     })
-  } else res.status(400).json({ success: false, message: 'Invalid ID' })
+  // } else res.status(400).json({ success: false, message: 'Invalid ID' })
 })
 
 router.put('/:id', (req, res) => {
@@ -66,7 +66,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  if (res.locals.user.role == 'admin') {
+  // if (res.locals.user.role == 'admin') {
     if (ObjectId.isValid(req.params.id)) {
       User.findById(req.params.id, (err, user) => {
         if (err) {
@@ -83,9 +83,9 @@ router.delete('/:id', (req, res) => {
     } else {
       res.status(404).json({success: false, message: 'User not found..'})
     }
-  } else {
-    res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
-  }
+  // } else {
+  //   res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
+  // }
 })
 
 export default router
