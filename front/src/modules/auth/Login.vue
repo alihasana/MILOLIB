@@ -41,12 +41,7 @@ export default {
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
-          console.log('ICI', res.data.content)
           localStorage.setItem("token", token);
-          swal({
-            type: "success",
-            text: "It's working"
-          });
           if (token) this.$router.push("/dashboard");
         })
         .catch(error => {
