@@ -6,6 +6,7 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import http from './helpers/http'
 import swal from "sweetalert2"
+import { store } from './store/store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/sass/main.scss'
@@ -19,6 +20,7 @@ Vue.use(BootstrapVue)
 new Vue({
 	el: "#app",
 	router,
+	store,
 	components: { App },
 	template: "<App/>"
 });

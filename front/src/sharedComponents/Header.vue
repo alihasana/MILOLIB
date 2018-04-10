@@ -74,8 +74,7 @@ export default {
       }
     },
     getRole() {
-      this.role = localStorage.getItem("role");
-      console.log(getRole);
+      this.role = this.$store.state.role;
     }
   },
   created() {
