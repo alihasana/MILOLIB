@@ -22,7 +22,7 @@
 
 <script>
 import swal from "sweetalert2";
-import axios from '../../../helpers/http'
+import http from '../../helpers/http'
 
 export default {
   name: "login",
@@ -37,24 +37,12 @@ export default {
   },
   methods: {
     signUp() {
-      console.log("ICI", this.user);
-      axios
+      http
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
           localStorage.setItem("token", token);
-          // localStorage.setItem("User", this.user.username);
-          // localStorage.getItem("Clef");
-          swal({
-            type: "success",
-            text: "It's working"
-          });
           if (token) this.$router.push("/dashboard");
-          // else
-          // swal({
-          //   type: "error",
-          //   text: "Server error"
-          // });
         })
         .catch(error => {
           swal({
