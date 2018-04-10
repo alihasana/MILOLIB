@@ -19,7 +19,7 @@
             </template>
             <b-dropdown-item><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>User's list</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>{{ role }} schedule</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <template slot="button-content">
@@ -31,7 +31,7 @@
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <template slot="button-content">
-              <em><i class="material-icons">account_circle</i><span>Profile</span></em>
+              <em><i class="material-icons">account_circle</i><span>{{ role }} Profile</span></em>
             </template>
             <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">question_answer</i><span>Messages</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'ProfileUser'}"><i class="material-icons">edit</i><span>Edit profile</span></router-link></b-dropdown-item>
@@ -43,6 +43,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+    <!-- <h1 v-if="role === 'admin'">Master {{ role }}</h1>
+    <h1 v-else-if="role === 'follower'">Soldier {{ role }}</h1>
+    <h1 v-else="role === 'primo'">Noob {{ role }}</h1> -->
   </div>
 </template>
 
@@ -52,7 +55,8 @@ export default {
   name: "Header",
   data() {
     return {
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("token"),
+      role : ""
       // msg: "Here we are ..."
     };
   },
@@ -60,6 +64,7 @@ export default {
   methods: {
     routerLogout() {
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       this.$router.push("/");
     },
     Token() {
@@ -67,10 +72,15 @@ export default {
       if (getToken === null) {
         this.$router.push("/");
       }
+    },
+    getRole() {
+      this.role = localStorage.getItem("role");
+      console.log(getRole);
     }
   },
   created() {
     this.Token();
+    this.getRole();
   }
 };
 </script>

@@ -41,7 +41,13 @@ export default {
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
+          let role = res.data.content.user;
           localStorage.setItem("token", token);
+          localStorage.setItem("role", role); // content: { token: process.env.AUTHBEARER + ' ' + result, user: user.role }
+          swal({
+            type: "success",
+            text: "It's working"
+          });
           if (token) this.$router.push("/dashboard");
         })
         .catch(error => {
