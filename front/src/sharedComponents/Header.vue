@@ -1,4 +1,4 @@
-<!-- Dashboard V2 : 
+<!-- Dashboard V2 :
 - Problèmes :
 1) Les items sont en fill/justify [<b-navbar-nav justified id="items">] et occupe donc tous l'espace dispo mais le dropdown est décalé dû à l'agrandissement des divs.
 2) Le clic sur les dropdowns n'est pas parfait : marche si click sur l'icon ou le texte mais en dehors d'un certains périmètre le click fail et ne route pas.
@@ -17,15 +17,15 @@
             <template slot="button-content">
               <em><i class="material-icons">assignment_ind</i><span>Users</span></em>
             </template>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item> 
+            <b-dropdown-item><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>User's list</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'userDetail'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <template slot="button-content">
               <em><i class="material-icons">date_range</i><span>Calendar</span></em>
             </template>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">perm_data_setting</i><span>Settings</span></router-link></b-dropdown-item> 
+            <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">perm_data_setting</i><span>Settings</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">event</i><span>RDV</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
@@ -38,7 +38,7 @@
             <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">settings</i><span>Settings</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">help</i><span>Help</span></router-link></b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item v-on:click="routerLogout"><i class="material-icons" id="logout">power_settings_new</i><span>Logout</span></router-link></b-dropdown-item> 
+            <b-dropdown-item v-on:click="routerLogout"><i class="material-icons" id="logout">power_settings_new</i><span>Logout</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>

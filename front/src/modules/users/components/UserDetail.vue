@@ -7,6 +7,7 @@
 
 <script>
 import swal from "sweetalert2";
+import http from "../../../helpers/http";
 export default {
   name: "userDetail",
   data() {
@@ -22,7 +23,7 @@ export default {
   },
   methods: {
     getTheUser(id) {
-      this.$http
+      http
         .get("/users/" + id)
         .then(res => {
           this.user = res.data.content;

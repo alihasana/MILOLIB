@@ -10,9 +10,9 @@
   /* eslint-disable */
   // import createUser from "./components/createUser";
   import ProfileDetails from "./components/ProfileDetails";
-  import axios from "axios";
-  
-  
+ import http from '../../helpers/http'
+
+
   export default {
     name: "ProfileUser",
     data() {
@@ -21,18 +21,18 @@
       };
     },
     methods: {
-      //save details 
-      
-      //update profile details 
+      //save details
+
+      //update profile details
       updateUserProfile: function(updateProfile) {
-        axios.post('http://localhost:1407/users/self', updateProfile)
+        http.post('http://localhost:1407/users/self', updateProfile)
           .then(function(res) {
             console.log('New user created:', res.data);
           })
           .catch(function(error) {
             console.log("Error", error)
           })
-      } 
+      }
     },
     components: {
       // createUser,
@@ -42,6 +42,6 @@
 </script>
 
 <style scoped>
-  /* import 'bootstrap/dist/css/bootstrap.css'; 
+  /* import 'bootstrap/dist/css/bootstrap.css';
   import 'bootstrap-vue/dist/bootstrap-vue.css'; */
 </style>

@@ -30,11 +30,10 @@
 
 <script>
   /* eslint-disable */
-  import axios from "axios"
-  import http from "../../../../helpers/http";
-  
+  import http from "../../../helpers/http";
+
   export default {
-  
+
     name: "createUser",
     data() {
       return {
@@ -84,7 +83,7 @@
     width: 50vw;
     margin-top: 3vw;
   }
-  
+
   hr {
     margin: auto;
     width: 40vw;

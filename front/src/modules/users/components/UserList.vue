@@ -11,6 +11,7 @@
 
 <script>
 import swal from "sweetalert2";
+import http from '../../../helpers/http'
 export default {
   name: "userList",
   data() {
@@ -21,11 +22,10 @@ export default {
   },
   methods: {
     getListUser() {
-      this.$http
+      http
         .get("/users", {})
         .then(res => {
           this.users = res.data.content;
-          console.log("ICI", this.users);
         })
         .catch(error => {
           if (error)

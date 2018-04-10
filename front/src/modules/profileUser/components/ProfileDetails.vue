@@ -36,7 +36,7 @@
 
 <script>
   /* eslint-disable */
-  import axios from "axios"
+  import http from '../../../helpers/http'
   export default {
     name: "ProfileDetails",
     data() {
@@ -49,7 +49,7 @@
           phone: '',
           password: '',
           confirmPassword: ''
-        }, 
+        },
         userDetails: {
           name: String,
           firstname: String,
@@ -64,9 +64,9 @@
       userProfileDetails: function() {
         const userDetails = {
           name: this.profileForm.name,
-          firstname: this.profileForm.firstname, 
-          phone: this.profileForm.phone, 
-          password: this.profileForm.password, 
+          firstname: this.profileForm.firstname,
+          phone: this.profileForm.phone,
+          password: this.profileForm.password,
           confirmPassword: this.profileForm.confirmPassword
         }
         //emit sends data to parent file
@@ -84,7 +84,7 @@
     width: 50vw;
     margin-top: 3vw;
   }
-  
+
   .passwordForm {
     margin-top: 3vw;
   }
