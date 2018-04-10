@@ -42,9 +42,12 @@ export default {
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
+          let role = res.data.content.role;
           localStorage.setItem("token", token);
+          localStorage.setItem("role", role);
+          console.log(res.data.content);
           // localStorage.setItem("User", this.user.username);
-          // localStorage.getItem("Clef");
+          // localStorage.getItem("role");
           swal({
             type: "success",
             text: "It's working"

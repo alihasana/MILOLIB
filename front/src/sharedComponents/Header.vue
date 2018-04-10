@@ -60,6 +60,7 @@ export default {
   methods: {
     routerLogout() {
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       this.$router.push("/");
     },
     Token() {
