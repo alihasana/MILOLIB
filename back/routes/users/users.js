@@ -21,15 +21,40 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // if (ObjectId.isValid(req.params.id)) {
-    User.findById(req.params.id, (err, user) => {
-      if (err) res.status(500).json({ success: false, message: err.message })
-      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
-      else {
-        helper.beforeSendUser(user)
-        res.status(200).json({ success: true, message: 'Here is the user profile!', content: user })
-      }
-    })
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      if (err.message.match(/^E11000 duplicate key error index.+/)) {
+        res.status(400).json({ success: false, message: 'Email already used' })
+      } else res.status(500).json({ success: false, message: err.message })
+    }
+    else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+    else {
+      helper.beforeSendUser(user)
+      res.status(200).json({ success: true, message: 'Here is the user profile!', content: user })
+    }
+  })
   // } else res.status(400).json({ success: false, message: 'Invalid ID' })
+})
+
+router.post('/', (req, res) => {
+  if (res.locals.user.role == 'admin') {
+    if (req.body.email && req.body.password) {
+      if (helper.regexEmail.test(req.body.email)) {
+        let newUser = new User(req.body)
+        newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
+        newUser.save((err, user) => {
+          if (err) {
+            if (err.message.match(/^E11000 duplicate key error index.+/)) {
+              res.status(400).json({ success: false, message: 'Email already used.' })
+            } else res.status(500).json({ success: false, message: err.message })
+          } else {
+            helper.beforeSendUser(user)
+            res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+          }
+        })
+      } else res.status(412).json({ success: false, message: 'Valid email required.' })
+    } else res.status(412).json({ success: false, message: 'Missing email and/or password.' })
+  } else res.status(403).json({ succes: false, message: 'Forbidden.' })
 })
 
 router.put('/:id', (req, res) => {
@@ -38,7 +63,7 @@ router.put('/:id', (req, res) => {
       User.findById(req.params.id, (err, user) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else {
-          if (req.body.hashPassword) res.status(400).json({message: 'Really?'})
+          if (req.body.hashPassword) res.status(400).json({ message: 'Really?' })
           else {
             if (req.body.password && req.body.oldPassword) {
               if (!user.comparePasswords(req.body.oldPassword)) {
@@ -66,7 +91,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  // if (res.locals.user.role == 'admin') {
+  if (res.locals.user.role == 'admin') {
     if (ObjectId.isValid(req.params.id)) {
       User.findById(req.params.id, (err, user) => {
         if (err) {
@@ -80,45 +105,11 @@ router.delete('/:id', (req, res) => {
           })
         }
       })
-    } else {
-      res.status(404).json({success: false, message: 'User not found..'})
-    }
-  // } else {
-  //   res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
-  // }
+    } else res.status(404).json({success: false, message: 'User not found..'})
+  } else res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
 })
 
 export default router
 
 // ???
 // Gestion d'erreurs un peu different entre "router.get/put/delete" . A voir ce qui est le plus pertinent
-
-//Create New User
-router.post('/create-user', (req, res) => {
-  let body = req.body; 
-  console.log('body: ', body);
-  if (body.email && body.pswd) {
-      User.findOne({ email: body.email }, function (err, doc) {
-          if (doc == null) {
-              let newUser = new User;
-              newUser.email = req.body.email;
-              newUser.role = req.body.role;
-              newUser.hashPassword = req.body.pswd;
-              console.log('New User object', newUser);
-              newUser.save(function(err){
-                  if (err) {
-                      return err;
-                  } else {
-                      return res.status(200).send('New user has been created');
-                  }
-              }); 
-          } else {
-              console.log('This user has already been created'); 
-              return res.status(400).send({ message: 'This user has already been created' })
-          }
-      });
-  } else {
-      console.log('All the fields are required')
-      return res.status(412).send({ message: 'All the fields are required' })
-  }
-});
