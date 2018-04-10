@@ -52,7 +52,7 @@
         User: {
           email: String,
           role: String,
-          pswd: String
+          password: String
         }
       }
     },
@@ -61,12 +61,12 @@
         const User = {
           email: this.form.userName,
           role: this.form.userRole,
-          pswd: this.form.userPassword
+          password: this.form.userPassword
         }
         console.log('Object from parent: ', User)
-        http.post('users/create-user', User)
+        http.post('users', User)
           .then(res => {
-            this.$router.push('/users/list')
+            this.$router.push('/users/')
           console.log('Bingo', res);
           })
           .catch(function(error) {

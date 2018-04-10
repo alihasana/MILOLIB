@@ -41,12 +41,9 @@ export default {
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
-          let role = res.data.content.role;
+          let role = res.data.content.user;
           localStorage.setItem("token", token);
-          localStorage.setItem("role", role);
-          console.log(res.data.content);
-          // localStorage.setItem("User", this.user.username);
-          // localStorage.getItem("role");
+          localStorage.setItem("role", role); // content: { token: process.env.AUTHBEARER + ' ' + result, user: user.role }
           swal({
             type: "success",
             text: "It's working"
