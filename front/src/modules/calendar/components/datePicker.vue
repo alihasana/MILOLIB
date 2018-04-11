@@ -1,29 +1,29 @@
-	<template>
-		<div>
-			<h5>{{msg}}</h5>
-			<b-form>
-				<b-form-group label="Période de paramétrage de mon agenda">
-					<b-list-group>
-						<b-list-group-item class="disposInDay">
-							<b-row class="periode">
-								<label :for="startDateInDP">Date de départ:</label>
-								<b-col sm="3"><b-form-input id="startDateInDP" v-model ="startDateInDP" type="date"></b-form-input></b-col>
-								<label :for="endDateInDP">Date de fin:</label>
-								<b-col sm="3"><b-form-input id="endDateInDP" v-model ="endDateInDP" type="date"></b-form-input></b-col>
-							</b-row>
-						</b-list-group-item>
-					</b-list-group>
-					<b-button variant="outline-primary" v-on:click="createNewAgenda()" type="button">Creer mon Agenda</b-button>
-				</b-form-group>
-			</b-form>
-			<div class="availabilitySetting">
-				<availabilitySetting :agendaRangeProp="agendaRangeInDP"></availabilitySetting>
-			</div>
-			<div class="agenda">
-				<agenda :agendaRangeProp="agendaRangeInDP" :startDateProp="startDateInDP" :endDateProp="endDateInDP" :agendaSlotProp="slotsInDP"></agenda>
-			</div>
+<template>
+	<div>
+		<h5>{{msg}}</h5>
+		<b-form>
+			<b-form-group label="Période de paramétrage de mon agenda">
+				<b-list-group>
+					<b-list-group-item class="disposInDay">
+						<b-row class="periode">
+							<label :for="startDateInDP">Date de départ:</label>
+							<b-col sm="3"><b-form-input id="startDateInDP" v-model ="startDateInDP" type="date"></b-form-input></b-col>
+							<label :for="endDateInDP">Date de fin:</label>
+							<b-col sm="3"><b-form-input id="endDateInDP" v-model ="endDateInDP" type="date"></b-form-input></b-col>
+						</b-row>
+					</b-list-group-item>
+				</b-list-group>
+				<b-button variant="outline-primary" v-on:click="createAgendaRange()" type="button">Creer mon Agenda</b-button>
+			</b-form-group>
+		</b-form>
+		<div class="availabilitySetting">
+			<availabilitySetting :agendaRangeProp="agendaRangeInDP"></availabilitySetting>
 		</div>
-	</template>
+		<div class="agenda">
+			<agenda :agendaRangeProp="agendaRangeInDP"></agenda>
+		</div>
+	</div>
+</template>
 
 <script>
 /* eslint-disable */
@@ -31,7 +31,9 @@
 //importing momentJs library //
 import moment from 'moment';
 import 'moment/locale/fr';
+
 import * as cHelpers from '.././calendarHelpers';
+
 import availabilitySetting from "./availabilitySetting";
 import agenda from "./agenda";
 
@@ -44,9 +46,7 @@ export default {
 	//description of component
 	//This component anable to select a range pariod, and on clik, it generates:
 	//- a list of days ( moment object)
-	//- a list of slots objects of 15 minutes.
-	// these list are passed to Agenda component via props
-
+	// this list is passed to Agenda component via props
 
 	name: "datePicker",
 	props: {
@@ -56,8 +56,7 @@ export default {
 			msg: "datePicker Vue",
 			startDateInDP: '',
 			endDateInDP:'',
-			agendaRangeInDP:'',
-			slotsInDP:[]
+			agendaRangeInDP:''
 		};
 	},
 	components: {
@@ -68,15 +67,9 @@ export default {
 		createAgendaRange : function(){
 			console.log('je vais créer mon agenda de', this.startDateInDP, 'à', this.endDateInDP );
 			return this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDP,this.endDateInDP);
-		},
-		createNewAgenda: function(){
-			this.createAgendaRange();
-			this.slotsInDP = cHelpers.setSlotsArray(this.startDateInDP,this.endDateInDP, 15, cHelpers.NotAvailable);
-			console.log('this.slotsInDP:', this.slotsInDP);
 		}
 	}	
 };
-
 
 </script>
 

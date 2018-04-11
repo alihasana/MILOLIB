@@ -1,49 +1,52 @@
-<template>
-	<div>
-		<h5>{{ msg }}</h5>
-		<b-form>
-			<b-form-group label="Paramétrage de mes disponibilités dans une semaine type">
-				<b-form-checkbox-group id="disposInWeek" name="disposInWeek" v-model="selected">
-					<b-list-group>
-						<b-list-group-item class="disposInDay" v-for="(day,index) in weekDays" :key="index">
-							<b-row>
-								<b-col sm="2">
-									<b-form-checkbox 
-									:value="day.dayname">{{day.dayname}}</b-form-checkbox>
-								</b-col>
-								<label for="input-morning-start">de:</label>
-								<b-col sm="2">
-									<b-form-input size="sm" id="input-morning-start" v-model="day.startMorningTime" type="time"></b-form-input>
-								</b-col>
-								<label for="input-morning-end">à:</label>
-								<b-col sm="2">
-									<b-form-input size="sm" id="input-morning-end" v-model="day.endMorningTime" type="time"></b-form-input>
-								</b-col>
-								<label for="input-afternoon-start">Et de:</label>
-								<b-col sm="2">
-									<b-form-input  size="sm" id="input-afternoon-start" v-model="day.startAfternoonTime" type="time"></b-form-input>
-								</b-col>
-								<label for="input-afternoon-end">à:</label>
-								<b-col sm="2">
-									<b-form-input size="sm" id="input-afternoon-end" v-model="day.endAfternoonTime" type="time"></b-form-input>
-								</b-col>
-							</b-row>
-						</b-list-group-item>
-					</b-list-group>
-				</b-form-checkbox-group>
-			</b-form-group>
-			<hr>
-			<b-button variant="outline-primary" v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</b-button>
-			<hr>
-			<div>Selected: <strong>{{ selected }}</strong></div>
-		</b-form>
-	</div>
-</template>
+	<template>
+		<div>
+			<h5>{{ msg }}</h5>
+			<b-form>
+				<b-form-group label="Paramétrage de mes disponibilités dans une semaine type">
+					<b-form-checkbox-group id="disposInWeek" name="disposInWeek" v-model="selected">
+						<b-list-group>
+							<b-list-group-item class="disposInDay" v-for="(day,index) in weekDays" :key="index">
+								<b-row>
+									<b-col sm="2">
+										<b-form-checkbox 
+										:value="day.dayname">{{day.dayname}}</b-form-checkbox>
+									</b-col>
+									<label for="input-morning-start">de:</label>
+									<b-col sm="2">
+										<b-form-input size="sm" id="input-morning-start" v-model="day.startMorningTime" type="time"></b-form-input>
+									</b-col>
+									<label for="input-morning-end">à:</label>
+									<b-col sm="2">
+										<b-form-input size="sm" id="input-morning-end" v-model="day.endMorningTime" type="time"></b-form-input>
+									</b-col>
+									<label for="input-afternoon-start">Et de:</label>
+									<b-col sm="2">
+										<b-form-input  size="sm" id="input-afternoon-start" v-model="day.startAfternoonTime" type="time"></b-form-input>
+									</b-col>
+									<label for="input-afternoon-end">à:</label>
+									<b-col sm="2">
+										<b-form-input size="sm" id="input-afternoon-end" v-model="day.endAfternoonTime" type="time"></b-form-input>
+									</b-col>
+								</b-row>
+							</b-list-group-item>
+						</b-list-group>
+					</b-form-checkbox-group>
+				</b-form-group>
+				<hr>
+				<b-button variant="outline-primary" v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</b-button>
+				<hr>
+				<div>Selected: <strong>{{ selected }}</strong></div>
+			</b-form>
+		</div>
+	</template>
 
 <script>
 /* eslint-disable */
 import moment from 'moment';
 import 'moment/locale/fr';
+
+import _ from 'underscore';
+
 import * as cHelpers from '.././calendarHelpers';
 
 //description of component
@@ -57,8 +60,9 @@ import * as cHelpers from '.././calendarHelpers';
 //To do:
 // - this component should open only after clicking on create my agenda in datePicker component
 // - the hours selection should only be visible when the day is selected
-// - Should the hours selection pre-filled?
-// - error handeling: if the range not suitable
+// - Should the hours selection pre-filled? or maybe the conseiller could tick a default checkbox to prefill all days with opening hours?
+// - error handeling: if the range not suitable // what about if they select hour like 3:18?
+//what about one slot is not complete?
 
 
 export default {
@@ -95,38 +99,50 @@ export default {
 					for(let j=0; j<this.agendaRangeInAS.length; j++){
 						let dayName = cHelpers.getNameOfDay(this.agendaRangeInAS[j]);
 						if (dayName == sel[i].toLowerCase()) {
-							console.log('dayName matching:', dayName);
+							console.log('dayName matching in i boucle:', dayName);
 							// if so i push the matching date in agendaRangeFiltered.
 							this.agendaRangeFilteredInAS.push(this.agendaRangeInAS[j]);
-							//and i create slots of availabilities for these days:
-								//for this i need to get starting and ending for eachperiod in Day
-								// and for this i need convert string collected in input to duration in minutes
-								if(this.weekDays[i].startMorningTime && this.weekDays[i].endMorningTime){
-									let startAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].startMorningTime), 'minutes');
-									let endAM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].endMorningTime), 'minutes');
-									// console.log('startAM:', startAM);
-									// console.log('endAM:', endAM);
-									this.slotsInAS.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
-								}
-								if(this.weekDays[i].startAfternoonTime && this.weekDays[i].endAfternoonTime){
-									let startPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].startAfternoonTime), 'minutes');
-									let endPM = moment(this.agendaRangeInAS[j]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[i].endAfternoonTime), 'minutes');
-									// console.log('startPM:', startPM);
-									// console.log('endPM:', endPM);
-									this.slotsInAS.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
-								}
 						}
 					}
 				}
-			}
+				//and i create slots of availabilities for these days:
+					//for this i need to get starting and ending for each period in Day:  i need convert string collected in input to duration in minutes
+					//and i need also to get the weekDays matching as well to get back the relevant rangetime.
+				for (let l=0; l<this.agendaRangeFilteredInAS.length; l++){
+					let daySlots = [];
+					let daySlotsAM = [];
+					let daySlotsPM = [];
+					let dayNamebis = cHelpers.getNameOfDay(this.agendaRangeFilteredInAS[l]);
+					for(let k=0; k<this.weekDays.length; k++){
+						if(dayNamebis == this.weekDays[k].dayname.toLowerCase()){
+							console.log('dayName matching in K boucle:', dayNamebis);
+							if(this.weekDays[k].startMorningTime && this.weekDays[k].endMorningTime){
+								let startAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startMorningTime), 'minutes');
+								let endAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endMorningTime), 'minutes');
+								console.log('startAM:', startAM);
+								console.log('endAM:', endAM);
+								daySlotsAM.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
+							}
+							if(this.weekDays[k].startAfternoonTime && this.weekDays[k].endAfternoonTime){
+								let startPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startAfternoonTime), 'minutes');
+								let endPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endAfternoonTime), 'minutes');
+								console.log('startPM:', startPM);
+								console.log('endPM:', endPM);
+								daySlotsPM.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
+							}
+						}
+						daySlots = _.union(daySlotsAM, daySlotsPM);
+						console.log('daySlots after union:', daySlots);
+					}
+					this.slotsInAS.push(daySlots);
+				}	
 			console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
-			console.log('slotsInAS:', this.slotsInAS)
+			console.log('slotsInAS:', this.slotsInAS);
 			// pass the this.slotsInAS to backend, so that backend check that these slots are not already booked.
 		}
-		
 	}
-
-		
+}
+	
 };
 
 </script>
