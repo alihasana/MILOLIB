@@ -8,7 +8,6 @@ import UserList from "@/modules/users/components/UserList";
 import UserDetail from "@/modules/users/components/UserDetail";
 import CreateUser from "@/modules/users/components/CreateUser";
 import ProfileUser from "@/modules/profileUser/ProfileUser";
-import ProfileDetails from "@/modules/profileUser/components/ProfileDetails";
 import calendar from "@/modules/calendar/calendar";
 import example from "@/sharedComponents/example";
 import Header from "@/sharedComponents/Header";
