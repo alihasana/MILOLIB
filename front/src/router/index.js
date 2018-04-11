@@ -39,7 +39,7 @@ export default new Router({
 			},
 			children: [
 				{
-					path: "/list",
+					path: "",
 					name: "userList",
 					component: UserList
 				},

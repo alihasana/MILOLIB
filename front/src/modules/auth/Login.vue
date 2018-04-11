@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="login">
    <form v-on:submit.prevent>
-    <div class="row">
+    <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
         <h1 class="heading-primary">{{ title }}</h1>
         <hr>
@@ -22,6 +22,7 @@
 
 <script>
 import swal from "sweetalert2";
+import http from '../../helpers/http'
 
 export default {
   name: "login",
@@ -36,24 +37,14 @@ export default {
   },
   methods: {
     signUp() {
-      console.log("ICI", this.user);
-      this.$http
+      http
         .post("/auth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
+          let role = res.data.content.user;
           localStorage.setItem("token", token);
-          // localStorage.setItem("User", this.user.username);
-          // localStorage.getItem("Clef");
-          swal({
-            type: "success",
-            text: "It's working"
-          });
+          this.$store.state.role = role;
           if (token) this.$router.push("/dashboard");
-          // else
-          // swal({
-          //   type: "error",
-          //   text: "Server error"
-          // });
         })
         .catch(error => {
           swal({

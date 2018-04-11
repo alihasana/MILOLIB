@@ -73,10 +73,10 @@ mongoose.Promise = global.Promise
 mongoose.connect(process.env.DB, {}, (err) => {
   if (err) { throw err; }
   else {
-    console.log('Connection to the Database etablished...')
+    console.log('Connection to the Database established...')
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
     let port = process.env.PORT || 1407
-    app.listen(port, () => console.log('App listen on port: ' + port + '\u0007'))
+    app.listen(port, () => console.log('App listens on port: ' + port + '\u0007'))
   }
 })
