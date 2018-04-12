@@ -4,7 +4,11 @@ import mongoose from 'mongoose'
 let SlotSchema = new mongoose.Schema({
   start: [] ,
   end: [] ,
-  status: String ,
+
+  // status: { type: String, required: true, default: 'availaibe' }, //
+                                // OR
+  // availaibe: { type: Boolean, required: true, default: true }, //
+  // status: { type: String }, //
 })
 
 

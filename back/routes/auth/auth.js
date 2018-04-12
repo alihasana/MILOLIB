@@ -24,7 +24,8 @@ router.post('/login', (req, res) => {
         }
       }
     })
-  } else res.status(412).json({ success: false, message: 'Missing email and/or password.' })
+  } else res.status(400).json({ success: false, message: 'Missing email and/or password.' })
+  // ou 412 ?
 })
 
 router.post('/signup', (req, res) => {
