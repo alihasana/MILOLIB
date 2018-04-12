@@ -27,8 +27,7 @@ export default {
     //   messageArray[3] = ' You can\'t modify your own role. '      
     // }
     if ( (messageArray[1] || messageArray[2] || messageArray[3]) !== '' ) {
-      messageArray[0] = 'Profile partialy updated, error in your request :'
-      messageArray[0] = 'Email'
+      messageArray[0] = 'Email and/or Password validation failed :'
       locals.user.unmarkModified('email')
       locals.user.unmarkModified('password')
       // locals.user.unmarkModified('role')      

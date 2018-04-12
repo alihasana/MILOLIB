@@ -11,10 +11,10 @@ router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
     User.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, user) => {
       if (err) res.status(500).json({ success: false, message: err.message })
-      else if (!user) res.status(401).json({ success: false, message: 'User not found.' })
+      else if (!user) res.status(400).json({ success: false, message: 'User not found.' })
       else {
         if (!user.comparePasswords(req.body.password)) {
-          res.status(401).json({ success: false, message: 'Wrong password.' })
+          res.status(400).json({ success: false, message: 'Wrong password.' })
         } else {
           // JWT.SIGN(PAYLOAD, SECRETKEY, CALLBACK(err, result){...})
           jwt.sign({ email: user.email, _id: user._id }, process.env.SECRETKEY, (err, result) => {
@@ -25,7 +25,6 @@ router.post('/login', (req, res) => {
       }
     })
   } else res.status(400).json({ success: false, message: 'Missing email and/or password.' })
-  // ou 412
 })
 
 router.post('/signup', (req, res) => {
@@ -43,8 +42,8 @@ router.post('/signup', (req, res) => {
           res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
         }
       })
-    } else res.status(412).json({ success: false, message: 'Valid email required.' })
-  } else res.status(412).json({ success: false, message: 'Missing email and/or password.' })
+    } else res.status(400).json({ success: false, message: 'Valid email required.' })
+  } else res.status(400).json({ success: false, message: 'Missing email and/or password.' })
 })
 
 export default router
