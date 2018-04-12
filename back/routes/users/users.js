@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
     if (req.body.email && req.body.password) {
       if (helper.regexEmail.test(req.body.email)) {
         let newUser = new User(req.body)
-        newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
+        newUser.password = bcrypt.hashSync(req.body.password, 10)
         newUser.save((err, user) => {
           if (err) {
             if (err.message.match(/^E11000 duplicate key error index.+/)) {
@@ -63,13 +63,13 @@ router.put('/:id', (req, res) => {
       User.findById(req.params.id, (err, user) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else {
-          if (req.body.hashPassword) res.status(400).json({ message: 'Really?' })
+          if (req.body.hashOLDPasswordOLD) res.status(400).json({ message: 'Really?' })
           else {
             if (req.body.password && req.body.oldPassword) {
               if (!user.comparePasswords(req.body.oldPassword)) {
                 res.status(401).json({ success: false, message: 'Old password not matching.' })
               } else {
-                req.body.hashPassword = bcrypt.hashSync(req.body.password, 10)
+                req.body.password = bcrypt.hashSync(req.body.password, 10)
               }
             }
             User.findByIdAndUpdate(req.params.id, req.body, (err, result) => {

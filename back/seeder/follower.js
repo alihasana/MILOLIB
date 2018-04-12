@@ -15,7 +15,7 @@ mongoose.connect(process.env.DB, {}, (err) => {
 let followers = [
     new User({
         email: 'follower',
-        hashPassword: bcrypt.hashSync('follower', 10),
+        password: bcrypt.hashSync('follower', 10),
         role: 'follower'  
     })
 ]

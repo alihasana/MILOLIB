@@ -25,14 +25,14 @@ router.post('/login', (req, res) => {
       }
     })
   } else res.status(400).json({ success: false, message: 'Missing email and/or password.' })
-  // ou 412 ?
+  // ou 412
 })
 
 router.post('/signup', (req, res) => {
   if (req.body.email && req.body.password) {
     if (helper.regexEmail.test(req.body.email)) {
       let newUser = new User(req.body)
-      newUser.hashPassword = bcrypt.hashSync(req.body.password, 10)
+      newUser.password = bcrypt.hashSync(req.body.password, 10)
       newUser.save((err, user) => {
         if (err) {
           if (err.message.match(/^E11000 duplicate key error index.+/)) {

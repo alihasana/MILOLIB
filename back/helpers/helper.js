@@ -15,7 +15,7 @@ var helper = {
 
   beforeSendUser: (data) => {
     helper.beforeSend(data)
-    data.hashPassword = undefined
+    data.password = undefined
   },
   
 }

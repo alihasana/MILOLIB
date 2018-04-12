@@ -21,14 +21,15 @@ router.get('/test', (req, res) => {
 // {runValidators : true}
 // exploiter le contenue de "result" pour faire des réponses differentes
 
+
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '', '']
   //'res.locals.user' is the actual connected user
   for (let key of Object.keys(req.body)) {
     res.locals.user[key] = req.body[key];
   }
-  res.locals.user.unmarkModified('hashPassword')
-  if (req.body.password || req.body.email || req.body.role) {
+  res.locals.user.unmarkModified('role')
+  if (req.body.password || req.body.email) {
     controller.protectedUpdate(req.body, res.locals, messageArray)
   }
   res.locals.user.save((err) => {
