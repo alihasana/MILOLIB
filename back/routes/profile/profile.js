@@ -8,6 +8,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
 
+//get connected profil
 router.get('/', (req, res) => {
   // helper.beforeSendUser(res.locals.user)
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
@@ -23,6 +24,7 @@ router.get('/test', (req, res) => {
 
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '', '']
+  //sends only all the keys of the req.body
   for (let key of Object.keys(req.body)) {
     //res.locals.user = connected user
     res.locals.user[key] = req.body[key];

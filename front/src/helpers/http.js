@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 
 let http = axios.create({
     baseURL: 'http://localhost:1408'

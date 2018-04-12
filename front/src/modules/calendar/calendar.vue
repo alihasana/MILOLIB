@@ -1,13 +1,13 @@
-<template>
-  <div class="container">
-  <div class="datePicker">
-    <datePicker></datePicker>
-  </div>
-  <div>
-    <eventTypeSetting></eventTypeSetting>
-  </div>
-  </div>
-</template>
+  <template>
+    <div class="container">
+      <div class="datePicker">
+        <datePicker></datePicker>
+      </div>
+      <div class="eventTypeSetting">
+        <eventTypeSetting></eventTypeSetting>
+      </div>
+    </div>
+  </template>
 
 <script>
 
@@ -15,6 +15,7 @@
 
 import datePicker from "./components/datePicker";
 import eventTypeSetting from "./components/eventTypeSetting";
+
 import * as cHelpers from './calendarHelpers';
 
 
@@ -31,8 +32,6 @@ export default {
   },
   methods: {}
 };
-
-
 
 </script>
 

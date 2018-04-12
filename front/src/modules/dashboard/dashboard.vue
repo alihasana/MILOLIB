@@ -18,11 +18,7 @@
             <template slot="button-content">
               <em><i class="material-icons">assignment_ind</i><span>Users</span></em>
             </template>
-<<<<<<< HEAD
-            <b-dropdown-item><router-link tag="span" :to="{name: 'ProfileUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item> 
-=======
             <b-dropdown-item><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Create user</span></router-link></b-dropdown-item> 
->>>>>>> a6a9913b6ae8b9c70eb88eaa2334fd3d57fa31bf
             <b-dropdown-item><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>User's list</span></router-link></b-dropdown-item>
             <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>

@@ -105,11 +105,10 @@ function createRange(start,end){
 	//'Booked' means appointment is there
 function createSlotObject(start, duration, status){
 	let slotObject = Object.create(null);
-	slotObject.isInDay = getDayFirstHour(start);
 	slotObject.start = moment(start);
 	slotObject.end = moment(start).add(duration, 'minutes');
 	slotObject.status = status;
-	slotObject.conseillerCalendar = 'usernameWhatever';
+	// slotObject.conseillerCalendar = 'usernameWhatever';
 	return slotObject;
 }
 

@@ -1,25 +1,42 @@
 <template>
 	<div>
 		<h5>{{ msg }}</h5>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-md-2 col-sm-6 col-xs-12" v-for="day in agendaRangeProp">
-					
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th>{{day | dateFormatText}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- <tr v-for="slot in agendaSlotProp" v-if="slotIsInDay(day,agendaSlotProp)">
-								day: {{day | dateFormatFull}}
-								slot.isInDay: {{slot.isInDay | dateFormatFull}}
-							</tr> -->
-						</tbody>
-					</table>
+		<div class="agenda">
+			<div class="agendaHeader">
+				agendaHeader
+			</div>
+			<div class="agendaBodyLeftPanel">
+				<div class="hour" v-for="hour in hourList">
+					{{hour}}
 				</div>
 			</div>
+			<table class="agendaBody">
+				<thead class="agendaBodyDays">
+					<tr class="day" v-for="(day,index) in agendaRangeProp" :key="index">
+						{{day | dateFormatText}}
+					</tr>
+				</thead>
+				<tbody class="agendaBodySlots">
+					<tr class="buttonSlots" v-for="(day,index) in agendaRangeProp" :key="index">
+						<ul>
+							<li><b-button variant="outline-primary">1</b-button></li>
+							<li><b-button variant="outline-primary">2</b-button></li>
+							<li><b-button variant="outline-primary">3</b-button></li>
+							<li><b-button variant="outline-primary">4</b-button></li>
+							<li><b-button variant="outline-primary">5</b-button></li>
+						</ul>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- <div class="col-md-2 col-sm-6 col-xs-12" v-for="day in agendaRangeProp"> -->
+						<!-- <tbody>
+							<tr v-for="slot in agendaSlotProp" v-if="slotIsInDay(day,agendaSlotProp)">
+								day: {{day | dateFormatFull}}
+								slot.isInDay: {{slot.isInDay | dateFormatFull}}
+							</tr>
+						</tbody> -->
+						<!-- 	</div> -->
 		</div>
 	</div>
 </template>
@@ -41,42 +58,23 @@ import * as cHelpers from '.././calendarHelpers';
 export default {
 
 	name: "agenda",
-	props:['agendaRangeProp', 'startDateProp', 'endDateProp', 'agendaSlotProp'],
+	props:['agendaRangeProp', 'agendaSlotProp'],
 	data() {
 		return {
 			msg: "agenda Vue",
 			day:'',
       		agendaRangeInA: '',
-      		startDateInA: '',
-      		endDateInA:'',
-      		slot:'',
       		slotsInA:[],
-      		slotsInAFiltered:[]
-		}
+      		slotsInAFiltered:[],
+      		hourList:['8:00','9:00','10:00','11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00' ],
+      		}
 	},
 	components: {},
-	created (){
-		// console.log('this.slotsInA at created:' , this.slotsInA)
-		//before created, check with backend that the range time has not already been booked.
-		// requete axios, j'envoie dans le back la rangeTime, 
-		// le back vérifie if there is not 'booked' status'
-		// if no 'booked status': set up agenda
-		// if any 'booked status' display message that the time range has already booking, (give which one)
-		//and that user should handle them before planning new settings
-	},
-	mounted(){
-		// console.log('this.slotsInA at mounted:' , this.slotsInA)
-	},
-	beforeUpdate(){
-		// console.log('this.slotsInA at mounted:' , this.slotsInA)
-	},
 	updated(){
 		this.startDateInA = this.startDateProp;
 		this.endDateInA = this.endDateProp;
 		this.agendaRangeInA = this.agendaRangeProp;
-		this.slotsInA = this.agendaSlotProp;
-		console.log('this.slotsInA at updated:' , this.slotsInA);
-		// this.slotIsInDay(this.day,this.slotsInA);
+		this.slotsInA = this.agendaSlotProp
 	},
 	methods: {
 		slotIsInDay: function(day,agendaSlotProp){
@@ -115,19 +113,68 @@ export default {
 
 <style scoped>
 
-.hour {
-	color: #bbb;
-	cursor: pointer;
+.agenda{
+	display: flex;  
+  	flex-flow: row wrap;
 }
-.selected {
-	background-color: #0aa8ce;
-	color: white;
+ 
+.agendaHeader{
+	background-color: pink;
+	width: 100%;
 }
-.table > tbody > tr.selected > td {
-	border-top: 1px solid #0aa8ce;
+
+
+.agendaBodyLeftPanel{
+	/*background-color: blue;*/
+	flex-direction:column;
+	width: 9%;
+	margin-top: 10vw;
 }
-.selected td:hover {
-	background-color: #0a89af;
-	color: white;
+
+.hour{
+	float: left;
+	padding: 10px;
+	text-align: left;
 }
+	
+
+.agendaBody{
+	/*background-color: green;*/
+	/*flex-direction:row;*/
+	width: 91%
+}
+
+.agendaBodyDays{
+	/*background-color: yellow;*/
+	display: flex;
+	flex-direction:row;
+	text-align: center;
+	height: 10vw;
+}
+
+.day{
+	width:13%;
+	padding: 10px;
+}
+
+.agendaBodySlots{
+	display: flex;
+	flex-direction:row;
+	text-align: center;
+}
+
+.buttonSlots{
+	width:13%;
+	padding: 10px;
+}
+
+ul{
+	list-style:none;
+}
+
+button{
+	border-color: #e5e5e5;
+	background-color: none;
+}
+
 </style>
