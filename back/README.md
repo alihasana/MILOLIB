@@ -29,7 +29,6 @@ To create the first admin,  which credentials are admin:admin
 
       body:
         any infromations you want to update,
-        if 'email' you need to provide 'oldEmail' too
         if 'password' you need to provide 'oldPassword' too
         
 

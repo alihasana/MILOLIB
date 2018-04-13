@@ -12,22 +12,18 @@ export default {
         locals.user.password = bcrypt.hashSync(body.password, 10)
       }
     }
-    // if (body.email) {
-    //   if (helper.regexEmail.test(body.email)) {
-    //     if (!(body.oldEmail && body.oldEmail === locals.userUnmodified.email) ) { // Email publique sur Milolib. 'oldEmail' inutile.
-    //       messageArray[2] = ' Actual email incorrect. '
-    //     }
-    //   } else {
-    //     messageArray[2] = ' Valid email required. '
-    //   } 
-    // }
+    if (body.email) {
+      if (!helper.regexEmail.test(body.email)) {
+        messageArray[2] = ' Valid email required. '
+      }
+    }
     // 'locals.user.unmarkModified('role')', a deplacer au début de la route ? Message d'erreur inutile
     // if (body.role) {
     //   // Pas de condition pour le moment, on ne peux simplement pas modifier son role  
     //   messageArray[3] = ' You can\'t modify your own role. '      
     // }
-    if ( (messageArray[1] || messageArray[2] || messageArray[3]) !== '' ) {
-      messageArray[0] = 'Email and/or Password validation failed :'
+    if ( (messageArray[1] || messageArray[2]) !== '' ) {
+      messageArray[0] = 'Validation failed :'
       locals.user.unmarkModified('email')
       locals.user.unmarkModified('password')
       // locals.user.unmarkModified('role')      
@@ -35,7 +31,3 @@ export default {
     }
   },
 }
-
-// a voir ou mettre les unmarkedModified, 
-// les mettres direct en haut evite les doublons mais,
-// oblige a refaire des 'locals.user.anything = body.anything'
