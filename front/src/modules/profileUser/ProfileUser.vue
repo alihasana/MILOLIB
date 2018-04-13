@@ -13,14 +13,14 @@
 
           <!-- Name -->
           <b-form-group>
-            <b-form-input type="text" v-model="profile.lastname" placeholder="Nom" v-if="show"></b-form-input>
-            <div v-else>NOM : {{ profile.lastname }}</div>         
+            <b-form-input type="text" v-model="profile.lastName" placeholder="Nom" v-if="show"></b-form-input>
+            <div v-else>NOM : {{ profile.lastName }}</div>         
           </b-form-group>
 
           <!-- Firstname -->
           <b-form-group>
-            <b-form-input type="text" v-model="profile.firstname" placeholder="Prénom" v-if="show"></b-form-input>
-            <div v-else>PRENOM : {{ profile.firstname }}</div>
+            <b-form-input type="text" v-model="profile.firstName" placeholder="Prénom" v-if="show"></b-form-input>
+            <div v-else>PRENOM : {{ profile.firstName }}</div>
           </b-form-group>
 
           <!-- E-mail -->
@@ -30,10 +30,10 @@
 
           </b-form-group>
           <!-- Phone -->
-            <b-form-group>
+            <!-- <b-form-group>
             <b-form-input type="text" v-model="profile.phone" placeholder="Numéro de téléphone" v-if="show"></b-form-input>
             <div v-else>NUMERO DE TELEPHONE: {{ profile.phone }}</div>
-            </b-form-group>
+            </b-form-group> -->
   
         </div>
         <!-- User change password -->
