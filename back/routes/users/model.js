@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 let UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
-  hashPassword: { type: String, required: true },
+  password: { type: String, required: true },
   role: { type: String, required: true, default: 'peon' },
   firstName: { type: String },
   lastName: { type: String },
@@ -13,8 +13,8 @@ let UserSchema = new mongoose.Schema({
   // appointment: AppointmentSchema  // WARNING WIP !!!
 })
 
-UserSchema.methods.comparePasswords = function(password) {
-  return bcrypt.compareSync(password, this.hashPassword)
+UserSchema.methods.comparePasswords = function(reqPassword) {
+  return bcrypt.compareSync(reqPassword, this.password)
 }
 
 export default mongoose.model('User', UserSchema)

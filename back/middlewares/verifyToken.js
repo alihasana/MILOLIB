@@ -19,7 +19,7 @@ let verifyToken = (req, res, next) => {
         if (ObjectId.isValid(decode._id)) {
           User.findById(decode._id, (err, user) => {
             if (err) res.status(500).json({ success: false, message: err.message })
-            if (!user) res.status(403).json({ success: false, message: 'Unauthozired' })
+            if (!user) res.status(401).json({ success: false, message: 'Unauthozired' })
             else {
               res.locals.user = user
               res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
@@ -29,7 +29,7 @@ let verifyToken = (req, res, next) => {
         } else res.status(400).json({ success: false, message: 'Invalid ID' })
       }
     })
-  } else res.status(403).json({ success: false, message: 'Unauthozired' })
+  } else res.status(401).json({ success: false, message: 'Unauthozired' })
 }
 
 export default verifyToken
