@@ -10,19 +10,14 @@ let router = express.Router()
 
 //get connected profil
 router.get('/', (req, res) => {
-  // helper.beforeSendUser(res.locals.user)
+  helper.beforeSendUser(res.locals.user)
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
-})
-
-router.get('/test', (req, res) => {
-  // helper.beforeSendUser(res.locals.user)
-  res.status(200).json({ success: true, message: 'Your res.', content: res.locals })
 })
 
 // {runValidators : true}
 // exploiter le contenue de "result" pour faire des réponses differentes
 
-
+// TO ADD : updatedDate
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '']
   //'res.locals.user' is the actual connected user
@@ -35,7 +30,7 @@ router.put('/', (req, res) => {
   }
   res.locals.user.save((err) => {
     if (err) {
-      if (err.message.match(/^E11000 duplicate key error index.+/)) {
+      if (err.message.match(/^E11000 duplicate key error.+/)) {
         res.status(400).json({ success: false, message: 'Profile update failed, new Email already used' })
       } else res.status(500).json({ success: false, message: err.message })
     }

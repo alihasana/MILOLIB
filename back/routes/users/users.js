@@ -44,12 +44,12 @@ router.post('/', (req, res) => {
         newUser.password = bcrypt.hashSync(req.body.password, 10)
         newUser.save((err, user) => {
           if (err) {
-            if (err.message.match(/^E11000 duplicate key error index.+/)) {
+            if (err.message.match(/^E11000 duplicate key error.+/)) {
               res.status(400).json({ success: false, message: 'Email already used.' })
             } else res.status(500).json({ success: false, message: err.message })
           } else {
             helper.beforeSendUser(user)
-            res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+            res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
           }
         })
       } else res.status(412).json({ success: false, message: 'Valid email required.' })
