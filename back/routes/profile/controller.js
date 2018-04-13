@@ -12,15 +12,15 @@ export default {
         locals.user.password = bcrypt.hashSync(body.password, 10)
       }
     }
-    if (body.email) {
-      if (helper.regexEmail.test(body.email)) {
-        if (!(body.oldEmail && body.oldEmail === locals.userUnmodified.email) ) { // Email publique sur Milolib. 'oldEmail' inutile.
-          messageArray[2] = ' Actual email incorrect. '
-        }
-      } else {
-        messageArray[2] = ' Valid email required. '
-      } 
-    }
+    // if (body.email) {
+    //   if (helper.regexEmail.test(body.email)) {
+    //     if (!(body.oldEmail && body.oldEmail === locals.userUnmodified.email) ) { // Email publique sur Milolib. 'oldEmail' inutile.
+    //       messageArray[2] = ' Actual email incorrect. '
+    //     }
+    //   } else {
+    //     messageArray[2] = ' Valid email required. '
+    //   } 
+    // }
     // 'locals.user.unmarkModified('role')', a deplacer au début de la route ? Message d'erreur inutile
     // if (body.role) {
     //   // Pas de condition pour le moment, on ne peux simplement pas modifier son role  

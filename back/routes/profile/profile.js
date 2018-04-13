@@ -30,10 +30,9 @@ router.put('/', (req, res) => {
     res.locals.user[key] = req.body[key];
   }
   res.locals.user.unmarkModified('role')
-  if (req.body.password || req.body.email) {
+  if (req.body.password) {
     controller.protectedUpdate(req.body, res.locals, messageArray)
   }
-  console.log(res.locals.user.firstName)
   res.locals.user.save((err) => {
     if (err) {
       if (err.message.match(/^E11000 duplicate key error index.+/)) {

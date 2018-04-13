@@ -11,7 +11,6 @@ const ObjectId = mongoose.Types.ObjectId
 let verifyToken = (req, res, next) => {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === process.env.AUTHBEARER) {
     jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRETKEY, (err, decode) => {
-      console.log(res)
       if (err) res.status(500).json({ success: false, message: err.message })
       else {
         // res.locals permet de stocker des datas utilisable dans la requête en cours
