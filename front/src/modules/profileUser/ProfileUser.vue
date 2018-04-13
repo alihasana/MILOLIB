@@ -6,6 +6,7 @@
         <!-- User profile details -->
         <div>
           <!-- Role -->
+          <!-- IL faudrait affichcer le role lors du GET sans l'inclure aprés dans la requéte PUT -->
           <b-form-group>
             <b-form-input type="text" v-model="profile.role" placeholder="Rôle" v-if="show" readonly></b-form-input>
             <div v-else>RÔLE : {{ profile.role }} </div>

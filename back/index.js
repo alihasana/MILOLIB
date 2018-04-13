@@ -77,6 +77,7 @@ mongoose.connect(process.env.DB, {}, (err) => {
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
     let port = process.env.PORT || 1407
-    app.listen(port, () => console.log('App listens on port: ' + port + '\u0007'))
+    app.listen(port, () => console.log('App listens on port: ' + port))
+    // app.listen(port, () => console.log('App listens on port: ' + port + '\u0007')) // With Sound
   }
 })

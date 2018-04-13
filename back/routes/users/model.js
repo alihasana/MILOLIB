@@ -7,6 +7,7 @@ let UserSchema = new mongoose.Schema({
   role: { type: String, required: true, default: 'peon' },
   firstName: { type: String },
   lastName: { type: String },
+  phone: { type: String },
   creationDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
   // calendar: CalendarSchema,  // WARNING WIP !!!
