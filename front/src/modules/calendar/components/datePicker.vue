@@ -17,10 +17,7 @@
 			</b-form-group>
 		</b-form>
 		<div class="availabilitySetting">
-			<availabilitySetting :agendaRangeProp="agendaRangeInDP"></availabilitySetting>
-		</div>
-		<div class="agenda">
-			<agenda :agendaRangeProp="agendaRangeInDP"></agenda>
+			<availabilitySetting :agendaRangeProp="agendaRangeInDP" agendaSlotProp="agendaSlotPropInDP" v-on:slotsAreReady="getSlotsFromAS($event)"></availabilitySetting>
 		</div>
 	</div>
 </template>
@@ -46,27 +43,39 @@ export default {
 	//description of component
 	//This component anable to select a range pariod, and on clik, it generates:
 	//- a list of days ( moment object)
-	// this list is passed to Agenda component via props
+	// this list is passed to availabilitySetting to mass set the days/hours available for the selected range time
 
 	name: "datePicker",
-	props: {
-	},
+	props:['agendaRangeProp', 'agendaSlotProp'],
 	data() {
 		return {
 			msg: "datePicker Vue",
 			startDateInDP: '',
 			endDateInDP:'',
-			agendaRangeInDP:''
+			agendaRangeInDP:'',
+			agendaSlotInDP:[],
+			agendaRangeFromC:'',
+			agendaSlotFromC:[]
 		};
 	},
 	components: {
 		agenda,
 		availabilitySetting
 	},
+	created(){
+		this.agendaRangeFromC = this.agendaRangeProp;
+		this.agendaSlotFromC = this.agendaSlotProp;
+	},
 	methods:{
 		createAgendaRange : function(){
 			console.log('je vais créer mon agenda de', this.startDateInDP, 'à', this.endDateInDP );
 			return this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDP,this.endDateInDP);
+		},
+		getSlotsFromAS : function(slots){
+			this.agendaSlotInDP = slots;
+			console.log('je suis dans le component DatePicker et je récupère les slots du component availabiltySetting', this.agendaSlotInDP);
+			this.$emit('newTimeRangeToDisplay', this.agendaRangeInDP)
+			this.$emit('newSlotsToDisplay', this.agendaSlotInDP );
 		}
 	}	
 };
@@ -75,5 +84,11 @@ export default {
 
 
 <style scoped>
+
+.periode {
+	margin: auto;
+	text-align: center;
+	justify-content: center;
+}
 
 </style>

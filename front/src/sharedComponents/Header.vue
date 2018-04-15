@@ -25,9 +25,11 @@
             <template slot="button-content">
               <em><i class="material-icons">date_range</i><span>Calendar</span></em>
             </template>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">perm_data_setting</i><span>Settings</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">event</i><span>RDV</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'example'}"><i class="material-icons">perm_contact_calendar</i><span>User's schedule</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">perm_data_setting</i><span>Agenda</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'availabilitySetting'}"><i class="material-icons">event</i><span>Disponibilités</span></router-link></b-dropdown-item>
+            <b-dropdown-item><router-link tag="span" :to="{name: 'eventTypeSetting'}"><i class="material-icons">perm_contact_calendar</i><span>Type/Durée RDV</span></router-link></b-dropdown-item>
+             <b-dropdown-item><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">perm_contact_calendar</i><span>Prendre un RDV</span></router-link></b-dropdown-item>
+              <b-dropdown-item><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">perm_contact_calendar</i><span>Agenda conseillers</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <template slot="button-content">

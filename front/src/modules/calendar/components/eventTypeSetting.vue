@@ -37,7 +37,9 @@
 
 import moment from 'moment';
 import 'moment/locale/fr';
+
 import * as cHelpers from '.././calendarHelpers';
+import http from '../../../helpers/http';
 
 //description of component
 //this component enable to set the type of meeting that will be allowed in calendar and their duration.
@@ -76,7 +78,8 @@ export default {
               type: this.types[i].rdvType,
               duration: this.types[i].duration
             });
-            console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV)
+            console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV);
+            // sendEventsSettings(this.eventTypeFilteredInETV);
           }
          }
       }
@@ -96,6 +99,24 @@ export default {
       else{
         console.log('Merci de sélectionner une durée valide');
       }
+    },
+    sendEventsSettings: function(SelectedEventTypes){
+      console.log('j envoie mes types de RDV et leur durée au back end pour qu il les store en DB');
+      let postBody = SelectedEventTypes;
+      console.log('postBody: ', postBody);
+      http.post('url', postBody)
+          .then(
+            res => {
+            console.log('res:',res);
+              //here will confirm that the new settings are well saved
+              this.$router.push('calendar');
+            })
+          .catch(
+            error => {
+              console.log('error:', error);
+              //should display message to user that the events setting could not been saved
+          });
+
     }
   }
 };
