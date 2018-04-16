@@ -161,7 +161,7 @@ export default {
 		//back end should check if the sent slots are not in conflict with booked slots
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
-		http.post('url', postBody)
+		http.post('/slot', postBody)
 					.then(
 						res => {
 						console.log('res:',res);

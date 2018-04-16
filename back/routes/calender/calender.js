@@ -1,25 +1,28 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
-import AppointmentType from './model'
+import Calender from './model'
 import helper from '../../helpers/helper'
+import moment from "moment";
 const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
 
-router.post('/', (req, res, next) => {
+router.post('/slot', (req, res, next) => {
   for (let key of Object.keys(req.body)) {
-  const appointmentType = new AppointmentType({
-    duration: req.body[key].duration,
-    type: req.body[key].type,
-    consellorId: res.locals._id
-  })
-  appointmentType.save()
+    const slot = new Slot({
+      start: req.body[key].start,
+      end: req.body[key].end,
+      consellorId: res.locals._id
+    })
+    slot.save()
   }
+ 
 }
 )
 
 export default router
+
 
   // .then(res.status(200).send({ success: true }))
   // .catch((err) => {
