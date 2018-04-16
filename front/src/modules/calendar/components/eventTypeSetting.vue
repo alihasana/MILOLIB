@@ -69,20 +69,22 @@ export default {
   },
   methods: {
     confirmSelectedTypes: function(sel){
-      console.log('selected types are: ', this.selected);
+      console.log('selected types are: ', sel);
       if(sel.length) {
         //if at least one type is selected, i get the value of duration and push it in array containing the enventType selection
-        for (let i=0; i<=sel.length; i++){
-          if(this.types[i].duration>0){
-            this.eventTypeFilteredInETV.push({
-              type: this.types[i].rdvType,
-              duration: this.types[i].duration
-            });
-            console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV);
-            // sendEventsSettings(this.eventTypeFilteredInETV);
-          }
-         }
-      }
+        for (let i=0; i<sel.length; i++){
+          for (let k=0; k<this.types.length; k++){
+            if(this.types[k].rdvType == sel[i] && this.types[k].duration>0){
+              this.eventTypeFilteredInETV.push({
+              type: this.types[k].rdvType,
+              duration: this.types[k].duration
+              })
+            }
+          }  
+        }
+      };
+      console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV);
+      this.sendEventsSettings(this.eventTypeFilteredInETV);
     },
     increaseDuration: function(t){
       if (t.duration>=0){
@@ -110,6 +112,7 @@ export default {
             console.log('res:',res);
               //here will confirm that the new settings are well saved
               this.$router.push('calendar');
+              this.this.eventTypeFilteredInETV = '';
             })
           .catch(
             error => {
