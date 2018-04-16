@@ -17,6 +17,7 @@ dotEnv.config()
 import auth from './routes/auth/auth'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
+import appointmenttype from './routes/appointmentType/appointmentType'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
 
@@ -60,6 +61,7 @@ router.use(verifyToken)
 // Protected routes
 router.use('/users', users)
 router.use('/profile', profile)
+router.use('/appointmenttype', appointmenttype)
 
 app.use(router)
 

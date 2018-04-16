@@ -104,7 +104,7 @@ export default {
       console.log('j envoie mes types de RDV et leur durée au back end pour qu il les store en DB');
       let postBody = SelectedEventTypes;
       console.log('postBody: ', postBody);
-      http.post('url', postBody)
+      http.post('/appointmenttype', postBody)
           .then(
             res => {
             console.log('res:',res);
