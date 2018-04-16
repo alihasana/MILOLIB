@@ -18,6 +18,7 @@ import auth from './routes/auth/auth'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
 import appointmenttype from './routes/appointmentType/appointmentType'
+import calendar from './routes/calendar/calendar'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
 
@@ -62,6 +63,7 @@ router.use(verifyToken)
 router.use('/users', users)
 router.use('/profile', profile)
 router.use('/appointmenttype', appointmenttype)
+router.use('/calendar', calendar)
 
 app.use(router)
 
