@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import User from './model'
 import helper from '../../helpers/helper'
+//Mettre mail dans les helpers ?
+import mail from '../../middlewares/mail'
 const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
@@ -48,6 +50,15 @@ router.post('/', (req, res) => {
               res.status(400).json({ success: false, message: 'Email already used.' })
             } else res.status(500).json({ success: false, message: err.message })
           } else {
+             //WIP a voir avec Luke
+          const msg = {
+            to: '',
+            from: 'milolib@milolib.com',
+            subject: 'Your are register',
+            text: 'Congrat you successfully registered into Milolib',
+          };
+          sendMail(req.body.email, msg)
+          //WIP
             helper.beforeSendUser(user)
             res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
           }

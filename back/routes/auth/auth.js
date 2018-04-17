@@ -4,8 +4,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import helper from './../../helpers/helper'
 import User from './../users/model'
-//Mettre mail dans les helpers ?
-import mail from '../../middlewares/mail'
 let router = express.Router()
 
 router.post('/login', (req, res) => {
@@ -39,15 +37,6 @@ router.post('/signup', (req, res) => {
             res.status(400).json({ success: false, message: 'Email already used' })
           } else res.status(500).json({ success: false, message: err.message })
         } else {
-          //WIP a voir avec Luke
-          const msg = {
-            to: '',
-            from: 'milolib@milolib.com',
-            subject: 'Your are register',
-            text: 'Congrat you successfully registered into Milolib',
-          };
-          sendMail(req.body.email, msg)
-          //WIP
           helper.beforeSendUser(user)
           res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
         }
