@@ -14,8 +14,8 @@ let UserSchema = new mongoose.Schema({
   phone: { type: String },
   creationDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
-  // calendar: { slots: [SlotSchema], eventsTypes: [] },  // WARNING WIP !!!
-  // calendar: CalendarSchema,  // WARNING WIP !!!
+  // calendar: { eventsTypes: [], slots: [SlotSchema] },  // WARNING WIP !!!
+  calendar: CalendarSchema,  // WARNING WIP !!!
   appointment: [AppointmentSchema]  // WARNING WIP !!!
 })
 

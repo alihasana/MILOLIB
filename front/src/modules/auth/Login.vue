@@ -43,7 +43,8 @@ export default {
           let token = res.data.content.token;
           let role = res.data.content.user;
           localStorage.setItem("token", token);
-          this.$store.state.role = role;
+          localStorage.setItem("role", role);
+          // this.$store.state.role = role;
           if (token) this.$router.push("/dashboard");
         })
         .catch(error => {
