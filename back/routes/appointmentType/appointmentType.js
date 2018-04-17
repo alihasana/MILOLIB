@@ -12,15 +12,19 @@ router.post('/', (req, res, next) => {
   const appointmentType = new AppointmentType({
     duration: req.body[key].duration,
     type: req.body[key].type,
-    consellorId: res.locals._id
+    consellorId: res.locals.user._id
+  }).save()
+  .catch((err) => {
+    res.status(500).send(err)
   })
-  appointmentType.save()
-      .then(res.status(200).send({ success: true }))
-      .catch((err) => {
-        res.status(500).send(err.errmsg)
-      })
   }
+  res.status(200).send({ success: true })
 }
 )
 
 export default router
+
+  // .then(res.status(200).send({ success: true }))
+  // .catch((err) => {
+  //   res.status(500).send(err.errmsg)
+  // })

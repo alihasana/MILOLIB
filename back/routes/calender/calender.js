@@ -13,11 +13,10 @@ router.post('/slot', (req, res, next) => {
     const slot = new Slot({
       start: req.body[key].start,
       end: req.body[key].end,
-      consellorId: res.locals._id
+      consellorId: req.locals._id
     })
     slot.save()
   }
- 
 }
 )
 
