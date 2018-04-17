@@ -45,7 +45,16 @@ export default {
           localStorage.setItem("token", token);
           localStorage.setItem("role", role);
           // this.$store.state.role = role;
-          if (token) this.$router.push("/dashboard");
+          if (token) {
+            if (role === "Administrateur" || role === "Chargé d'accueil") {
+              this.$router.push("/users/");
+            } else if (role === "Conseiller" || role === "Administrateur/Conseiller") {
+              this.$router.push("/calendar");
+            } else {
+              this.$router.push("/dashboard");
+              console.log(role);
+            }
+          }
         })
         .catch(error => {
           swal({
