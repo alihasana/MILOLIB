@@ -152,7 +152,7 @@ export default {
 				console.log('slotsInAS:', this.slotsInAS);
 				console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
 			
-			// this.checkAvailability(this.slotsInAS);
+				this.checkAvailability(this.slotsInAS);
 
 		}
 	},
@@ -161,7 +161,7 @@ export default {
 		//back end should check if the sent slots are not in conflict with booked slots
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
-		http.post('/slot', postBody)
+		http.post('/calendar', postBody)
 					.then(
 						res => {
 						console.log('res:',res);

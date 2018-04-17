@@ -173,6 +173,9 @@ export default {
 				return this.buttonClass;
 			}
 		},
+		updateAgenda: function(timeRange, slots){
+			//this function will take timeRange and Slots as parameters, and will be launched when at update
+		}
 	},
 	filters: {
 		dateFormatFull : function (date) {
