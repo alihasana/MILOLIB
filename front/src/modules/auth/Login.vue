@@ -42,8 +42,8 @@ export default {
         .then(res => {
           let token = res.data.content.token;
           let role = res.data.content.user;
-          localStorage.setItem("token", token);
           localStorage.setItem("role", role);
+          localStorage.setItem("token", token);
           // this.$store.state.role = role;
           if (token) {
             if (role === "Administrateur" || role === "Chargé d'accueil") {

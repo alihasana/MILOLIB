@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  if (res.locals.user.role == 'admin') {
+  if (res.locals.user.role == 'Administrateur') {
     if (req.body.email && req.body.password) {
       if (helper.regexEmail.test(req.body.email)) {
         let newUser = new User(req.body)
@@ -57,7 +57,8 @@ router.post('/', (req, res) => {
             subject: 'Your are register',
             text: 'Congrat you successfully registered into Milolib',
           };
-          sendMail(req.body.email, msg)
+          //sendMail commenter jusau a ce que compte sendgrid creer
+          // sendMail(req.body.email, msg)
           //WIP
             helper.beforeSendUser(user)
             res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
@@ -69,7 +70,7 @@ router.post('/', (req, res) => {
 })
 
 // router.put('/:id', (req, res) => {
-//   if (res.locals.user.role == 'admin') {
+//   if (res.locals.user.role == 'Administrateur') {
 //     if (ObjectId.isValid(req.params.id)) {
 //       User.findById(req.params.id, (err, user) => {
 //         if (err) res.status(500).json({ success: false, message: err.message })
@@ -102,7 +103,7 @@ router.post('/', (req, res) => {
 // })
 
 // router.delete('/:id', (req, res) => {
-//   if (res.locals.user.role == 'admin') {
+//   if (res.locals.user.role == 'Administrateur') {
 //     if (ObjectId.isValid(req.params.id)) {
 //       User.findById(req.params.id, (err, user) => {
 //         if (err) {
