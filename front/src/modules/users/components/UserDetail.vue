@@ -12,10 +12,11 @@
       <b-button variant="success" type="submit" v-if="show">Enregistrer les modifications</b-button>
       <b-button variant="primary" @click="show=!show" v-else>Modifier le profil de l'utilisateur</b-button>
     </div>
-    <b-button-group>
+
+    <!-- <b-button-group>
     <b-button variant="success">Voir le calendrier de l'utilisateur</b-button>
     <b-button variant="danger">Supprimer le profil de l'utilisateur</b-button>
-    </b-button-group>
+    </b-button-group> -->
   </b-form>
 </template>
 
@@ -35,9 +36,11 @@
       getTheUser(id) {
         http
           .get("/users/" + id)
+          // id corresponds to this.params.id
+          // console.log("retrieved user id", id)
           .then(res => {
-            this.user = res.data.content;
-            console.log("Utilisateur : ", res.data.content)
+            this.users = res.data.content;
+            console.log("retrieved user : ", res.data.content)
           })
           .catch(error => {
             if (error)
@@ -65,9 +68,12 @@
       },
     },
     beforeMount() {
+      // if don't find any user
       if (this.$route.params.user == undefined) {
+        // get the user with this id 
         this.getTheUser(this.$route.params.id);
       } else {
+        // user = user object
         this.user = this.$route.params.user;
       }
     }
