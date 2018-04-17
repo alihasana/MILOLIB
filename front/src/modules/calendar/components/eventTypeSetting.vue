@@ -111,7 +111,7 @@ export default {
             res => {
             console.log('res:',res);
               //here will confirm that the new settings are well saved
-              this.$router.push('calendar');
+              this.$router.push( 'calendar');
               this.this.eventTypeFilteredInETV = '';
             })
           .catch(
