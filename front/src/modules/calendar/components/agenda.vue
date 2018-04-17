@@ -4,20 +4,19 @@
 		<div class="agenda">
 			<div class="agendaHeader">
 				<b-navbar-nav>
-      				<b-nav-form class="nav">
-	      				<div class="navDisplay">
-		      				<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">today</i></b-button>
-		      				<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_week</i></b-button>
-		      				<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_module</i></b-button>
-	      				</div>
-	      				<div class="navNavigate">
-		      				<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_before</i></b-button>
-		      				<span class="weekNumber">Semaine{{current}}</span>
-
-	        			<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_next</i></b-button>
-	        			</div>
-      				</b-nav-form>
-    			</b-navbar-nav>
+					<b-nav-form class="nav">
+						<li class="navDisplay">
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">today</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_week</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_module</i></b-button>
+						</li>
+						<li class="navNavigate">
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_before</i></b-button>
+							<span class="weekNumber">Semaine{{current}}</span>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_next</i></b-button>
+						</li>
+					</b-nav-form>
+				</b-navbar-nav>
 			</div>
 			<div class="agendaBodyLeftPanel">
 				<ul class="hour" v-for="hour in hourList">
@@ -43,7 +42,7 @@
 				<button v-on:click="createButtonId(agendaRangePropC)">Click to create ButtonID</button>
 			</div>
 		</div>
-		</div>
+	</div>
 </template>
 
 <script>
@@ -244,14 +243,28 @@ export default {
 
 .nav{
 	display: flex;
+	flex-direction:row;
+	justify-content: space-between;
 }
 
 .navNavigate {
 	float: right;
+	margin-right: 50px;
+	/*background-color: yellow;
+	padding: 5px;*/
 }
 
 .navDisplay {
 	float: left;
+	/*background-color: pink;
+	padding: 5px;*/
+}
+
+
+.weekNumber{
+	font-weight: bold;
+	font-size: 14px;
+	color: white;
 }
 
 
