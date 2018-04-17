@@ -6,15 +6,19 @@ import mongoose from 'mongoose'
 let router = express.Router()
 
 router.post('/', (req, res) => {
-console.log(req.body);
-  // for (let key of Object.keys(req.body)) {
-  //   res.locals.user.calendar.slots.push(req.body[key])
-  // }
 
-  // res.locals.user.save((err) => {
-  //   if (err) res.status(500).json({ success: false, message: err.message })
-  //   else res.status(200).json({ success: true, message: 'C\'est ok. Tout va bien' })
-  // })
+console.log(req.body);
+ 
+  for (let key of Object.keys(req.body)) {
+    res.locals.user.calendar.slots.push(req.body[key])
+  }
+  res.locals.user.calendar.slots.markModified('start')
+  res.locals.user.calendar.slots.markModified('end')
+
+  res.locals.user.save((err) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées' })
+  })
 })
 
 export default router
