@@ -16,7 +16,8 @@ let primos = [
     new User({
         email: 'primo',
         password: bcrypt.hashSync('primo', 10),
-        role: 'primo'  
+        role: 'Primo',
+        calendar: {}  
     })
 ]
 

@@ -12,11 +12,11 @@ mongoose.connect(process.env.DB, {}, (err) => {
 })
 
 
-let admins = [
+let accueils = [
     new User({
-        email: 'admin',
-        password: bcrypt.hashSync('admin', 10),
-        role: 'Administrateur'  ,
+        email: 'accueil',
+        password: bcrypt.hashSync('accueil', 10),
+        role: 'Chargé d\'accueil',
         calendar: {}
     })
 ]
@@ -24,11 +24,11 @@ let admins = [
 
 //First Method (same as in the vidéo https://www.youtube.com/watch?v=V30Rpqi6kYE)
 let done = 0
-for (let i = 0; i < admins.length; i++) {
-    admins[i].save( (err, result) => {
+for (let i = 0; i < accueils.length; i++) {
+    accueils[i].save( (err, result) => {
         done++
-        if (done === admins.length) {
-            console.log("Admins seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+        if (done === accueils.length) {
+            console.log("chargés d'accueil seeding complete. Yeah (づ｡◕‿◕｡)づ !")
             exit()
         }
     })

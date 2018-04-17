@@ -12,22 +12,23 @@ mongoose.connect(process.env.DB, {}, (err) => {
 })
 
 
-let followers = [
+let conseillers = [
     new User({
-        email: 'follower',
-        password: bcrypt.hashSync('follower', 10),
-        role: 'follower'  
+        email: 'conseiller',
+        password: bcrypt.hashSync('conseiller', 10),
+        role: 'Conseiller',
+        calendar: {} 
     })
 ]
 
 
 //First Method (same as in the vidéo https://www.youtube.com/watch?v=V30Rpqi6kYE)
 let done = 0
-for (let i = 0; i < followers.length; i++) {
-    followers[i].save( (err, result) => {
+for (let i = 0; i < conseillers.length; i++) {
+    conseillers[i].save( (err, result) => {
         done++
-        if (done === followers.length) {
-            console.log("Followers seeding complete. Yeah (╭☞⫑益⫒)╭☞ !")
+        if (done === conseillers.length) {
+            console.log("Conseillers seeding complete. Yeah (づ｡◕‿◕｡)づ !")
             exit()
         }
     })
