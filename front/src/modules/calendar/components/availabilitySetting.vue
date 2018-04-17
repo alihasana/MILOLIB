@@ -149,15 +149,15 @@ export default {
 				this.slotsInAS = _.flatten(allDaysSlots);
 				this.$emit('slotsAreReady', this.slotsInAS)
 				// console.log('allDaysSlots:', allDaysSlots);
-				console.log('slotsInAS:', this.slotsInAS);
-				console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
+				// console.log('slotsInAS:', this.slotsInAS);
+				// console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
 			
 				this.checkAvailability(this.slotsInAS);
 
 		}
 	},
 	checkAvailability: function(availableSlots){
-		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien dispoibles');
+		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je redirigerai vers calendar qui fera un get pour obtenir les slots du back');
 		//back end should check if the sent slots are not in conflict with booked slots
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
@@ -166,7 +166,7 @@ export default {
 						res => {
 						console.log('res:',res);
 							//here will call a function update calendar that will update the actual calendar with new rangetime/availabilities
-							this.$router.push('calendar');
+						 this.$router.push({name: 'calendar'});
 						})
 					.catch(
 						error => {

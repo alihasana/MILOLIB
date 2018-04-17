@@ -110,6 +110,10 @@ export default {
 	},
 	methods: {
 		createButtonId: function(timeRange){
+			//should be launched each time get.http request
+			//based on a timeRange of days, et based on the hours to display in agenda
+			//this function create buttons with Id representatives of the date, hour.
+			//by default, they also represent status N( Non available)
 			let reg = /:/;
 			for (let i=0; i<timeRange.length; i++){
 				for(let j=0; j<this.hourList.length; j++){
@@ -123,6 +127,7 @@ export default {
 			return this.buttonIdList;
 		},
 		buttonIdIsInDay: function(day,id){
+			// this is a conditional function, called in V-for to display under the day only the button with ID matching the day
 			let a = moment(day).format('YYYY-MM-DD').toString();
 			let b = id.slice(0,10);
 			if(a == b) {
@@ -130,6 +135,7 @@ export default {
 			}
 		},
 		updateButtonId: function(slots, idList){
+			//this function will update ButtonID based on slots status.
 			for (let i=0; i<slots.length; i++){
 				for (let j=0; j<idList.length; j++){
 					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
@@ -153,6 +159,7 @@ export default {
 
 		},
 		updateButtons: function(newList){
+			//not sure this function is usefull, not working now, i have tried to render the change of buttonsId in the agenda with and event, but not working.
 			this.buttonIdList = newList;
 		},
 		changeClassButton : function(btnId){
@@ -174,7 +181,10 @@ export default {
 			}
 		},
 		updateAgenda: function(timeRange, slots){
-			//this function will take timeRange and Slots as parameters, and will be launched when at update
+			//this function will take timeRange and Slots as parameters, and will be launched after hhtp.GET
+			this.createButtonId(timeRange);
+			this.updateButtonId(slots, this.buttonIdList);
+
 		}
 	},
 	filters: {
