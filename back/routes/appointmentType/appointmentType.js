@@ -15,13 +15,12 @@ router.post('/', (req, res, next) => {
     consellorId: res.locals._id
   })
   appointmentType.save()
+      .then(res.status(200).send({ success: true }))
+      .catch((err) => {
+        res.status(500).send(err.errmsg)
+      })
   }
 }
 )
 
 export default router
-
-  // .then(res.status(200).send({ success: true }))
-  // .catch((err) => {
-  //   res.status(500).send(err.errmsg)
-  // })
