@@ -21,6 +21,7 @@
       <b-navbar-brand><router-link tag="a" :to="{name: 'dashboard'}"><span id="dashboard">DASHBOARD {{ role }}</span></router-link></b-navbar-brand>
       <b-navbar-toggle target="header_collapse"></b-navbar-toggle>
     </b-navbar>
+    
     <b-navbar type="dark" variant="dark" toggleable="sm" id="header_collapse">
       <b-collapse is-nav id="header_collapse">
         <b-navbar-nav justified id="items"> <!-- fill or justified -->
@@ -55,6 +56,7 @@
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item v-on:click="routerLogout"><i class="material-icons" id="logout">power_settings_new</i><span>Logout</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown> -->
+          
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
