@@ -1,10 +1,10 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
-import User from './../users/model'
+// import bcrypt from 'bcrypt'
+// import User from './../users/model'
 import helper from '../../helpers/helper'
 import controller from './controller';
-const ObjectId = mongoose.Types.ObjectId
+// const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
 

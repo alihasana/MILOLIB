@@ -18,7 +18,7 @@
     name: "userList",
     data() {
       return {
-        title: "Your are on userList",
+        title: "Your are on the userList",
         users: []
       };
     },
@@ -49,5 +49,4 @@
 </script>
 
 <style scoped>
-  
 </style>

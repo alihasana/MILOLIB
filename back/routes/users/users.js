@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import User from './model'
 import helper from '../../helpers/helper'
+//Mettre mail dans les helpers ?
+import mail from '../../middlewares/mail'
 const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
@@ -37,7 +39,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  if (res.locals.user.role == 'admin') {
+  if (res.locals.user.role == 'Administrateur') {
     if (req.body.email && req.body.password) {
       if (helper.regexEmail.test(req.body.email)) {
         let newUser = new User(req.body)
@@ -48,6 +50,16 @@ router.post('/', (req, res) => {
               res.status(400).json({ success: false, message: 'Email already used.' })
             } else res.status(500).json({ success: false, message: err.message })
           } else {
+             //WIP a voir avec Luke
+          const msg = {
+            to: '',
+            from: 'milolib@milolib.com',
+            subject: 'Your are register',
+            text: 'Congrat you successfully registered into Milolib',
+          };
+          //sendMail commenter jusau a ce que compte sendgrid creer
+          // sendMail(req.body.email, msg)
+          //WIP
             helper.beforeSendUser(user)
             res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
           }
@@ -57,57 +69,57 @@ router.post('/', (req, res) => {
   } else res.status(403).json({ succes: false, message: 'Forbidden.' })
 })
 
-router.put('/:id', (req, res) => {
-  if (res.locals.user.role == 'admin') {
-    if (ObjectId.isValid(req.params.id)) {
-      User.findById(req.params.id, (err, user) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
-        else {
-          if (req.body.hashOLDPasswordOLD) res.status(400).json({ message: 'Really?' })
-          else {
-            if (req.body.password && req.body.oldPassword) {
-              if (!user.comparePasswords(req.body.oldPassword)) {
-                res.status(401).json({ success: false, message: 'Old password not matching.' })
-              } else {
-                req.body.password = bcrypt.hashSync(req.body.password, 10)
-              }
-            }
-            User.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
-              if (err) {
-                res.status(500).json({ success: false, message: err.message })
-              } else {
-                res.status(200).json({ success: true, message: 'User updated!' })
-              }
-            })
-          }
-        }
-      })
-    } else {
-      res.status(404).json({ success: false, message: 'User not found..' })
-    }
-  } else {
-    res.status(401).json({ success: false, message: 'You are not authorized to do this action..' })
-  }
-})
+// router.put('/:id', (req, res) => {
+//   if (res.locals.user.role == 'Administrateur') {
+//     if (ObjectId.isValid(req.params.id)) {
+//       User.findById(req.params.id, (err, user) => {
+//         if (err) res.status(500).json({ success: false, message: err.message })
+//         else {
+//           if (req.body.hashOLDPasswordOLD) res.status(400).json({ message: 'Really?' })
+//           else {
+//             if (req.body.password && req.body.oldPassword) {
+//               if (!user.comparePasswords(req.body.oldPassword)) {
+//                 res.status(401).json({ success: false, message: 'Old password not matching.' })
+//               } else {
+//                 req.body.password = bcrypt.hashSync(req.body.password, 10)
+//               }
+//             }
+//             User.findByIdAndUpdate(req.params.id, req.body, (err, result) => {
+//               if (err) {
+//                 res.status(500).json({ success: false, message: err.message })
+//               } else {
+//                 res.status(200).json({ success: true, message: 'User updated!' })
+//               }
+//             })
+//           }
+//         }
+//       })
+//     } else {
+//       res.status(404).json({ success: false, message: 'User not found..' })
+//     }
+//   } else {
+//     res.status(401).json({ success: false, message: 'You are not authorized to do this action..' })
+//   }
+// })
 
-router.delete('/:id', (req, res) => {
-  if (res.locals.user.role == 'admin') {
-    if (ObjectId.isValid(req.params.id)) {
-      User.findById(req.params.id, (err, user) => {
-        if (err) {
-          res.status(500).json({success: false, message: err.message})
-        } else {
-          User.remove({ _id: req.params.id }, (err) => {
-            if (err) res.status(500).json({success: false, message: err.message})
-            else {
-              res.status(200).json({success: true, message: 'The user has been deleted!'})
-            }
-          })
-        }
-      })
-    } else res.status(404).json({success: false, message: 'User not found..'})
-  } else res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
-})
+// router.delete('/:id', (req, res) => {
+//   if (res.locals.user.role == 'Administrateur') {
+//     if (ObjectId.isValid(req.params.id)) {
+//       User.findById(req.params.id, (err, user) => {
+//         if (err) {
+//           res.status(500).json({success: false, message: err.message})
+//         } else {
+//           User.remove({ _id: req.params.id }, (err) => {
+//             if (err) res.status(500).json({success: false, message: err.message})
+//             else {
+//               res.status(200).json({success: true, message: 'The user has been deleted!'})
+//             }
+//           })
+//         }
+//       })
+//     } else res.status(404).json({success: false, message: 'User not found..'})
+//   } else res.status(401).json({success: false, message: 'You are not authorized to do this action..'})
+// })
 
 export default router
 

@@ -42,9 +42,19 @@ export default {
         .then(res => {
           let token = res.data.content.token;
           let role = res.data.content.user;
+          localStorage.setItem("role", role);
           localStorage.setItem("token", token);
-          this.$store.state.role = role;
-          if (token) this.$router.push("/dashboard");
+          // this.$store.state.role = role;
+          if (token) {
+            if (role === "Administrateur" || role === "Chargé d'accueil") {
+              this.$router.push("/users/");
+            } else if (role === "Conseiller" || role === "Administrateur/Conseiller") {
+              this.$router.push("/calendar");
+            } else {
+              this.$router.push("/dashboard");
+              console.log(role);
+            }
+          }
         })
         .catch(error => {
           swal({

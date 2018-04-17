@@ -1,0 +1,29 @@
+.createUser {
+	// border: solid 1px black;
+	width: 50vw;
+	margin: 8vh auto;
+	background-color: $color-primary;
+	box-shadow: 0 1.5rem 4rem rgba($color-black, 0.5);
+	padding: 2rem;
+	transition: transform 1s;
+
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	&__form {
+		margin: auto;
+		width: 50vw;
+		margin-top: 3vw;
+	}
+
+	hr {
+      margin: auto;
+      width: 40vw;
+      margin-top: 3vw;
+      margin-bottom: 3vw;
+    }
+
+}

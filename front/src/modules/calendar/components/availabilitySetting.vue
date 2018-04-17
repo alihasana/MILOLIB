@@ -48,6 +48,7 @@ import 'moment/locale/fr';
 import _ from 'underscore';
 
 import * as cHelpers from '.././calendarHelpers';
+import http from '../../../helpers/http';
 
 //description of component
 	//This component anable to pre-set availabilities periods recurrent in the week
@@ -67,7 +68,7 @@ import * as cHelpers from '.././calendarHelpers';
 
 export default {
 	name: "availabilitySetting",
-	props:['agendaRangeProp'],
+	props:['agendaRangeProp', 'agendaSlotProp'],
 	data() {
 		return {
 			msg: "availabilitySetting Vue",
@@ -88,6 +89,9 @@ export default {
 		}
 	},
 	components: {},
+	created(){
+		this.slotsInAs = this.agendaSlotProp;
+	},
 	updated(){
 		this.agendaRangeInAS = this.agendaRangeProp;
 	},
@@ -99,7 +103,7 @@ export default {
 					for(let j=0; j<this.agendaRangeInAS.length; j++){
 						let dayName = cHelpers.getNameOfDay(this.agendaRangeInAS[j]);
 						if (dayName == sel[i].toLowerCase()) {
-							console.log('dayName matching in i boucle:', dayName);
+							// console.log('dayName matching in i boucle:', dayName);
 							// if so i push the matching date in agendaRangeFiltered.
 							this.agendaRangeFilteredInAS.push(this.agendaRangeInAS[j]);
 						}
@@ -108,39 +112,69 @@ export default {
 				//and i create slots of availabilities for these days:
 					//for this i need to get starting and ending for each period in Day:  i need convert string collected in input to duration in minutes
 					//and i need also to get the weekDays matching as well to get back the relevant rangetime.
+				let allDaysSlots = [];
+				let daySlots = [];
 				for (let l=0; l<this.agendaRangeFilteredInAS.length; l++){
-					let daySlots = [];
 					let daySlotsAM = [];
 					let daySlotsPM = [];
 					let dayNamebis = cHelpers.getNameOfDay(this.agendaRangeFilteredInAS[l]);
 					for(let k=0; k<this.weekDays.length; k++){
 						if(dayNamebis == this.weekDays[k].dayname.toLowerCase()){
-							console.log('dayName matching in K boucle:', dayNamebis);
+							// console.log('dayName matching in K boucle:', dayNamebis);
 							if(this.weekDays[k].startMorningTime && this.weekDays[k].endMorningTime){
 								let startAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startMorningTime), 'minutes');
 								let endAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endMorningTime), 'minutes');
-								console.log('startAM:', startAM);
-								console.log('endAM:', endAM);
+								// console.log('startAM:', startAM);
+								// console.log('endAM:', endAM);
 								daySlotsAM.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
+								// console.log('daySlotsAM', daySlotsAM);
+								daySlots.push(daySlotsAM);
+								// console.log('daySlots: ', daySlots);
+
 							}
 							if(this.weekDays[k].startAfternoonTime && this.weekDays[k].endAfternoonTime){
 								let startPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startAfternoonTime), 'minutes');
 								let endPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endAfternoonTime), 'minutes');
-								console.log('startPM:', startPM);
-								console.log('endPM:', endPM);
+								// console.log('startPM:', startPM);
+								// console.log('endPM:', endPM);
 								daySlotsPM.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
+								// console.log('daySlotsPM', daySlotsPM);
+								daySlots.push(daySlotsPM);
+								// console.log('daySlots: ', daySlots);
 							}
 						}
-						daySlots = _.union(daySlotsAM, daySlotsPM);
-						console.log('daySlots after union:', daySlots);
 					}
-					this.slotsInAS.push(daySlots);
-				}	
-			console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
-			console.log('slotsInAS:', this.slotsInAS);
-			// pass the this.slotsInAS to backend, so that backend check that these slots are not already booked.
+				}
+				allDaysSlots.push(_.flatten(daySlots));
+				this.slotsInAS = _.flatten(allDaysSlots);
+				this.$emit('slotsAreReady', this.slotsInAS)
+				// console.log('allDaysSlots:', allDaysSlots);
+				// console.log('slotsInAS:', this.slotsInAS);
+				// console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
+			
+				this.checkAvailability(this.slotsInAS);
+
 		}
+	},
+	checkAvailability: function(availableSlots){
+		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je redirigerai vers calendar qui fera un get pour obtenir les slots du back');
+		//back end should check if the sent slots are not in conflict with booked slots
+		let postBody = availableSlots;
+		console.log('postBody: ', postBody);
+		http.post('/calendar', postBody)
+					.then(
+						res => {
+						console.log('res:',res);
+							//here will call a function update calendar that will update the actual calendar with new rangetime/availabilities
+						 this.$router.push({name: 'calendar'});
+						})
+					.catch(
+						error => {
+					    console.log('error:', error);
+					    //should display message to user that the selected period/range time has already 'booked' slots
+					});
 	}
+
 }
 	
 };
