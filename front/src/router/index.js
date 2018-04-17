@@ -9,6 +9,7 @@ import UserDetail from "@/modules/users/components/UserDetail";
 import CreateUser from "@/modules/users/components/CreateUser";
 import ProfileUser from "@/modules/profileUser/ProfileUser";
 import calendar from "@/modules/calendar/calendar";
+import agenda from "@/modules/calendar/components/agenda";
 import datePicker from "@/modules/calendar/components/datePicker";
 import eventTypeSetting from "@/modules/calendar/components/eventTypeSetting";
 import example from "@/sharedComponents/example";
@@ -72,8 +73,13 @@ export default new Router({
 				header: Header
 			},
 			children:[
+			{
+					path: "",
+					name: "agenda",
+					component: agenda
+				},
 				{
-					path: "/availabilitySetting",
+					path: "availabilitySetting",
 					name: "availabilitySetting",
 					component: datePicker
 				},

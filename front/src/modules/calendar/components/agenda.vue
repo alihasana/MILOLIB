@@ -33,13 +33,13 @@
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC" :key="index">
 						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="buttonId in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)">
-							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId">{{buttonId}}</b-button></li>
+							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,agendaRangePropC)">{{buttonId}}</b-button></li>
 						</ul>
 					</tr>
 				</tbody>
 			</table>
 			<div>
-				<button v-on:click="createButtonId(agendaRangePropC)">Click to create ButtonID</button>
+				<button v-on:click="createButtonId(agendaRangeInA)">Click to create ButtonID</button>
 			</div>
 		</div>
 	</div>
@@ -51,6 +51,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 
 import * as cHelpers from '.././calendarHelpers';
+import _ from 'underscore';
 
 
 //description of component
@@ -74,13 +75,13 @@ export default {
 		return {
 			msg: "agenda Vue will be displayed by default with calendar",
 			day:'',
-      		agendaRangeInA: '',
+      		agendaRangeInA:[],
       		slotsInA:[],
       		hourList:['08:00','08:15','08:30','08:45','09:00','09:15', '09:30', '09:45',
       		'10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45', '15:00','15:15','15:30','15:45','16:00','16:15','16:30','16:45','17:00','17:15','17:30','17:45','18:00'],
       		current:'',
       		buttonId:'',
-      		buttonClass : '',
+      		buttonClass :'',
       		buttonIdList:[]
       	};
 	},
@@ -89,13 +90,14 @@ export default {
 		this.current = cHelpers.getWeekNumber('now');
 		this.slotsInA = this.agendaSlotPropC;
 		this.agendaRangeInA = this.agendaRangePropC;
+		this.updateAgenda(this.agendaRangeInA, this.slotsInA);
 		//for now only to test we will get back the slots from Calendar component.
 		//as soon as route ok, we will retreive the slots from back end
 		// http.get('url')
 		// 			.then(
 		// 				res => {
 		// 				console.log('res:',res);
-		// 				this.slotsInA = res.data.slots;
+		// 				this.slotsInA = res.data;
 		// 				//here we will get the back the slots and launch an update agenda function
 		// 				})
 		// 			.catch(
@@ -103,10 +105,6 @@ export default {
 		// 			    console.log('error:', error);
 		// 			    //should display message to user that there is an error
 		// 			});
-	},
-	updated(){
-		this.updateButtonId(this.agendaSlotPropC,this.buttonIdList);
-		this.changeClassButton(this.buttonId);
 	},
 	methods: {
 		createButtonId: function(timeRange){
@@ -185,7 +183,39 @@ export default {
 			this.createButtonId(timeRange);
 			this.updateButtonId(slots, this.buttonIdList);
 
-		}
+		},
+		setAppointment: function(btnId, slots){
+			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
+			// let matchingSlot = '';
+			// //et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
+			// //s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
+			// if (btnId.charAt(btnId.length - 1) == 'A'){
+			// 	// matchingSlot =_.find(this.slotsInA, function(element){
+			// 	// 	moment(this.slotsInA.element).format('YYYY-MM-DD-HH-mm').toString() == btnId.slice(0,16);
+			// 	for (let i=0; i<slots.length; i++){
+			// 		let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
+			// 		console.log(moment(slots[0].start).format('YYYY-MM-DD-HH-mm').toString())
+			// 		let id = btnId.slice(0,16);
+			// 		if (sl == id){
+			// 			matchingSlot = sl;
+			// 			console.log('the matching slot is:', matchingSlot);
+			// 			let postBody = matchingSlot;
+			// 			console.log('postBody: ', postBody);
+			// 			http.post('/???', postBody)
+			// 					.then(
+			// 						res => {
+			// 						console.log('res:',res);
+			// 						//display message that the booking is OK
+			// 						})
+			// 					.catch(
+			// 						error => {
+			// 					    console.log('error:', error);
+			// 					    //should display message to user that the selected period/range time has already 'booked' slots
+			// 					});
+			// 		}
+			// 	}
+			// }
+	}
 	},
 	filters: {
 		dateFormatFull : function (date) {
@@ -346,7 +376,7 @@ export default {
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
     border-right: 1px solid #d4d4d4;
-	background-color: white;
+	background-color: pink;
 	color:grey;
   	border-radius:0;
   	width: 100%;

@@ -161,18 +161,21 @@ export default {
 		//back end should check if the sent slots are not in conflict with booked slots
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
-		http.post('/calendar', postBody)
-					.then(
-						res => {
-						console.log('res:',res);
-							//here will call a function update calendar that will update the actual calendar with new rangetime/availabilities
-						 this.$router.push({name: 'calendar'});
-						})
-					.catch(
-						error => {
-					    console.log('error:', error);
-					    //should display message to user that the selected period/range time has already 'booked' slots
-					});
+		this.$router.push({name: 'agenda'});
+
+		// http.post('/calendar', postBody)
+		// 			.then(
+		// 				res => {
+		// 				console.log('res:',res);
+		// 					//here will call a function update calendar that will update the actual calendar with new rangetime/availabilities
+		// 				 this.$router.push({name: 'agenda'});
+		// 				})
+		// 			.catch(
+		// 				error => {
+		// 			    console.log('error:', error);
+		// 			    //should display message to user that the selected period/range time has already 'booked' slots
+		// 			    
+		// 			});
 	}
 
 }
