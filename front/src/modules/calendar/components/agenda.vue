@@ -19,7 +19,7 @@
 				</b-navbar-nav>
 			</div>
 			<div class="agendaBodyLeftPanel">
-				<ul class="hour" v-for="hour in hourList">
+				 <ul class="hour" v-for="(hour, index) in hourList" :key="index">
 					<li class="hourli">{{hour}}</li>
 				</ul>
 			</div>
@@ -32,7 +32,7 @@
 				</thead>
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC" :key="index">
-						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="buttonId in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)">
+						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
 							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId">{{buttonId}}</b-button></li>
 						</ul>
 					</tr>
