@@ -78,7 +78,7 @@ export default new Router({
 					component: datePicker
 				},
 				{
-					path: "/eventTypeSetting",
+					path: "eventTypeSetting",
 					name: "eventTypeSetting",
 					component: eventTypeSetting
 				}

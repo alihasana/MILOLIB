@@ -32,7 +32,7 @@ import 'moment/locale/fr';
 import * as cHelpers from '.././calendarHelpers';
 
 import availabilitySetting from "./availabilitySetting";
-import agenda from "./agenda";
+// import agenda from "./agenda";
 
 //setting local format and language
 moment.locale('fr');
@@ -59,7 +59,6 @@ export default {
 		};
 	},
 	components: {
-		agenda,
 		availabilitySetting
 	},
 	created(){
