@@ -104,9 +104,9 @@ export default {
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
-#dashboard {
-  /* color: yellow; */
-}
+/* #dashboard {
+   color: yellow;
+} */
 
 #items {
   /* background-color: red; */
