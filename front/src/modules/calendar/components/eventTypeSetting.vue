@@ -1,33 +1,35 @@
 <template>
-  <div class="container">
-    <h5>{{msg}}</h5>
-    <b-form>
-      <b-form-group label="Paramétrage de mes types de RDV">
-        <b-form-checkbox-group id="eventSettings" name="eventSettings" v-model="selected">
-          <b-list-group>
-            <b-list-group-item v-for="(type,index) in types" :key="index">
-              <b-row>
-                <b-col sm="3" class="typesrdv">
-                  <b-form-checkbox :value="type.rdvType">{{ type.rdvType }}</b-form-checkbox>
-                </b-col>
-                <b-col sm="6">
-                  <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)">
-                    <i class="material-icons">remove_circle_outline</i>
-                  </b-button>
-                  <span>{{type.duration}} min</span>
-                  <b-button variant="link" size="sm" v-on:click="increaseDuration(type)">
-                    <i class="material-icons">add_circle_outline</i>
-                  </b-button>
-                </b-col>
-              </b-row>
-            </b-list-group-item>
-          </b-list-group>
-        </b-form-checkbox-group>
-      </b-form-group>
-      <b-button variant="outline-primary" v-on:click="confirmSelectedTypes(selected)" type="button">Confirmer mes types de RDV</b-button>
-      <hr>
-      <div>Selected: <strong>{{ selected }}</strong></div>
-    </b-form>
+  <div class="eventTypeSetting">
+      <h5>{{msg}}</h5>
+    <div class="eventTypeSetting__row">
+      <b-form>
+        <b-form-group label="Paramétrage de mes types de RDV">
+          <b-form-checkbox-group id="eventSettings" name="eventSettings" v-model="selected">
+            <b-list-group>
+              <b-list-group-item v-for="(type,index) in types" :key="index">
+                <b-row>
+                  <b-col sm="3" class="eventTypeSetting__typesrdv">
+                    <b-form-checkbox :value="type.rdvType">{{ type.rdvType }}</b-form-checkbox>
+                  </b-col>
+                  <b-col sm="6">
+                    <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)">
+                      <i class="material-icons">remove_circle_outline</i>
+                    </b-button>
+                    <span>{{type.duration}} min</span>
+                    <b-button variant="link" size="sm" v-on:click="increaseDuration(type)">
+                      <i class="material-icons">add_circle_outline</i>
+                    </b-button>
+                  </b-col>
+                </b-row>
+              </b-list-group-item>
+            </b-list-group>
+          </b-form-checkbox-group>
+        </b-form-group>
+        <b-button variant="outline-primary" v-on:click="confirmSelectedTypes(selected)" type="button">Confirmer mes types de RDV</b-button>
+        <hr>
+        <div>Selected: <strong>{{ selected }}</strong></div>
+      </b-form>
+    </div>
   </div>
 </template>
 
@@ -53,13 +55,13 @@ export default {
     return {
       msg: "Event Type Settings",
       types:[
-        { rdvType:'Premier RDV individuel', index:0, duration:0},
-        { rdvType:'Emploi', index:1, duration:0},
-        { rdvType:'Formation', index:2, duration:0},
-        { rdvType:'Projet professionnel', index:3, duration:0},
-        { rdvType:'Aide Financiere', index:4, duration:0},
-        { rdvType:'Apprentissage', index:5, duration:0},
-        { rdvType:'Autre', index:6, duration:0}
+      { rdvType:'Premier RDV individuel', index:0, duration:0},
+      { rdvType:'Emploi', index:1, duration:0},
+      { rdvType:'Formation', index:2, duration:0},
+      { rdvType:'Projet professionnel', index:3, duration:0},
+      { rdvType:'Aide Financiere', index:4, duration:0},
+      { rdvType:'Apprentissage', index:5, duration:0},
+      { rdvType:'Autre', index:6, duration:0}
       ],
       selected:[],
       eventTypeFilteredInETV:[]
@@ -76,11 +78,11 @@ export default {
           for (let k=0; k<this.types.length; k++){
             if(this.types[k].rdvType == sel[i] && this.types[k].duration>0){
               this.eventTypeFilteredInETV.push({
-              type: this.types[k].rdvType,
-              duration: this.types[k].duration
+                type: this.types[k].rdvType,
+                duration: this.types[k].duration
               })
             }
-          }  
+          }
         }
       };
       console.log('this.eventTypeFilteredInETV: ', this.eventTypeFilteredInETV);
@@ -107,38 +109,25 @@ export default {
       let postBody = SelectedEventTypes;
       console.log('postBody: ', postBody);
       http.post('/appointmenttype', postBody)
-          .then(
-            res => {
-            console.log('res:',res);
+      .then(
+        res => {
+          console.log('res:',res);
               //here will confirm that the new settings are well saved
               this.$router.push({name: 'calendar'});
               this.this.eventTypeFilteredInETV = '';
             })
-          .catch(
-            error => {
-              console.log('error:', error);
+      .catch(
+        error => {
+          console.log('error:', error);
               //should display message to user that the events setting could not been saved
-          });
+            });
 
     }
   }
 };
-
-
-
 </script>
 
 
 
 <style scoped>
-
-.container {
-  display: block;
-}
-
-.typesrdv{
-
-text-align: left;
-}
-
 </style>

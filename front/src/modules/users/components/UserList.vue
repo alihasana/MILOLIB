@@ -1,6 +1,6 @@
 <template>
   <div class="userlist">
-    <h2 class="heading-secondary">Here is your AwesomeUserList</h2>
+    <h2 class="heading-secondary">{{ title }}</h2>
     <div class="row userlist__row">
           <!--Il faudrait plutôt mettre des boutons, car le lien doit permettre de modifier, supprimer, accéder au calendrier, et accéder au détails de l'utilisateur-->
       <router-link tag="div" class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id:user.username , user: user}}" style="cursor: pointer" v-for='user in users' :key="user.username">
@@ -18,7 +18,7 @@
     name: "userList",
     data() {
       return {
-        title: "Your are on userList",
+        title: "Your are on the userList",
         users: []
       };
     },
@@ -49,5 +49,5 @@
 </script>
 
 <style scoped>
-  
+
 </style>

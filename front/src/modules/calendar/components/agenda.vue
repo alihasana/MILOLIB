@@ -56,9 +56,9 @@ import * as cHelpers from '.././calendarHelpers';
 //description of component
 	//This component will display the conseiller agenda.
 	// by default, the agenda is filled in with buttons with NonAvailable ids
-	// when the agenda get the 'available' rangeTime and slots from backend, 
+	// when the agenda get the 'available' rangeTime and slots from backend,
 		//it will update the display on the current agenda if no conflict
-	
+
 	//! WORK IN PROGRESS
 
 	// TODO
@@ -218,7 +218,7 @@ export default {
 /*******Agenda structure*******/
 
 .agenda{
-	display: flex;  
+	display: flex;
   	flex-flow: row wrap;
 }
 
@@ -381,9 +381,4 @@ export default {
     margin-bottom: 0px;
     margin-top: 0px;
 }
-
-
-
-
-
 </style>

@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<div class="datePicker">
 		<h5>{{msg}}</h5>
 		<b-form>
 			<b-form-group label="Période de paramétrage de mon agenda">
 				<b-list-group>
 					<b-list-group-item class="disposInDay">
-						<b-row class="periode">
+						<b-row class="datePicker__periode">
 							<label :for="startDateInDP">Date de départ:</label>
 							<b-col sm="3"><b-form-input id="startDateInDP" v-model ="startDateInDP" type="date"></b-form-input></b-col>
 							<label :for="endDateInDP">Date de fin:</label>
@@ -76,18 +76,11 @@ export default {
 			this.$emit('newTimeRangeToDisplay', this.agendaRangeInDP)
 			this.$emit('newSlotsToDisplay', this.agendaSlotInDP );
 		}
-	}	
+	}
 };
 
 </script>
 
 
 <style scoped>
-
-.periode {
-	margin: auto;
-	text-align: center;
-	justify-content: center;
-}
-
 </style>
