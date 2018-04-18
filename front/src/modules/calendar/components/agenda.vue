@@ -11,36 +11,37 @@
 							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_module</i></b-button>
 						</li>
 						<li class="navNavigate">
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_before</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
 							<span class="weekNumber">Semaine{{current}}</span>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_next</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getNextDays()"><i class="material-icons">navigate_next</i></b-button>
 						</li>
 					</b-nav-form>
 				</b-navbar-nav>
 			</div>
 			<div class="agendaBodyLeftPanel">
-				<ul class="hour" v-for="hour in hourList">
+				 <ul class="hour" v-for="(hour, index) in hourList" :key="index">
 					<li class="hourli">{{hour}}</li>
 				</ul>
 			</div>
 			<table class="agendaBody">
 				<thead class="agendaBodyDays">
-					<tr class="day" v-for="(day,index) in agendaRangePropC" :key="index">
+					<tr class="day" v-for="(day,index) in agendaRangePropC.slice(0,7)" :key="index">
 						<p class="dayName">{{day | dateFormatDayName}}</p>
 						<p class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</p>
 					</tr>
 				</thead>
 				<tbody class="agendaBodySlots">
-					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC" :key="index">
-						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="buttonId in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)">
-							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,agendaRangePropC)">{{buttonId}}</b-button></li>
+					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC.slice(0,7)" :key="index">
+						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtonsIdList($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
+							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,agendaSlotPropC)">{{buttonId}}</b-button></li>
+
 						</ul>
 					</tr>
 				</tbody>
 			</table>
-			<div>
+			<!-- <div>
 				<button v-on:click="createButtonId(agendaRangeInA)">Click to create ButtonID</button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
@@ -49,8 +50,8 @@
 /* eslint-disable */
 import moment from 'moment';
 import 'moment/locale/fr';
-
 import * as cHelpers from '.././calendarHelpers';
+import http from '../../../helpers/http';
 import _ from 'underscore';
 
 
@@ -82,7 +83,10 @@ export default {
       		current:'',
       		buttonId:'',
       		buttonClass :'',
-      		buttonIdList:[]
+      		buttonIdList:[],
+      		displayLimit:'',
+      		beginDisplay:0,
+      		endDisplay:7
       	};
 	},
 	components: {},
@@ -106,6 +110,9 @@ export default {
 		// 			    //should display message to user that there is an error
 		// 			});
 	},
+	// updated(){
+	// 	this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+	// },
 	methods: {
 		createButtonId: function(timeRange){
 			//should be launched each time get.http request
@@ -156,8 +163,8 @@ export default {
 			console.log('les buttonId sont updatés!:', idList);
 
 		},
-		updateButtons: function(newList){
-			//not sure this function is usefull, not working now, i have tried to render the change of buttonsId in the agenda with and event, but not working.
+		updateButtonsIdList: function(newList){
+			//this function enable to update the display further to listening the event'buttonsIdsUpdated'
 			this.buttonIdList = newList;
 		},
 		changeClassButton : function(btnId){
@@ -184,40 +191,65 @@ export default {
 			this.updateButtonId(slots, this.buttonIdList);
 
 		},
+		getNextDays: function(){
+			console.log('je veux voir les jours d après');
+			this.beginDisplay += 7;
+			console.log('this.beginDisplay:', this.beginDisplay);
+		},
+		getPreviousDays: function(){
+			console.log('je veux voir les jours d avant');
+			this.beginDisplay -= 7;
+			console.log('this.beginDisplay:', this.beginDisplay);
+
+		},
 		setAppointment: function(btnId, slots){
 			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
-			// let matchingSlot = '';
-			// //et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
-			// //s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
-			// if (btnId.charAt(btnId.length - 1) == 'A'){
-			// 	// matchingSlot =_.find(this.slotsInA, function(element){
-			// 	// 	moment(this.slotsInA.element).format('YYYY-MM-DD-HH-mm').toString() == btnId.slice(0,16);
-			// 	for (let i=0; i<slots.length; i++){
-			// 		let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
-			// 		console.log(moment(slots[0].start).format('YYYY-MM-DD-HH-mm').toString())
-			// 		let id = btnId.slice(0,16);
-			// 		if (sl == id){
-			// 			matchingSlot = sl;
-			// 			console.log('the matching slot is:', matchingSlot);
-			// 			let postBody = matchingSlot;
-			// 			console.log('postBody: ', postBody);
-			// 			http.post('/???', postBody)
-			// 					.then(
-			// 						res => {
-			// 						console.log('res:',res);
-			// 						//display message that the booking is OK
-			// 						})
-			// 					.catch(
-			// 						error => {
-			// 					    console.log('error:', error);
-			// 					    //should display message to user that the selected period/range time has already 'booked' slots
-			// 					});
-			// 		}
-			// 	}
-			// }
+			let matchingSlot = '';
+			//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
+			//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
+			if (btnId.charAt(btnId.length - 1) == 'A'){
+				// matchingSlot =_.find(this.slotsInA, function(element){
+				// 	moment(this.slotsInA.element).format('YYYY-MM-DD-HH-mm').toString() == btnId.slice(0,16);
+				for (let i=0; i<slots.length; i++){
+					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
+					let id = btnId.slice(0,16);
+					if (sl == id){
+						matchingSlot = slots[i];
+						console.log('the matching slot is:', matchingSlot);
+						let postBody = matchingSlot;
+						console.log('postBody: ', postBody);
+						// http.post('/???', postBody)
+						// 		.then(
+						// 			res => {
+						// 			console.log('res:',res);
+						// 			//display message that the booking is OK
+									// this.updateButtonId(res.data,btnId);
+									// this.changeClassButton (btnId);
+						// 			})
+						// 		.catch(
+						// 			error => {
+						// 		    console.log('error:', error);
+						// 		    //should display message to user that the selected period/range time has already 'booked' slots
+						// 		});
+						let newBtnId = btnId.slice(0,16)+'-'+'B';
+						let newButtonIdList = _.without(this.buttonIdList, btnId);
+						console.log('old buttonId:',btnId);
+						console.log('new ButtonID is:', newBtnId);
+						newButtonIdList.push(newBtnId);
+						newButtonIdList.sort();
+						this.$emit('buttonsIdsUpdated', newButtonIdList);
+						console.log('newbuttonIdList:', newButtonIdList);
+						this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+					}
+				}
+			}
+
 	}
 	},
 	filters: {
+		displayLimit: function(timeRange){
+	return timeRange.slice(this.beginDisplay,this.endDisplay);
+		},
 		dateFormatFull : function (date) {
     return moment(date).format('DD/MM/YYYY');
 		},

@@ -35,7 +35,6 @@ export default {
   name: "calendar",
   data() {
     return {
-      msg: "Calendar Vue",
       agendaRangeInC:[],
       agendaSlotInC:[]
     };
