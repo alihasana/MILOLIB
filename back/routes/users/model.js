@@ -12,12 +12,14 @@ let UserSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   phone: { type: String },
-  creationDate: { type: Date, default: Date.now },
-  updatedDate: { type: Date, default: Date.now },
   // calendar: { eventsTypes: [], slots: [SlotSchema] },  // WARNING WIP !!!
   calendar: CalendarSchema,  // WARNING WIP !!!
-  appointment: [AppointmentSchema]  // WARNING WIP !!!
-})
+  appointment: [AppointmentSchema],  // WARNING WIP !!!
+  // creationDate: { type: Date, default: Date.now },
+  // updatedDate: { type: Date, default: Date.now },
+},
+  { timestamps: true }
+)
 
 UserSchema.methods.comparePasswords = function(reqPassword) {
   return bcrypt.compareSync(reqPassword, this.password)
