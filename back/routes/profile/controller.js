@@ -6,7 +6,7 @@ import helper from './../../helpers/helper';
 export default {
   protectedUpdate: (body, locals, messageArray) => {
     if (body.password) {
-      if (!(body.oldPassword && locals.user.comparePasswords(body.oldPassword)) ) {
+      if (!(body.oldPassword && locals.user.comparePasswords(body.oldPassword))) {
         messageArray[1] = ' Actual password incorrect. '
       } else {
         locals.user.password = bcrypt.hashSync(body.password, 10)
@@ -22,7 +22,7 @@ export default {
     //   // Pas de condition pour le moment, on ne peux simplement pas modifier son role  
     //   messageArray[3] = ' You can\'t modify your own role. '      
     // }
-    if ( (messageArray[1] || messageArray[2]) !== '' ) {
+    if ((messageArray[1] || messageArray[2]) !== '') {
       messageArray[0] = 'Validation failed :'
       locals.user.unmarkModified('email')
       locals.user.unmarkModified('password')

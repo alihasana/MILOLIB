@@ -14,10 +14,8 @@ router.get('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
 })
 
-// {runValidators : true}
-// exploiter le contenue de "result" pour faire des réponses differentes
-
 // TO ADD : updatedDate
+// TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '']
   //'res.locals.user' is the actual connected user
