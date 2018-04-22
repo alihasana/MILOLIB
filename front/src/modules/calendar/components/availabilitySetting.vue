@@ -147,21 +147,21 @@ export default {
 				}
 				allDaysSlots.push(_.flatten(daySlots));
 				this.slotsInAS = _.flatten(allDaysSlots);
-				this.$emit('slotsAreReady', this.slotsInAS)
+				// this.$emit('slotsAreReady', this.slotsInAS)
 				// console.log('allDaysSlots:', allDaysSlots);
 				// console.log('slotsInAS:', this.slotsInAS);
 				// console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
 			
-				this.checkAvailability(this.slotsInAS);
+				// this.checkAvailability(this.slotsInAS);
 
 		}
 	},
 	checkAvailability: function(availableSlots){
 		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je redirigerai vers calendar qui fera un get pour obtenir les slots du back');
-		//back end should check if the sent slots are not in conflict with booked slots
+		// back end should check if the sent slots are not in conflict with booked slots
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
-		this.$router.push({name: 'agenda'});
+		// this.$router.push({name: 'agenda'});
 
 		// http.post('/calendar', postBody)
 		// 			.then(

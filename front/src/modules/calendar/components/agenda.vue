@@ -1,6 +1,9 @@
 <template>
 	<div>
 		<h5>{{ msg }}</h5>
+		<div>
+			<!-- here: {{ test }} -->
+		</div>
 		<div class="agenda">
 			<div class="agendaHeader">
 				<b-navbar-nav>
@@ -13,7 +16,7 @@
 						<li class="navNavigate">
 							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
 							<span class="weekNumber">Semaine{{current}}</span>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getNextDays()"><i class="material-icons">navigate_next</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="changeWeek()"><i class="material-icons">navigate_next</i></b-button>
 						</li>
 					</b-nav-form>
 				</b-navbar-nav>
@@ -25,23 +28,24 @@
 			</div>
 			<table class="agendaBody">
 				<thead class="agendaBodyDays">
-					<tr class="day" v-for="(day,index) in agendaRangePropC.slice(0,7)" :key="index">
+					<tr class="day" v-for="(day,index) in agendaRangePropC" :key="index">
 						<p class="dayName">{{day | dateFormatDayName}}</p>
 						<p class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</p>
 					</tr>
 				</thead>
 				<tbody class="agendaBodySlots">
-					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC.slice(0,7)" :key="index">
-						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtonsIdList($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
+					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC" :key="index">
+						<!-- <ul class="slotUl" v-on:buttonsIdsUpdated="updateButtonsIdList($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index"> -->
+							<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
 							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,agendaSlotPropC)">{{buttonId}}</b-button></li>
 
 						</ul>
 					</tr>
 				</tbody>
 			</table>
-			<!-- <div>
-				<button v-on:click="createButtonId(agendaRangeInA)">Click to create ButtonID</button>
-			</div> -->
+			<div>
+				<button v-on:click="createButtonId(agendaRangePropC)">Click to create ButtonID</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -84,17 +88,21 @@ export default {
       		buttonId:'',
       		buttonClass :'',
       		buttonIdList:[],
-      		displayLimit:'',
-      		beginDisplay:0,
-      		endDisplay:7
+      		// newButtonIdList:[],
+      		// displayLimit:'',
+      		// beginDisplay:0,
+      		// endDisplay:'',
+      		// test: []
       	};
 	},
 	components: {},
 	created(){
 		this.current = cHelpers.getWeekNumber('now');
+		// this.endDisplay = cHelpers.limitDisplay('week', this.beginDisplay);
 		this.slotsInA = this.agendaSlotPropC;
 		this.agendaRangeInA = this.agendaRangePropC;
-		this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+		// this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+		// this.test = this.agendaRangePropC.slice(this.beginDisplay,this.endDisplay)
 		//for now only to test we will get back the slots from Calendar component.
 		//as soon as route ok, we will retreive the slots from back end
 		// http.get('url')
@@ -110,10 +118,16 @@ export default {
 		// 			    //should display message to user that there is an error
 		// 			});
 	},
-	// updated(){
-	// 	this.updateAgenda(this.agendaRangeInA, this.slotsInA);
-	// },
+	updated(){
+		// this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+		this.updateButtonId(this.agendaSlotPropC,this.buttonIdList);
+		this.changeClassButton(this.buttonId);
+	},
 	methods: {
+		// changeWeek() {
+		// 	console.log('in change zweek');
+		// 	this.test = this.agendaRangePropC.slice(this.beginDisplay + 7, this.beginDisplay + 14);
+		// },
 		createButtonId: function(timeRange){
 			//should be launched each time get.http request
 			//based on a timeRange of days, et based on the hours to display in agenda
@@ -146,7 +160,7 @@ export default {
 					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
 					let id = idList[j].slice(0,16);
 					if (sl == id) {
-						console.log('here are the buttonsIds that should be modified:', idList[j]);
+						// console.log('here are the buttonsIds that should be modified:', idList[j]);
 						if(slots[i].status == 'Available'){
 							idList[j]=idList[j].slice(0,16)+'-'+'A';
 						}
@@ -163,7 +177,7 @@ export default {
 			console.log('les buttonId sont updatés!:', idList);
 
 		},
-		updateButtonsIdList: function(newList){
+		updateButtons: function(newList){
 			//this function enable to update the display further to listening the event'buttonsIdsUpdated'
 			this.buttonIdList = newList;
 		},
@@ -189,67 +203,91 @@ export default {
 			//this function will take timeRange and Slots as parameters, and will be launched after hhtp.GET
 			this.createButtonId(timeRange);
 			this.updateButtonId(slots, this.buttonIdList);
+		}
+		// getNextDays: function(){
+		// 	console.log('je veux voir les jours d après');
+		// 	let start = this.beginDisplay + 7;
+		// 	let end = cHelpers.limitDisplay('week', start);
+		// 	console.log('start:', start);
+		// 	console.log('end:', end);
+		// 	let displayRange = {
+		// 		start:start,
+		// 		end:end
+		// 	};
+		// 	// this.$emit('updateDisplay',displayRange);
+		// 	this.beginDisplay = start;
+		// 	console.log('begin display', this.beginDisplay);
+		// 	this.test = this.agendaRangePropC.slice(start,end);
+		// 	console.log('teeeessttt', this.test);			
+		// },
+		// getPreviousDays: function(){
+		// 	console.log('je veux voir les jours d avant');
+		// 	let start = this.beginDisplay - 7;
+		// 	let end = cHelpers.limitDisplay('week', start);
+		// 	console.log('start:', start);
+		// 	console.log('end:', end);
+		// 	let displayRange = {
+		// 		start:start,
+		// 		end:end
+		// 	};
+		// 	// this.$emit('updateDisplay',displayRange);
+		// 	console.log('i change range');			
+		// },
+		// updateDisplayRange: function(range){
+		// 	this.beginDisplay = range.start;
+		// 	this.endDisplay = range.end;
+		// 	console.log('new beginDisplay:', this.beginDisplay);
+		// 	console.log('new endDisplay:', this.endDisplay);
+		// 	//this function is the reply to the event updateDisplayRange
+		// }
+		// setAppointment: function(btnId, slots){
+		// 	console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
+		// 	let matchingSlot = '';
+		// 	//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
+		// 	//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
+		// 	if (btnId.charAt(btnId.length - 1) == 'A'){
+		// 		// matchingSlot =_.find(this.slotsInA, function(element){
+		// 		// 	moment(this.slotsInA.element).format('YYYY-MM-DD-HH-mm').toString() == btnId.slice(0,16);
+		// 		for (let i=0; i<slots.length; i++){
+		// 			let sl = ''; //moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
+		// 			let id = btnId.slice(0,16);
+		// 			if (sl == id){
+		// 				matchingSlot = slots[i];
+		// 				console.log('the matching slot is:', matchingSlot);
+		// 				let postBody = matchingSlot;
+		// 				console.log('postBody: ', postBody);
+		// 				// http.post('/???', postBody)
+		// 				// 		.then(
+		// 				// 			res => {
+		// 				// 			console.log('res:',res);
+		// 				// 			//display message that the booking is OK
+		// 							// this.updateButtonId(res.data,btnId);
+		// 							// this.changeClassButton (btnId);
+		// 				// 			})
+		// 				// 		.catch(
+		// 				// 			error => {
+		// 				// 		    console.log('error:', error);
+		// 				// 		    //should display message to user that the selected period/range time has already 'booked' slots
+		// 				// 		});
+		// 				let newBtnId = btnId.slice(0,16)+'-'+'B';
+		// 				let newButtonIdList = _.without(this.buttonIdList, btnId);
+		// 				console.log('old buttonId:',btnId);
+		// 				console.log('new ButtonID is:', newBtnId);
+		// 				newButtonIdList.push(newBtnId);
+		// 				newButtonIdList.sort();
+		// 				this.$emit('buttonsIdsUpdated', newButtonIdList);
+		// 				console.log('newbuttonIdList:', newButtonIdList);
+		// 				this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+		// 			}
+		// 		}
+		// 	}
 
-		},
-		getNextDays: function(){
-			console.log('je veux voir les jours d après');
-			this.beginDisplay += 7;
-			console.log('this.beginDisplay:', this.beginDisplay);
-		},
-		getPreviousDays: function(){
-			console.log('je veux voir les jours d avant');
-			this.beginDisplay -= 7;
-			console.log('this.beginDisplay:', this.beginDisplay);
-
-		},
-		setAppointment: function(btnId, slots){
-			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
-			let matchingSlot = '';
-			//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
-			//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
-			if (btnId.charAt(btnId.length - 1) == 'A'){
-				// matchingSlot =_.find(this.slotsInA, function(element){
-				// 	moment(this.slotsInA.element).format('YYYY-MM-DD-HH-mm').toString() == btnId.slice(0,16);
-				for (let i=0; i<slots.length; i++){
-					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
-					let id = btnId.slice(0,16);
-					if (sl == id){
-						matchingSlot = slots[i];
-						console.log('the matching slot is:', matchingSlot);
-						let postBody = matchingSlot;
-						console.log('postBody: ', postBody);
-						// http.post('/???', postBody)
-						// 		.then(
-						// 			res => {
-						// 			console.log('res:',res);
-						// 			//display message that the booking is OK
-									// this.updateButtonId(res.data,btnId);
-									// this.changeClassButton (btnId);
-						// 			})
-						// 		.catch(
-						// 			error => {
-						// 		    console.log('error:', error);
-						// 		    //should display message to user that the selected period/range time has already 'booked' slots
-						// 		});
-						let newBtnId = btnId.slice(0,16)+'-'+'B';
-						let newButtonIdList = _.without(this.buttonIdList, btnId);
-						console.log('old buttonId:',btnId);
-						console.log('new ButtonID is:', newBtnId);
-						newButtonIdList.push(newBtnId);
-						newButtonIdList.sort();
-						this.$emit('buttonsIdsUpdated', newButtonIdList);
-						console.log('newbuttonIdList:', newButtonIdList);
-						this.updateAgenda(this.agendaRangeInA, this.slotsInA);
-					}
-				}
-			}
-
-	}
+	// }
 	},
 	filters: {
-		displayLimit: function(timeRange){
-	return timeRange.slice(this.beginDisplay,this.endDisplay);
-		},
+	// 	displayLimit: function(timeRange){
+	// return timeRange.slice(this.beginDisplay,this.endDisplay);
+	// 	},
 		dateFormatFull : function (date) {
     return moment(date).format('DD/MM/YYYY');
 		},

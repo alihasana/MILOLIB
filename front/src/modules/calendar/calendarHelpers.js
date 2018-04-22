@@ -148,6 +148,17 @@ function convertTimeInMinutes (hoursMinutes){
 	return totalMinutes;
 }
 
+//this function will take as parameter day, week or month for the durationName. 
+//the start will be the begin of Display
+//will return the number of days to display in the calendar
+function limitDisplay (durationName, start ){
+	let duration = '';
+	if (durationName == 'day'){duration = 1;}
+	if (durationName == 'week'){duration = 7;}
+	else {duration = 31;}
+	return start + duration;
+}
+
 
 export {
 	NotAvailable,
@@ -170,7 +181,8 @@ export {
 	getNameOfDay,
 	filterInt,
 	convertTimeInMinutes,
-	setSlotsArray
+	setSlotsArray,
+	limitDisplay
 
 }
 

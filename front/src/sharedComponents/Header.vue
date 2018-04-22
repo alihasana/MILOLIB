@@ -38,7 +38,7 @@
             <b-dropdown-item v-if="role !== 'Primo' || role !== 'Suivit'"><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>Liste des utilisateurs</span></router-link></b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
-            <em><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">date_range</i><span>Agenda</span></router-link></em>
+            <em><router-link tag="span" :to="{name: 'agenda'}"><i class="material-icons">date_range</i><span>Agenda</span></router-link></em>
           </b-nav-item>
           <b-nav-item-dropdown right v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
 <template slot="button-content">
