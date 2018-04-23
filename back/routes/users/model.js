@@ -11,7 +11,7 @@ let UserSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   phone: { type: String },
-  calendar: [CalendarSchema],  // WARNING WIP !!!
+  calendar: CalendarSchema,  // WARNING WIP !!!
   appointment: [AppointmentSchema],  // WARNING WIP !!!
   // creationDate: { type: Date, default: Date.now },
   // updatedDate: { type: Date, default: Date.now },

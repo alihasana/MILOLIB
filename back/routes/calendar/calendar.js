@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
   //   res.locals.user.calendar.slots.push(req.body[key])
   // }
   for (let i = 0; i < req.body.length; i++) {
-    res.locals.user.calendar[0].slots.push(req.body[i])
+    res.locals.user.calendar.slots.push(req.body[i])
   }
   res.locals.user.markModified('calendar.slots.start')
   res.locals.user.markModified('calendar.slots.end')
