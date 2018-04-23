@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import helper from './../../helpers/helper'
-import User from './users/model'
+import Client from './model'
 let router = express.Router()
 
 router.post('/login', (req, res) => {
