@@ -1,7 +1,8 @@
 // WARNING WIP !!!
 import express from 'express'
 import mongoose from 'mongoose'
-// import User from './../users/model'
+import User from './../users/model'
+import Client from './../clients/model'
 
 let router = express.Router()
 

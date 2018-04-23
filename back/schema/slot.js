@@ -2,8 +2,8 @@
 import mongoose from 'mongoose'
 
 let SlotSchema = new mongoose.Schema({
-	// clientID: String, String, Probablememt a degager
-	// conseillerID: String, Probablememt a degager
+	clientID: String,
+	conseillerID: String,
 	// rdvID: String, A voir comment creer un id unique
 	start: mongoose.Schema.Types.Mixed,
 	end: mongoose.Schema.Types.Mixed,

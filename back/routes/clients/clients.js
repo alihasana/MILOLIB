@@ -43,5 +43,4 @@ router.get('/:id', (req, res) => {
 
 export default router
 
-// ???
 // Gestion d'erreurs un peu different entre "router.get/put/delete" . A voir ce qui est le plus pertinent
