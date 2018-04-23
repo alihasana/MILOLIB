@@ -66,7 +66,7 @@ router.use(verifyToken)
 
 // Protected routes
 router.use('/users', users)
-router.use('/client', users)
+router.use('/clients', clients)
 router.use('/profile', profile)
 router.use('/appointmenttype', appointmenttype)
 router.use('/calendar', calendar)

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 
 let ClientSchema = new mongoose.Schema(
   {
+    active: { type: Boolean, required: true, default: true },
     nom: { type: String, required: false },
     prenom: { type: String, required: false },
     email: { type: String, required: true, unique: true },

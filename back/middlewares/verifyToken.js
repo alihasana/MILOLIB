@@ -25,7 +25,12 @@ let verifyToken = (req, res, next) => {
           res.locals.decode = decode
           if (ObjectId.isValid(decode._id)) {
             if (decode.userCollection == 'User' || 'Client') {
-              eval(decode.userCollection).findById(decode._id, (err, user) => {
+              if (decode.userCollection === 'User') {
+                let Collection = User
+              } else {
+                let Collection = Client
+              }
+              let Collection = Client.findById(decode._id, (err, user) => {
                 if (err)
                   res.status(500).json({ success: false, message: err.message })
                 else if (!user)
@@ -33,13 +38,11 @@ let verifyToken = (req, res, next) => {
                     .status(401)
                     .json({ success: false, message: 'Unauthozired' })
                 else if (user.active !== true)
-                  res
-                    .status(403)
-                    .json({
-                      success: false,
-                      message:
-                        'Inactive account. Please contact an administrator.'
-                    })
+                  res.status(403).json({
+                    success: false,
+                    message:
+                      'Inactive account. Please contact an administrator.'
+                  })
                 else {
                   res.locals.user = user
                   // res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
