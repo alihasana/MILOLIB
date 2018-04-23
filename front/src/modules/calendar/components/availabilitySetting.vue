@@ -164,7 +164,7 @@ export default {
 						})
 					.catch(
 						error => {
-					    console.log('error:', error);
+					    console.log('error:', error.response.data.message);
 					    swal({
 			            type: "error",
 			            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
