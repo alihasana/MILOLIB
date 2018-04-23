@@ -66,7 +66,6 @@ router.post('/', (req, res) => {
       if (helper.regexEmail.test(req.body.email)) {
         let newUser = new User(req.body)
         newUser.password = bcrypt.hashSync(req.body.password, 10)
-        console.log('newUser', newUser)
         newUser.save((err, user) => {
           if (err) {
             if (err.message.match(/^E11000 duplicate key error.+/)) {
