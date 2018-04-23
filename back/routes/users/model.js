@@ -3,16 +3,14 @@ import bcrypt from 'bcrypt'
 
 let UserSchema = new mongoose.Schema(
   {
-    active: { type: Boolean, required: true, default: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
     role: { type: String, required: true, default: 'peon' },
     firstName: { type: String },
     lastName: { type: String },
     phone: { type: String }
     // eventsTypes: [{}], // Les types de rdv possibles et leur durées
-    // creationDate: { type: Date, default: Date.now },
-    // updatedDate: { type: Date, default: Date.now },
   },
   { timestamps: true }
 )
