@@ -17,38 +17,59 @@
 -->
 <template>
   <div>
-    <!-- navbar toggleable -->
-    <b-navbar toggleable="sm" type="dark" variant="dark">
+    <!-- navbar menus -->
+    <b-navbar type="dark" variant="dark" toggleable="sm">
       <b-navbar-brand>
         <router-link tag="a" :to="{name: 'dashboard'}"><span id="dashboard">DASHBOARD {{ role }}</span></router-link>
       </b-navbar-brand>
       <b-navbar-toggle target="header_collapse"></b-navbar-toggle>
-    </b-navbar>
-    <!-- navbar menus -->
-    <b-navbar type="dark" variant="dark" toggleable="sm" id="header_collapse">
       <b-collapse is-nav id="header_collapse">
-        <b-navbar-nav justified id="items">
+        <b-navbar-nav justified style="width: 100%">
           <!-- fill or justified -->
-          <b-nav-item-dropdown right v-if="role !== 'Primo' && role !== 'Suivit'">
+          <b-nav-item-dropdown no-caret right v-if="role !== 'Primo' && role !== 'Suivit'">
             <template slot="button-content">
-                <em><i class="material-icons">assignment_ind</i><span>Users</span></em>
+                <div><i class="material-icons">assignment_ind</i><span>Users</span></div>
             </template>
-            <b-dropdown-item v-if="role === 'Administrateur' || role === 'Administrateur/Conseiller'"><router-link tag="span" :to="{name: 'createUser'}"><i class="material-icons">note_add</i><span>Créer un utilisateur</span></router-link></b-dropdown-item>
+            <b-dropdown-item v-if="role === 'Administrateur' || role === 'Administrateur/Conseiller'">
+              <router-link tag="div" :to="{name: 'createUser'}">
+                <i class="material-icons">note_add</i><span>Créer un utilisateur</span>
+              </router-link>
+            </b-dropdown-item>
             <!-- <b-dropdown-item v-if="role === 'Administrateur' || role === 'Administrateur/Conseiller' || role === 'Conseiller' || role === 'Chargé d\'accueil' || role === 'Invité'"><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>User's list</span></router-link></b-dropdown-item> -->
-            <b-dropdown-item v-if="role !== 'Primo' || role !== 'Suivit'"><router-link tag="span" :to="{name: 'userList'}"><i class="material-icons">folder_shared</i><span>Liste des utilisateurs</span></router-link></b-dropdown-item>
+            <b-dropdown-item v-if="role !== 'Primo' || role !== 'Suivit'">
+              <router-link tag="div" :to="{name: 'userList'}">
+                <i class="material-icons">folder_shared</i><span>Liste des utilisateurs</span>
+              </router-link>
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
-            <em><router-link tag="span" :to="{name: 'calendar'}"><i class="material-icons">date_range</i><span>Agenda</span></router-link></em>
+            <em><router-link tag="div" :to="{name: 'calendar'}">
+              <i class="material-icons">date_range</i><span>Agenda</span>
+            </router-link></em>
           </b-nav-item>
           <b-nav-item-dropdown right v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
-<template slot="button-content">
-  <em><i class="material-icons">perm_data_setting</i><span>Paramètres de l'agenda</span></em>
-</template>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'availabilitySetting'}"><i class="material-icons">event</i><span>Disponibilités</span></router-link></b-dropdown-item>
-            <b-dropdown-item><router-link tag="span" :to="{name: 'eventTypeSetting'}"><i class="material-icons">perm_contact_calendar</i><span>Type/Durée RDV</span></router-link></b-dropdown-item>
+          <template slot="button-content">
+            <em><i class="material-icons">perm_data_setting</i><span>Paramètres de l'agenda</span></em>
+          </template>
+            <b-dropdown-item>
+              <router-link tag="div" :to="{name: 'availabilitySetting'}">
+                <i class="material-icons">event</i><span>Disponibilités</span>
+              </router-link>
+            </b-dropdown-item>
+            <b-dropdown-item>
+              <router-link tag="div" :to="{name: 'eventTypeSetting'}">
+                <i class="material-icons">perm_contact_calendar</i><span>Type/Durée RDV</span>
+              </router-link>
+            </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-nav-item v-if="role !== 'Invité' && role !== 'Primo' && role !== 'Suivit'"><router-link tag="span" :to="{name: 'ProfileUser'}"><i class="material-icons">account_circle</i><span>Profil {{ role }}</span></router-link></b-nav-item>
-          <b-nav-item v-on:click="routerLogout"><i class="material-icons" id="logout">power_settings_new</i><span>Déconnexion</span></router-link></b-nav-item>
+          <b-nav-item v-if="role !== 'Invité' && role !== 'Primo' && role !== 'Suivit'">
+            <router-link tag="div" :to="{name: 'ProfileUser'}">
+              <i class="material-icons">account_circle</i><span>Profil {{ role }}</span>
+            </router-link>
+          </b-nav-item>
+          <b-nav-item v-on:click="routerLogout">
+            <i class="material-icons" id="logout">power_settings_new</i><span>Déconnexion</span>
+          </b-nav-item>
           <!-- <b-nav-item-dropdown right>
 <template slot="button-content">
   <em><i class="material-icons">account_circle</i><span>{{ role }}</span></em>
@@ -76,7 +97,6 @@
       return {
         token: localStorage.getItem("token"),
         role: ""
-        // msg: "Here we are ..."
       };
     },
     components: {},
@@ -120,17 +140,53 @@
   .material-icons.md-48 {
     font-size: 48px;
   }
-  
-  
+
+  a.dropdown-item div {
+    display: flex;
+    align-items: center
+  }
+
+ a.nav-link {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end
+ }
+
+ a.nav-link.dropdown-toggle div {
+   display: flex
+ }
+
+ a.nav-link div {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end
+ }
+
+@media all and (max-width: 720px) {
+  a.nav-link {
+   display: flex;
+   align-items: center;
+   justify-content: center
+ }
+
+ a.nav-link div {
+   display: flex;
+   align-items: center;
+   justify-content: center
+ }
+}
+
+
+
   /* #dashboard {
      color: yellow;
   } */
   
-  #items {
-    /* background-color: red; */
+  /* #items {
+     background-color: red; 
     width: 100%;
-    /* comme les items sont en fill sur 100% de l'espace ils augmentent la taille de leur conteneur et décale ainsi le dropdown */
-  }
+     comme les items sont en fill sur 100% de l'espace ils augmentent la taille de leur conteneur et décale ainsi le dropdown 
+  } */
   
   i {
     /* color: purple; */
