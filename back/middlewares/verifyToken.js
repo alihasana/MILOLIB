@@ -30,7 +30,7 @@ let verifyToken = (req, res, next) => {
               } else {
                 let Collection = Client
               }
-              let Collection = Client.findById(decode._id, (err, user) => {
+              Collection.findById(decode._id, (err, user) => {
                 if (err)
                   res.status(500).json({ success: false, message: err.message })
                 else if (!user)
