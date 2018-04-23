@@ -6,6 +6,8 @@ import mongoose from 'mongoose'
 let router = express.Router()
 
 router.post('/', (req, res) => {
+  console.log('req.body', req.body);
+  console.log('res.locals', res.locals);
   // for (let key of Object.keys(req.body)) {
   //   res.locals.user.calendar.slots.push(req.body[key])
   // }

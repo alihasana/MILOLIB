@@ -24,8 +24,9 @@ let Booked = 'Booked';
 
 // ----- Our Helpers for calendar components -----
 
+//yes
 // return moment object current day
-function getCurrentDate (){
+function getCurrentDate(){
 	return moment();
 };
 
@@ -49,6 +50,7 @@ function getMonthLastDate(date){
 	return moment(date).endOf('month');
 }
 
+//yes
 // return the first day (moment object) of the week for a date given as parameter
 function getWeekFirstDate(date){
 	return moment(date).startOf('week');
@@ -65,9 +67,10 @@ function getWeekFirstDayPosition(date){
 	return wd.day();
 }
 
+//yes
 // return the week number (number) for a date given as parameter
 function getWeekNumber(date){
-	return moment().format('ww');
+	return moment(date).format('ww');
 };
 
 // return the name of the day of a moment date
@@ -75,6 +78,20 @@ function getNameOfDay(date){
 	return moment(date).format('dddd');
 }
 
+function addOneMonth(date){
+	return moment(date).add(1,'month');
+}
+
+function addOneWeek(date){
+	return moment(date).add(1,'week');
+}
+
+function substractOneWeek(date){
+	return moment(date).subtract(1,'week');
+}
+
+
+//yes
 //return object containing the starting day and final day of the duration ( 'day, week, month, year), 
 // starting with a given date. the nb represents how many days, or week is the duration
 function getTimeRange(nb, duration, date) {
@@ -99,6 +116,7 @@ function createRange(start,end){
 //create a slot Object : parameters
 // start : start time for the object
 // duration : duration of the period for the object
+//available: true (by default), because the slots are created when setting the availabilities
 // status: either 'NotAvailable' 'Available' 'Booked'
 	// 'NotAvailable' means that the conseiller is not opening time for any booking
 	// 'Available' means that the conseiller is opening time for booking
@@ -107,6 +125,7 @@ function createSlotObject(start, duration, status){
 	let slotObject = Object.create(null);
 	slotObject.start = moment(start);
 	slotObject.end = moment(start).add(duration, 'minutes');
+	slotObject.available = true;
 	slotObject.status = status;
 	// slotObject.conseillerCalendar = 'usernameWhatever';
 	return slotObject;
@@ -140,6 +159,7 @@ function filterInt (value) {
   return NaN;
 }
 
+//yes
 //return a number of minutes from hh:mm
 function convertTimeInMinutes (hoursMinutes){
 	let timeSplit = [];
@@ -148,6 +168,7 @@ function convertTimeInMinutes (hoursMinutes){
 	return totalMinutes;
 }
 
+//yes
 //this function will take as parameter day, week or month for the durationName. 
 //the start will be the begin of Display
 //will return the number of days to display in the calendar
@@ -157,6 +178,14 @@ function limitDisplay (durationName, start ){
 	if (durationName == 'week'){duration = 7;}
 	else {duration = 31;}
 	return start + duration;
+}
+
+function InitializeDefaultTimeRange(){
+	let now = getCurrentDate();
+	let nowStartWeek= getWeekFirstDate(now);
+	let nowSWPlusOneMonth = addOneMonth(nowStartWeek);
+	let defaultTimeRange = getDaysOfTheTimeRange(nowStartWeek,nowSWPlusOneMonth);
+	return defaultTimeRange;
 }
 
 
@@ -182,7 +211,11 @@ export {
 	filterInt,
 	convertTimeInMinutes,
 	setSlotsArray,
-	limitDisplay
+	limitDisplay,
+	addOneMonth,
+	InitializeDefaultTimeRange,
+	addOneWeek,
+	substractOneWeek
 
 }
 
