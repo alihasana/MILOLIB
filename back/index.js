@@ -15,6 +15,8 @@ dotEnv.config()
 
 //  Routes Imports
 import auth from './routes/auth/auth'
+import clientAuth from './routes/client/clientAuth'
+import client from './routes/client/client'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
 import appointmenttype from './routes/appointmentType/appointmentType'
@@ -56,6 +58,7 @@ let router = express.Router()
 
 // AUTH ROUTE UNPROTECTED
 router.use('/auth', auth)
+router.use('/clientAuth', clientAuth)
 
 // AUTH PROTECTION STARTS HERE
 // Il verifiera à chaque fois si le token est valide avant d'authoriser l'acces à la suite sinon l'aventure s'arrête ici.

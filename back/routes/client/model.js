@@ -7,10 +7,11 @@ let ClientSchema = new mongoose.Schema(
     prenom: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    phone: { type: String }
+    phone: { type: String },
     descolarise: { type: Boolean, required: true },
     >26 : { type: Boolean, required: true },
-    commune: String
+    commune: String,
+    role: String
     // eventsTypes: [{}], // Les types de rdv possibles et leur durées
     // creationDate: { type: Date, default: Date.now },
     // updatedDate: { type: Date, default: Date.now },
