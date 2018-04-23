@@ -17,7 +17,6 @@ let adminConseillers = [
     email: 'admin-conseiller',
     password: bcrypt.hashSync('admin-conseiller', 10),
     role: 'Administrateur/Conseiller',
-    calendar: {}, // WIP calendar, a voir si on fait comme ça à terme
   })
 ]
 

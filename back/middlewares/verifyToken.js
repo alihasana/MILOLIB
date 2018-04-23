@@ -18,8 +18,8 @@ let verifyToken = (req, res, next) => {
         res.locals.decode = decode
         if (ObjectId.isValid(decode._id)) {
           if (decode.userCollection == 'User' || 'Client') {
-            if (decode.userCollection === 'User') let Collection = User
-            else let Collection = Client
+            if (decode.userCollection === 'User') var Collection = User // Anciennement un 'let', erreur 'SyntaxError'. Pourquoi ?
+            else var Collection = Client
             Collection.findById(decode._id, (err, user) => {
               if (err) res.status(500).json({ success: false, message: err.message })
               else if (!user) res.status(401).json({ success: false, message: 'Unauthozired' })
