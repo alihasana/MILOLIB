@@ -33,7 +33,7 @@ app.use(morgan('dev'))
 // A partir d'ici, toute les routes utilisent le middleware pour les cross-origin
 // Cela permet d'accepter certaines requetes qui seraient autrement invalides car
 // bloquées par le navigateur ou autre..
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
@@ -44,9 +44,11 @@ app.use( (req, res, next) => {
 })
 
 // BODY PARSER
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+)
 app.use(bodyParser.json())
 
 // ROUTER PREFIX API DEFINING (see below)
@@ -61,6 +63,7 @@ router.use(verifyToken)
 
 // Protected routes
 router.use('/users', users)
+router.use('/client', users)
 router.use('/profile', profile)
 router.use('/appointmenttype', appointmenttype)
 router.use('/calendar', calendar)
@@ -69,14 +72,17 @@ app.use(router)
 
 // Fin des routes, on renvoi un 404 not found pour tout le reste
 app.use('/*', (req, res) => {
-  res.status(404).json({ success: false, message: 'This route does not exists.'})
+  res
+    .status(404)
+    .json({ success: false, message: 'This route does not exists.' })
 })
 
 // MONGOOSE MONGODB CONNECT
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.DB, {}, (err) => {
-  if (err) { throw err; }
-  else {
+mongoose.connect(process.env.DB, {}, err => {
+  if (err) {
+    throw err
+  } else {
     console.log('Connection to the Database established...')
     // LAUNCHING SERVER TO THE MOON
     // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407

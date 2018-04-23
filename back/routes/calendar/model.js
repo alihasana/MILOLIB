@@ -12,4 +12,4 @@ let CalendarSchema = new mongoose.Schema(
 	{ timestamps: true }
 )
 
-export default mongoose.model('Calendar', Calendar)
+export default mongoose.model('Calendar', CalendarSchema)
