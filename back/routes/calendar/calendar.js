@@ -15,39 +15,45 @@ router.post('/', (req, res) => {
   res.locals.user.markModified('calendar.slots.start')
   res.locals.user.markModified('calendar.slots.end')
 
-  res.locals.user.save((err) => {
+  res.locals.user.save(err => {
     if (err) res.status(500).json({ success: false, message: err.message })
-    else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées' })
+    else
+      res
+        .status(200)
+        .json({ success: true, message: "C'est ok. Slots ajoutées" })
   })
 })
 
 router.get('/', (req, res) => {
-  res.status(200).json({ success: true, message: 'Your calendar.', content: res.locals.user.calendar.slots })
+  res.status(200).json({
+    success: true,
+    message: 'Your calendar.',
+    content: res.locals.user.calendar.slots
+  })
   // calendar.slots ou calendar ?
 })
 
 router.get('/:id', (req, res) => {
   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
-    res.status(200).json({ success: true, message: 'Your slot, you ding dong.', content: res.locals.user.calendar.slots.id(req.params.id) })
-  } else res.status(404).json({ success: false, message: 'Slot not found.' })  
+    res.status(200).json({
+      success: true,
+      message: 'Your slot, you ding dong.',
+      content: res.locals.user.calendar.slots.id(req.params.id)
+    })
+  } else res.status(404).json({ success: false, message: 'Slot not found.' })
 })
 
-router.put('/:id', (req, res) => { // one slot change
+router.put('/:id', (req, res) => {
+  // one slot change
   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
-    res.locals.user.calendar.slots.available = !res.locals.user.calendar.slots.available
-  } else res.status(404).json({ success: false, message: 'Slot not found.' })  
+    res.locals.user.calendar.slots.available = !res.locals.user.calendar.slots
+      .available
+  } else res.status(404).json({ success: false, message: 'Slot not found.' })
 })
 
-
-router.put('/', (req, res) => { // multiples slots change
-
+router.put('/', (req, res) => {
+  // multiples slots change
 })
-
-
-
-
-
-
 
 router.post('/test', (req, res) => {
   console.log(req.body)
@@ -63,9 +69,12 @@ router.post('/test', (req, res) => {
   res.locals.user.markModified('calendar.slots.start')
   res.locals.user.markModified('calendar.slots.end')
 
-  res.locals.user.save((err) => {
+  res.locals.user.save(err => {
     if (err) res.status(500).json({ success: false, message: err.message })
-    else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées' })
+    else
+      res
+        .status(200)
+        .json({ success: true, message: "C'est ok. Slots ajoutées" })
   })
 })
 
