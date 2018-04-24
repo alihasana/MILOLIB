@@ -13,6 +13,12 @@
               <div v-else>RÔLE : {{ profile.role }} </div>
             </b-form-group>
 
+             <!-- Workplace -->
+            <b-form-group>
+              <b-form-input type="text" v-model="profile.workPlace" placeholder="Rôle" v-if="show" readonly></b-form-input>
+              <div v-else>LIEU(X) D'EXERCICE : {{ profile.workPlace }} </div>
+            </b-form-group>
+
             <!-- Name -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.lastName" placeholder="Nom" v-if="show"></b-form-input>
@@ -29,8 +35,8 @@
             <b-form-group>
               <b-form-input type="text" v-model="profile.email" placeholder="E-mail" v-if="show"></b-form-input>
               <div v-else>E-MAIL: {{ profile.email }}</div>
-
             </b-form-group>
+            
             <!-- Phone -->
             <!-- <b-form-group>
             <b-form-input type="text" v-model="profile.phone" placeholder="Numéro de téléphone" v-if="show"></b-form-input>
@@ -43,15 +49,15 @@
           <h3>{{ titre2 }}</h3>
           <!--Former password-->
           <b-form-group>
-            <b-form-input type="password" placeholder="Ancien mot de passe"></b-form-input>
+            <b-form-input type="password" v-model="profile.oldPswd" placeholder="Ancien mot de passe"></b-form-input>
           </b-form-group>
           <!--New password-->
           <b-form-group>
-            <b-form-input type="password" placeholder="Nouveau mot de passe"></b-form-input>
+            <b-form-input type="password" v-model="profile.password" placeholder="Nouveau mot de passe"></b-form-input>
           </b-form-group>
           <!--Confirm new password-->
           <b-form-group>
-            <b-form-input type="password" placeholder="Confirmer le nouveau de passe"></b-form-input>
+            <b-form-input type="password" v-model="profile.confirmPassword" placeholder="Confirmer le nouveau de passe"></b-form-input>
           </b-form-group>
         </div>
         <div v-else></div>
@@ -71,6 +77,7 @@
 
 <script>
 /* eslint-disable */
+import swal from "sweetalert2";
 import http from '../../helpers/http'
 export default {
   name: "ProfileUser",
@@ -79,7 +86,16 @@ export default {
       titre1: "Mettre à jour votre profil",
       titre2: "Mettre à jour votre mot de passe",
         // profile: [],
-        profile: {},
+        profile: {
+            role: '', 
+            workPlace: '', 
+            lastName: '', 
+            firstName: '', 
+            email: '', 
+            oldPswd: '', 
+            password: '', 
+            confirmPassword: '', 
+        }, 
         show: false
       };
     },
@@ -88,7 +104,8 @@ export default {
       http.get('/profile')
       .then(res => {
         this.profile = res.data.content;
-        console.log('voici le res.data.content: ', res.data.content)
+        // server response
+        console.log('Profil récupéré: ', res.data.content)
       })
       .catch(err => {
         console.log(err)
@@ -96,19 +113,30 @@ export default {
     },
     methods: {
       updateUserProfile() {
-        console.log('Sent data: ', this.profile);
-        this.profile.password = undefined
-        http.put('/profile', this.profile)
-        .then(res => {
-          console.log('réponse then: ', res.data)
-          if (res.data) {
-            console.log('User details have been updated')
-            this.$router.push('/users')
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        // check new and confirm new password here
+        if (this.profile.password === this.profile.confirmPassword) {
+          // send only new and old
+          console.log('pswd sent data: ', this.profile);
+          // this.profile.password = undefined
+          http.put('/profile', this.profile)
+          console.log('data to server: ', this.profile)
+          // .then(res => {
+          //   console.log('réponse then: ', res.data)
+          //   if (res.data) {
+          //     console.log('User details have been updated')
+          //     this.$router.push('/users')
+          //   }
+          // })
+          // .catch(err => {
+          //   console.log(err)
+          // })
+
+        } else {
+          console.log('new and confirmNew do not match'); 
+          swal({
+            text: 'Les mots de passe ne correspondent pas'
+          });
+        }
       },
     }
   }

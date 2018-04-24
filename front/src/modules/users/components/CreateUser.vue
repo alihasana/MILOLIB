@@ -47,7 +47,6 @@
 <script>
 /* eslint-disable */
 import http from "../../../helpers/http";
-
 export default {
 
   name: "createUser",
@@ -69,9 +68,9 @@ export default {
       'Administrateur', 'Administrateur-Conseiller', 'Conseiller', 'Chargé d\'accueil', 'Invité'
       ],
       options: [
-        {text: 'Sénart', value: 'senart'},
-        {text: 'Combs-La-Ville', value: 'combs'},
-        {text: 'Moissy-Cramayel', value: 'moissy'}
+        {text: 'Sénart', value: 'Sénart'},
+        {text: 'Combs-La-Ville', value: 'Combs-La-Ville'},
+        {text: 'Moissy-Cramayel', value: 'Moissy-Cramayel'}
       ],
       User: {
         lastName: String, 
@@ -87,7 +86,7 @@ export default {
     createUser: function(newUser) {
       const User = {
         lastName: this.form.lName, 
-        FirstName: this.form.fName,
+        firstName: this.form.fName,
         email: this.form.userEmail,
         role: this.form.userRole,
         password: this.form.userPassword, 
@@ -95,8 +94,9 @@ export default {
       }
       console.log('Object from parent: ', User)
       http.post('users', User)
+      console.log('profil créé: ', User)
       .then(res => {
-        this.$router.push('/users/')
+        this.$router.push('/users')
         console.log('Bingo', res);
       })
       .catch(function(error) {
