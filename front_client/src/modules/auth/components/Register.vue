@@ -47,10 +47,16 @@
               <option :value="null" disabled>-- Votre commune --</option>
             </template>
             <!-- these options will appear after the ones from 'options' prop -->
-            <option value="A">Tatooine</option>
-            <option value="B">L'étoile de la mort (ou l'étoile noire osef)</option>
-            <option value="C">Dagobah</option>
-            <option value="D">Coruscant (n'existe plus lol)</option>
+            <option value="Cesson">Cesson</option>
+            <option value="Combs-la-Ville">Combs-la-Ville</option>
+            <option value="Lieusaint">Lieusaint</option>
+            <option value="Moissy-Cramayel">Moissy-Cramayel</option>
+            <option value="Nandy">Nandy</option>
+            <option value="Réau">Réau</option>
+            <option value="Savigny-le-Temple">Savigny-le-Temple</option>
+            <option value="St-Pierre-du-Perray">St-Pierre-du-Perray</option>
+            <option value="Tigery">Tigery</option>
+            <option value="Vert-St-Denis">Vert-St-Denis</option>
           </b-form-select>
           <div>Selected: <strong>{{ selected }}</strong></div>
         </div>
