@@ -44,8 +44,8 @@
 /* eslint-disable */
 import moment from 'moment';
 import 'moment/locale/fr';
-
 import _ from 'underscore';
+import swal from "sweetalert2";
 
 import * as cHelpers from '.././calendarHelpers';
 import http from '../../../helpers/http';
@@ -53,10 +53,10 @@ import http from '../../../helpers/http';
 //description of component
 	//This component anable to pre-set availabilities periods recurrent in the week
 	//from the period selected in the datePicker:
-	//it will convert all the selected days and available times to slots with status'available',
+	//it will convert all the selected days ( get from datepicker component) and available times to slots with property start and end. it will send these slots to backend; 
 	//it will return:
+	//- a list of slots objects of 15 minutes, with properties 'start' 'end' 'available':true, status
 	//- a list of days ( moment object) in which the conseiller will have availabilities
-	//- a list of slots objects of 15 minutes, with status 'available'
 
 //To do:
 // - this component should open only after clicking on create my agenda in datePicker component
@@ -68,7 +68,7 @@ import http from '../../../helpers/http';
 
 export default {
 	name: "availabilitySetting",
-	props:['agendaRangeProp', 'agendaSlotProp'],
+	props:['planNewRangeProp', 'planNewRangeProp'],
 	data() {
 		return {
 			msg: "availabilitySetting Vue",
@@ -90,10 +90,10 @@ export default {
 	},
 	components: {},
 	created(){
-		this.slotsInAs = this.agendaSlotProp;
+		this.slotsInAs = this.planNewSlotProp;
 	},
 	updated(){
-		this.agendaRangeInAS = this.agendaRangeProp;
+		this.agendaRangeInAS = this.planNewRangeProp;
 	},
 	methods: {
 		getDisposInWeek: function(sel) {
@@ -103,7 +103,6 @@ export default {
 					for(let j=0; j<this.agendaRangeInAS.length; j++){
 						let dayName = cHelpers.getNameOfDay(this.agendaRangeInAS[j]);
 						if (dayName == sel[i].toLowerCase()) {
-							// console.log('dayName matching in i boucle:', dayName);
 							// if so i push the matching date in agendaRangeFiltered.
 							this.agendaRangeFilteredInAS.push(this.agendaRangeInAS[j]);
 						}
@@ -120,62 +119,57 @@ export default {
 					let dayNamebis = cHelpers.getNameOfDay(this.agendaRangeFilteredInAS[l]);
 					for(let k=0; k<this.weekDays.length; k++){
 						if(dayNamebis == this.weekDays[k].dayname.toLowerCase()){
-							// console.log('dayName matching in K boucle:', dayNamebis);
 							if(this.weekDays[k].startMorningTime && this.weekDays[k].endMorningTime){
 								let startAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startMorningTime), 'minutes');
 								let endAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endMorningTime), 'minutes');
-								// console.log('startAM:', startAM);
-								// console.log('endAM:', endAM);
 								daySlotsAM.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
-								// console.log('daySlotsAM', daySlotsAM);
 								daySlots.push(daySlotsAM);
-								// console.log('daySlots: ', daySlots);
-
 							}
 							if(this.weekDays[k].startAfternoonTime && this.weekDays[k].endAfternoonTime){
 								let startPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startAfternoonTime), 'minutes');
 								let endPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endAfternoonTime), 'minutes');
-								// console.log('startPM:', startPM);
-								// console.log('endPM:', endPM);
 								daySlotsPM.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
-								// console.log('daySlotsPM', daySlotsPM);
 								daySlots.push(daySlotsPM);
-								// console.log('daySlots: ', daySlots);
 							}
 						}
 					}
 				}
 				allDaysSlots.push(_.flatten(daySlots));
 				this.slotsInAS = _.flatten(allDaysSlots);
-				this.$emit('slotsAreReady', this.slotsInAS)
-				// console.log('allDaysSlots:', allDaysSlots);
-				// console.log('slotsInAS:', this.slotsInAS);
-				// console.log('agendaRangeFilteredInAS:', this.agendaRangeFilteredInAS);
-			
+				// this.$emit('slotsAreReady', this.slotsInAS)
 				this.checkAvailability(this.slotsInAS);
-
 		}
 	},
 	checkAvailability: function(availableSlots){
-		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je redirigerai vers calendar qui fera un get pour obtenir les slots du back');
-		//back end should check if the sent slots are not in conflict with booked slots
+		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles et récupérer les slots avec toutes les propriétés. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je renverrai les slots au store');
 		let postBody = availableSlots;
 		console.log('postBody: ', postBody);
+
+		//this is for now
+		this.$store.commit('slotsAvailables', this.slotsInAS);
 		this.$router.push({name: 'agenda'});
 
-		// http.post('/calendar', postBody)
-		// 			.then(
-		// 				res => {
-		// 				console.log('res:',res);
-		// 					//here will call a function update calendar that will update the actual calendar with new rangetime/availabilities
-		// 				 this.$router.push({name: 'agenda'});
-		// 				})
-		// 			.catch(
-		// 				error => {
-		// 			    console.log('error:', error);
-		// 			    //should display message to user that the selected period/range time has already 'booked' slots
-		// 			    
-		// 			});
+		//this when the back-end OK
+		// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available, status
+		http.post('/calendar', postBody)
+					.then(
+						res => {
+						console.log('res:',res);
+						this.$store.commit('slotsAvailables', res.data);
+						swal({
+			            type: "success",
+			            title: "paramétrage de vos disponibilités: OK!"
+			          	});
+						this.$router.push({name: 'agenda'});
+						})
+					.catch(
+						error => {
+					    console.log('error:', error.response.data.message);
+					    swal({
+			            type: "error",
+			            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
+			          	});
+					});
 	}
 
 }

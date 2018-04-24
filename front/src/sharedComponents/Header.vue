@@ -43,9 +43,10 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
-            <em><router-link tag="div" :to="{name: 'calendar'}">
+            <em><router-link tag="span" :to="{name: 'agenda'}"><i class="material-icons">date_range</i><span>Agenda</span></router-link></em>
+           <!--  <em><router-link tag="div" :to="{name: 'calendar'}">
               <i class="material-icons">date_range</i><span>Agenda</span>
-            </router-link></em>
+            </router-link></em> -->
           </b-nav-item>
           <b-nav-item-dropdown no-caret right v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
           <template slot="button-content">
