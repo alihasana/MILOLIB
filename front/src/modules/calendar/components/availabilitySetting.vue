@@ -131,44 +131,42 @@ export default {
 				allDaysSlots.push(_.flatten(daySlots));
 				this.slotsInAS = _.flatten(allDaysSlots);
 				this.checkAvailability(this.slotsInAS);
+			}
+		},
+		checkAvailability: function(availableSlots){
+			console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles et récupérer les slots avec toutes les propriétés. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. les slots et la time range sont passés au store');
+			let postBody = availableSlots;
+			console.log('postBody: ', postBody);
+
+			//this is for now
+			this.$store.commit('getSlotsAvailables', this.slotsInAS);
+			this.$store.commit('updateRangeTime', this.agendaRangeInAS)
+			this.$router.push({name: 'agenda'});
+
+			//this when the back-end OK
+			// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available:false, status
+			http.post('/calendar', postBody)
+						.then(
+							res => {
+							console.log('res:',res);
+							this.$store.commit('slotsAvailables', res.data);
+							this.$store.commit('updateRangeTime', this.agendaRangeInAS)
+							swal({
+				            type: "success",
+				            title: "paramétrage de vos disponibilités: OK!"
+				          	});
+							this.$router.push({name: 'agenda'});
+							})
+						.catch(
+							error => {
+						    console.log('error:', error.response.data.message);
+						    swal({
+				            type: "error",
+				            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
+				          	});
+						});
 		}
-	},
-	checkAvailability: function(availableSlots){
-		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles et récupérer les slots avec toutes les propriétés. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. les slots et la time range sont passés au store');
-		let postBody = availableSlots;
-		console.log('postBody: ', postBody);
-
-		//this is for now
-		this.$store.commit('getSlotsAvailables', this.slotsInAS);
-		this.$store.commit('updateRangeTime', this.agendaRangeInAS)
-		this.$router.push({name: 'agenda'});
-
-		//this when the back-end OK
-		// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available:false, status
-		http.post('/calendar', postBody)
-					.then(
-						res => {
-						console.log('res:',res);
-						this.$store.commit('slotsAvailables', res.data);
-						this.$store.commit('updateRangeTime', this.agendaRangeInAS)
-						swal({
-			            type: "success",
-			            title: "paramétrage de vos disponibilités: OK!"
-			          	});
-						this.$router.push({name: 'agenda'});
-						})
-					.catch(
-						error => {
-					    console.log('error:', error.response.data.message);
-					    swal({
-			            type: "error",
-			            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
-			          	});
-					});
-	}
-
-}
-	
+}	
 };
 
 </script>

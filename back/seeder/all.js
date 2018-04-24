@@ -27,7 +27,8 @@ let workToDo = [
 
 async function seeder(array) {
   for (let item of array) {
-    await item
+    let result = await item.call()
+    console.log(result)
   }
   console.log('---------------------------')
   console.log('ᕕ( ᐛ )ᕗ ### Seeding complete ᕙ(⇀‸↼‶)ᕗ')

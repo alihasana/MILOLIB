@@ -38,10 +38,37 @@
 				</tbody>
 			</table>
 		</div>
+
+		<!-- RDV POP-UP-->
+		<div>
+			<!-- button -->
+			<!-- <b-btn v-b-modal.modalPrevent>Fixer un RDV</b-btn> -->
+			<!-- Modal Component -->
+			<!-- <b-modal id="modalPrevent" ref="modal" title="Fixer un nouveau rendez-vous" @ok="handleOk" @shown="clearName">
+				<form @submit.stop.prevent="handleSubmit">
+					<b-form-input type="text" placeholder="Heure du rdv" v-model="name" disabled=""></b-form-input> -->
+					<!-- list -->
+					<!-- <b-form-group id="" label="Type de rdv:" label-for="">
+						<b-form-select id="" :options="rdv" required v-model="form.rdv">
+						</b-form-select>
+					</b-form-group> -->
+					<!-- inputs -->
+					<!-- <b-form-input type="text" placeholder="Nom" v-model="name"></b-form-input>
+					<b-form-input type="text" placeholder="Prénom" v-model="name"></b-form-input>
+					<b-form-input type="text" placeholder="Téléphone" v-model="name"></b-form-input>
+					<b-form-input type="email" placeholder="E-mail" v-model="name"></b-form-input> -->
+					<!-- comment -->
+					<!-- <b-form-textarea type="text" placeholder="Ajouter un commentaire" :rows="6" :max-rows="6">
+					</b-form-textarea>
+				</form>
+			</b-modal> -->
+		</div> 
+
 	</div>
 </template>
 
 <script>
+
 /* eslint-disable */
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -59,12 +86,12 @@ import swal from "sweetalert2";
 	// when the agenda get the 'available' or 'booked' slots from backend,
 		//it will pass them to the store if no conflict
 
-	//! WORK IN PROGRESS
 
+	//! WORK IN PROGRESS
+	
 	// TODO
 	
 export default {
-
 	name: "agenda",
 	computed:{
 		getTimeRange(){
@@ -76,11 +103,11 @@ export default {
 		timeRangeToDisplay(){
 			return this.getTimeRange.slice(this.beginDisplay, this.endDisplay)
 		},
-		week(){
-			return cHelpers.getWeekNumber(this.$store.state.now);
-		},
 		getSlots(){
 			return this.$store.state.agendaSlots;
+		},
+		week(){
+			return cHelpers.getWeekNumber(this.$store.state.now);
 		}
 	},
 	data() {
@@ -93,7 +120,16 @@ export default {
       		buttonId:'',
       		buttonIdList:[],
       		buttonClass :'',
-      	};
+      		form: {
+					rdv: null
+				},
+			rdv: [{
+					text: 'Choisir un type de rendez-vous',
+					value: null
+				},
+				'Suivi emploi', 'Suivi formation', 'Suivi projet pro', 'Aides financières', 'Apprentisage', 'Autres'
+			]
+      	}
 	},
 	created(){
 		this.beginDisplay = 0;
@@ -229,39 +265,36 @@ export default {
 						//             title: "Votre RDV n'a pas été crée"
 						//           	});
 						// 		});
+
 					}
 				}
 			}
 		}
 	},
 	filters: {
-		dateFormatFull : function (date) {
-    return moment(date).format('DD/MM/YYYY');
+		dateFormatFull: function(date) {
+			return moment(date).format('DD/MM/YYYY');
 		},
-		dateFormatYear : function (date) {
-    return moment(date).format('YYYY');
+		dateFormatYear: function(date) {
+			return moment(date).format('YYYY');
 		},
-		dateFormatDayName : function (date) {
-    return moment(date).format('dddd');
+		dateFormatDayName: function(date) {
+			return moment(date).format('dddd');
 		},
-		dateFormatDayNumberAndMonth : function (date) {
-    return moment(date).format('D MMM');
+		dateFormatDayNumberAndMonth: function(date) {
+			return moment(date).format('D MMM');
 		},
-		formatTime : function(date) {
-	return moment(date).format('LT');
+		formatTime: function(date) {
+			return moment(date).format('LT');
 		},
-		formatDayHour : function(date){
-	return moment(date).format('lll');
+		formatDayHour: function(date) {
+			return moment(date).format('lll');
 		}
 	}
 };
-
-
 </script>
 
 <style scoped>
-
-
 /*******Agenda structure*******/
 
 .agenda{
