@@ -10,6 +10,7 @@ let UserSchema = new mongoose.Schema({
   role: { type: String, required: true, default: 'peon' },
   firstName: { type: String },
   lastName: { type: String },
+  workPlace: { type: String },
   phone: { type: String },
   calendar: CalendarSchema,  // WARNING WIP !!!
   appointment: [AppointmentSchema],  // WARNING WIP !!!

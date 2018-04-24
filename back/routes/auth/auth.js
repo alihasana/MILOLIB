@@ -9,7 +9,6 @@ let router = express.Router()
 router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
     User.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, user) => {
-      console.log(user.active + ' : ' + typeof (user.active)) // si different de false ou 'false', true est renvoyé. wtf ? :=/
       if (err) res.status(500).json({ success: false, message: err.message })
       else if (!user) res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
       else if (user.active !== true) res.status(400).json({ success: false, message: 'Inactive account. Please contact an administrator.' }) // condition pas parfaite, elle n'est remplie que lorsque il y a false ou 'false'. Si active: 'uneStringAuPif' , ça passe :/.
@@ -33,6 +32,7 @@ router.post('/signup', (req, res) => {
     if (helper.regexEmail.test(req.body.email)) {
       let newUser = new User(req.body)
       newUser.password = bcrypt.hashSync(req.body.password, 10)
+      newUser.calendar = {}
       newUser.save((err, user) => {
         if (err) {
           if (err.message.match(/^E11000 duplicate key error.+/)) {
