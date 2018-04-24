@@ -1,13 +1,6 @@
   <template>
     <div class="container">
-     <!--  <router-view :agendaRangeProp="agendaRangeInC" :agendaSlotProp="agendaSlotInC" :agendaRangePropC="agendaRangeInC" :agendaSlotPropC="agendaSlotInC" v-on:newTimeRangeToDisplay="getNewTimeRangeToDisplay($event)" v-on:newSlotsToDisplay="getNewSlotsToDisplay($event)"></router-view> -->
        <router-view></router-view>
-      <!-- <div class="agenda">
-        <agenda :agendaSlotPropC="agendaSlotInC"></agenda>
-      </div> -->
-      <div class="datePicker">
-        <datePicker :agendaRangeProp="agendaRangeInC" :agendaSlotProp="agendaSlotInC" v-on:newTimeRangeToDisplay="getNewTimeRangeToDisplay($event)" v-on:newSlotsToDisplay="getNewSlotsToDisplay($event)"></datePicker>
-      </div>
     </div>
   </template>
 
@@ -15,13 +8,14 @@
 
 /* eslint-disable */
 import agenda from "./components/agenda";
-import datePicker from "./components/datePicker";
+import availabilityDatePicker from "./components/availabilityDatePicker";
+import eventTypeSetting from "./components/eventTypeSetting"
 
 import * as cHelpers from './calendarHelpers';
 
 //component description: this component is the main component of the calendar module.
 //it will display by default the agenda.
-//it gather datas from the datePicker, and AvailanilitySettings
+//it gather datas from the availabilityDatePicker, and AvailanilitySettings
 
 //WORK IN PROGRESS: How to display the components that have props with view-router?
 
@@ -30,23 +24,13 @@ export default {
   name: "calendar",
   data() {
     return {
-      agendaRangeInC:[],
-      agendaSlotInC:[]
     };
   },
   components: {
-    datePicker,
+    availabilityDatePicker,
     agenda
   },
   methods: {
-    getNewTimeRangeToDisplay: function(timeRange){
-      this.agendaRangeInC = timeRange;
-      console.log('je suis dans le component Calendar et je récupère la time range du datePicker', this.agendaRangeInC);
-    },
-    getNewSlotsToDisplay: function(slots){
-      this.agendaSlotInC = slots;
-      console.log('je suis dans le component Calendar je récupère les slots du datePicker', this.agendaSlotInC);
-    }
   }
 };
 

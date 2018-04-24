@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
 import twix from 'twix';
+import _ from 'underscore';
 
 
 Vue.use(Vuex)
@@ -22,8 +23,15 @@ export const store = new Vuex.Store({
  		agendaSlots:[]
  	},
  	mutations:{
- 		slotsAvailables(state, slots){
+ 		getSlotsAvailables(state, slots){
  			state.agendaSlots = slots;
+ 		},
+ 		updateRangeTime(state, timeRange){
+ 			let newTimeRange = [];
+ 			newTimeRange.push(timeRange);
+ 			newTimeRange.push(state.agendaRangeTime);
+ 			state.agendaRangeTime = _.uniq(_.flatten(newTimeRange));
+ 			console.log('agendaRangeTime:', state.agendaRangeTime);
  		}
  	}
  })

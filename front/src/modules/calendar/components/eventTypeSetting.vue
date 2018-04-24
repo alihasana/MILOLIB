@@ -1,17 +1,18 @@
 <template>
   <div class="eventTypeSetting">
-      <h5>{{msg}}</h5>
     <div class="eventTypeSetting__row">
-      <b-form>
-        <b-form-group label="Paramétrage de mes types de RDV">
+      <b-form class="list">
+        <b-form-group class="title" label="Paramétrage de mes types de RDV">
           <b-form-checkbox-group id="eventSettings" name="eventSettings" v-model="selected">
             <b-list-group>
               <b-list-group-item v-for="(type,index) in types" :key="index">
-                <b-row>
-                  <b-col sm="3" class="eventTypeSetting__typesrdv">
+                <b-row >
+                  <b-col sm="1">
+                  </b-col>
+                  <b-col class="eventTypeSetting__typesrdv">
                     <b-form-checkbox :value="type.rdvType">{{ type.rdvType }}</b-form-checkbox>
                   </b-col>
-                  <b-col sm="6">
+                  <b-col class="duration">
                     <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)">
                       <i class="material-icons">remove_circle_outline</i>
                     </b-button>
@@ -20,6 +21,8 @@
                       <i class="material-icons">add_circle_outline</i>
                     </b-button>
                   </b-col>
+                  <b-col sm="1">
+                  </b-col>
                 </b-row>
               </b-list-group-item>
             </b-list-group>
@@ -27,7 +30,6 @@
         </b-form-group>
         <b-button variant="outline-primary" v-on:click="confirmSelectedTypes(selected)" type="button">Confirmer mes types de RDV</b-button>
         <hr>
-        <div>Selected: <strong>{{ selected }}</strong></div>
       </b-form>
     </div>
   </div>
@@ -53,7 +55,6 @@ export default {
   name: "eventTypeSetting",
   data() {
     return {
-      msg: "Event Type Settings",
       types:[
       { rdvType:'Premier RDV individuel', index:0, duration:0},
       { rdvType:'Emploi', index:1, duration:0},
@@ -130,6 +131,35 @@ export default {
 
 <style scoped>
 
+.eventTypeSetting{
+   font-size: 12px;
+   width:100%;
+}
 
+.eventTypeSetting__row{
+  width: 100%;
+}
 
+.list{
+  width:70%;
+  margin: auto;
+}
+.title{
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.list-group-item{
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.eventTypeSetting__typesrdv{
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.duration{
+}
 </style>
