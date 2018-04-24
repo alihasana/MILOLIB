@@ -8,23 +8,25 @@ import Calendar from './model'
 let router = express.Router()
 
 router.post('/', (req, res) => {
-  // TODO : filtrer les slots enrengistrer ()
+  console.log('Le req.body ' + req.body)
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
+    console.log('Le calendar non modifié ' + calendar)
     if (err) res.status(500).json({ success: false, message: err.message })
     else {
-
+      
       if (!calendar) { // Create calendar if needed
         let newCalendar = new Calendar({ userId: user._id })
         newCalendar.save((err, calendar) => {
           if (err) res.status(500).json({ success: false, message: err.message })
         })
       }
-
+      
+      // TODO : filtrer les slots enrengistrer ()
       for (let i = 0; i < req.body.length; i++) {
         calendar.slots.push(req.body[i])
       }
-      calendar.markModified('calendar.slots.start')
-      calendar.markModified('calendar.slots.end')
+      calendar.markModified('slots.start')
+      calendar.markModified('slots.end')
       calendar.save((err) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées' })
@@ -38,7 +40,7 @@ router.get('/', (req, res) => {
     if (err) res.status(500).json({ success: false, message: err.message })    
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
     else {
-      // TODO : filtrer les slots
+      // TODO : filtrer les slots not available
       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
     }
   })

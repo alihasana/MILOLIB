@@ -2,6 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import Client from './model'
+import User from './../users/model'
+import Calendar from './../calendar/model'
 import helper from '../../helpers/helper'
 
 let router = express.Router()
