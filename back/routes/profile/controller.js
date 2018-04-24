@@ -12,11 +12,14 @@ export default {
         locals.user.password = bcrypt.hashSync(body.password, 10)
       }
     }
-    if (body.email) {
-      if (!helper.regexEmail.test(body.email)) {
-        messageArray[2] = ' Valid email required. '
-      }
-    }
+    // J'AI DESACTIVER POUR LE MOMENT PARCE QUE C'EST RELOU SI T'EDIT L'ADMIN
+    // QUI A PAS D'EMAIL VALIDE CA BLOQUE, VOIR LE FRONT............
+    // if (body.email) {
+    //   if (!helper.regexEmail.test(body.email)) {
+    //     messageArray[2] = ' Valid email required. '
+    //   }
+    // }
+    
     // 'locals.user.unmarkModified('role')', a deplacer au début de la route ? Message d'erreur inutile
     // if (body.role) {
     //   // Pas de condition pour le moment, on ne peux simplement pas modifier son role  

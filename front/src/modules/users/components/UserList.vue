@@ -3,8 +3,12 @@
     <h2 class="heading-secondary">Here is your AwesomeUserList</h2>
     <div class="row userlist__row">
           <!--Il faudrait plutôt mettre des boutons, car le lien doit permettre de modifier, supprimer, accéder au calendrier, et accéder au détails de l'utilisateur-->
-      <router-link tag="div" class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" style="cursor: pointer" v-for='user in users' :key="user._id">
-        <p>{{ user.email }}</p>
+      <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
+        <p>{{ user.email }}<br/>
+          <i class="material-icons">edit</i>
+          <i class="material-icons">event</i>
+          <i class="material-icons">delete_forever</i>
+          </p>
         <!-- <button v-on:click="redirectToUserList">Modifier</button> -->
       </router-link>
     </div>
