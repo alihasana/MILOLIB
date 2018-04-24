@@ -53,7 +53,7 @@ export default {
               title: "Vous êtes connecté !",
               text: res.data.message
             });
-            this.$router.push("/dashboard");
+            this.$router.push("/rdv");
           }
         })
         .catch(error => {
