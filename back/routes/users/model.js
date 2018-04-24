@@ -9,7 +9,8 @@ let UserSchema = new mongoose.Schema(
     role: { type: String, required: true, default: 'peon' },
     firstName: { type: String },
     lastName: { type: String },
-    phone: { type: String }
+    phone: { type: String },
+    workPlace: { type: String },
     // eventsTypes: [{}], // Les types de rdv possibles et leur durées
   },
   { timestamps: true }

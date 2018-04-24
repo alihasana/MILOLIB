@@ -1,6 +1,5 @@
 <template>
 	<div class="datePicker">
-		<h5>{{msg}}</h5>
 		<b-form>
 			<b-form-group label="Période de paramétrage de mon agenda">
 				<b-list-group>
@@ -17,7 +16,7 @@
 			</b-form-group>
 		</b-form>
 		<div class="availabilitySetting">
-			<availabilitySetting :agendaRangeProp="agendaRangeInDP" agendaSlotProp="agendaSlotPropInDP" v-on:slotsAreReady="getSlotsFromAS($event)"></availabilitySetting>
+			<availabilitySetting :planNewRangeProp="agendaRangeInDP" planNewSlotProp="InDP" v-on:slotsAreReady="getSlotsFromAS($event)"></availabilitySetting>
 		</div>
 	</div>
 </template>
@@ -46,24 +45,17 @@ export default {
 	// this list is passed to availabilitySetting to mass set the days/hours available for the selected range time
 
 	name: "datePicker",
-	props:['agendaRangeProp', 'agendaSlotProp'],
+	props:['planNewRangeProp', 'planNewSlotProp'],
 	data() {
 		return {
-			msg: "datePicker Vue",
 			startDateInDP: '',
 			endDateInDP:'',
 			agendaRangeInDP:'',
-			agendaSlotInDP:[],
-			agendaRangeFromC:'',
-			agendaSlotFromC:[]
+			agendaSlotInDP:[]
 		};
 	},
 	components: {
 		availabilitySetting
-	},
-	created(){
-		this.agendaRangeFromC = this.agendaRangeProp;
-		this.agendaSlotFromC = this.agendaSlotProp;
 	},
 	methods:{
 		createAgendaRange : function(){

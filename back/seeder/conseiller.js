@@ -34,5 +34,5 @@ for (let i = 0; i < conseillers.length; i++) {
 }
 
 function exit() {
-    mongoose.disconnect()
+	mongoose.disconnect()
 }

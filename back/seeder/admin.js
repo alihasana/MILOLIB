@@ -12,7 +12,6 @@ mongoose.connect(process.env.DB, {}, (err) => {
   }
 })
 
-
 let admins = [
   new User({
     email: 'admin',
@@ -20,7 +19,6 @@ let admins = [
     role: 'Administrateur',
   })
 ]
-
 
 //First Method (same as in the vidéo https://www.youtube.com/watch?v=V30Rpqi6kYE)
 let done = 0

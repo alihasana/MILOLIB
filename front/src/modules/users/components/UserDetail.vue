@@ -10,13 +10,13 @@
   
     <div class="class row">
       <b-button variant="success" type="submit" v-if="show">Enregistrer les modifications</b-button>
-      <b-button variant="primary" @click="show=!show" v-else>Modifier le profil de l'utilisateur</b-button>
+      <b-button variant="primary" @click="show=!show" v-else>Modifier le profil de cet utilisateur</b-button>
+    <b-button variant="danger">Désactiver le profil de cet utilisateur</b-button>
     </div>
 
-    <!-- <b-button-group>
-    <b-button variant="success">Voir le calendrier de l'utilisateur</b-button>
-    <b-button variant="danger">Supprimer le profil de l'utilisateur</b-button>
-    </b-button-group> -->
+    <b-button-group>
+    
+    </b-button-group>
   </b-form>
 </template>
 
