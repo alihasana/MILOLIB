@@ -25,8 +25,6 @@ let workToDo = [
   suivitSeed
 ]
 
-let workDone = 0
-
 async function seeder(array) {
   for (let item of array) {
     await item
@@ -39,6 +37,7 @@ async function seeder(array) {
 mongoose.connect(process.env.DB, {}, (err) => {
   if (err) { throw err; } else {
       console.log('Connection to the Database etablished (' + process.env.DB + ')...')
+      console.log('---------------------------')
       seeder(workToDo)
   }
 })
