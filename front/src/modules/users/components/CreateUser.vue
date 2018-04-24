@@ -5,9 +5,19 @@
       <!-- Create user Form -->
       <div class="createUser__form">
         <b-form>
+<!-- Name -->
+          <b-form-group id="">
+            <b-form-input id="" v-model="form.lastName" required placeholder="Entrer le nom du nouvel utilisateur">
+            </b-form-input>
+          </b-form-group>
+          <!-- Firstname -->
+          <b-form-group id="">
+            <b-form-input id="" v-model="form.firstName" required placeholder="Entrer le prénom du nouvel utilisateur">
+            </b-form-input>
+          </b-form-group>
           <!-- Username/E-mail -->
           <b-form-group id="">
-            <b-form-input id="" type="email" v-model="form.userName" required placeholder="Entrer l'adresse e-mail d'un nouvel utilisateur">
+            <b-form-input id="" type="email" v-model="form.userName" required placeholder="Entrer l'adresse e-mail du nouvel utilisateur">
             </b-form-input>
           </b-form-group>
           <!-- User role -->
@@ -15,6 +25,10 @@
             <b-form-select id="" :options="userRole" required v-model="form.userRole">
             </b-form-select>
           </b-form-group>
+    <b-form-group label="Indiquer le(s) lieu(x) d'exercice du nouvel utilisateur">
+      <b-form-checkbox-group id="workPlace" name="workPlace" v-model="workPlace" :options="options">
+      </b-form-checkbox-group>
+    </b-form-group>
           <!-- Password -->
           <b-form-group>
             <b-form-input v-model="form.userPassword" placeholder="Entrer un mot de passe"></b-form-input>
@@ -41,29 +55,43 @@ export default {
     return {
       title: "Créer le profil d'un nouvel utilisateur",
       form: {
+        lastName: '',
+        firstName: '',
         userName: '',
         userPassword: '',
-        userRole: null
+        userRole: null,
+        workPlace: null,
       },
       userRole: [{
         text: 'Assigner un rôle au nouvel utilisateur',
         value: null
       },
-      'Administrateur', 'Conseiller', 'Chargé d\'accueil', 'Invité'
+      'Administrateur', 'Administrateur-Conseiller', 'Conseiller', 'Chargé d\'accueil', 'Invité'
+      ],
+      options: [
+        {text: 'Sénart', value: 'senart'},
+        {text: 'Combs-La-Ville', value: 'combs'},
+        {text: 'Moissy-Cramayel', value: 'moissy'}
       ],
       User: {
+        lName: String, 
+        FName: String,
         email: String,
         role: String,
-        password: String
+        password: String, 
+        place: String
       }
     }
   },
   methods: {
     createUser: function(newUser) {
       const User = {
+        lName: this.form.lastName, 
+        FName: this.form.firstName,
         email: this.form.userName,
         role: this.form.userRole,
-        password: this.form.userPassword
+        password: this.form.userPassword, 
+        place: this.form.workPlace
       }
       console.log('Object from parent: ', User)
       http.post('users', User)
