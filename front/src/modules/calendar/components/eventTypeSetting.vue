@@ -113,8 +113,8 @@ export default {
         res => {
           console.log('res:',res);
               //here will confirm that the new settings are well saved
-              this.$router.push({name: 'calendar'});
-              this.this.eventTypeFilteredInETV = '';
+              this.$router.push({name: 'agenda'});
+              this.eventTypeFilteredInETV = '';
             })
       .catch(
         error => {
@@ -128,6 +128,8 @@ export default {
 </script>
 
 
-
 <style scoped>
+
+
+
 </style>

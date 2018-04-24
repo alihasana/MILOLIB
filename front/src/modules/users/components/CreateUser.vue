@@ -7,17 +7,17 @@
         <b-form>
 <!-- Name -->
           <b-form-group id="">
-            <b-form-input id="" v-model="form.lastName" required placeholder="Entrer le nom du nouvel utilisateur">
+            <b-form-input id="" v-model="form.lName" required placeholder="Entrer le nom du nouvel utilisateur">
             </b-form-input>
           </b-form-group>
           <!-- Firstname -->
           <b-form-group id="">
-            <b-form-input id="" v-model="form.firstName" required placeholder="Entrer le prénom du nouvel utilisateur">
+            <b-form-input id="" v-model="form.fName" required placeholder="Entrer le prénom du nouvel utilisateur">
             </b-form-input>
           </b-form-group>
           <!-- Username/E-mail -->
           <b-form-group id="">
-            <b-form-input id="" type="email" v-model="form.userName" required placeholder="Entrer l'adresse e-mail du nouvel utilisateur">
+            <b-form-input id="" type="email" v-model="form.userEmail" required placeholder="Entrer l'adresse e-mail du nouvel utilisateur">
             </b-form-input>
           </b-form-group>
           <!-- User role -->
@@ -25,8 +25,8 @@
             <b-form-select id="" :options="userRole" required v-model="form.userRole">
             </b-form-select>
           </b-form-group>
-    <b-form-group label="Indiquer le(s) lieu(x) d'exercice du nouvel utilisateur">
-      <b-form-checkbox-group id="workPlace" name="workPlace" v-model="workPlace" :options="options">
+    <b-form-group label="Indiquer le lieu d'exercice du nouvel utilisateur">
+      <b-form-checkbox-group id="workPlace" name="workPlace" v-model="form.place" :options="options">
       </b-form-checkbox-group>
     </b-form-group>
           <!-- Password -->
@@ -55,12 +55,12 @@ export default {
     return {
       title: "Créer le profil d'un nouvel utilisateur",
       form: {
-        lastName: '',
-        firstName: '',
-        userName: '',
+        lName: '',
+        fName: '',
+        userEmail: '',
         userPassword: '',
         userRole: null,
-        workPlace: null,
+        place: null,
       },
       userRole: [{
         text: 'Assigner un rôle au nouvel utilisateur',
@@ -74,24 +74,24 @@ export default {
         {text: 'Moissy-Cramayel', value: 'moissy'}
       ],
       User: {
-        lName: String, 
-        FName: String,
+        lastName: String, 
+        FirstName: String,
         email: String,
         role: String,
         password: String, 
-        place: String
+        workPlace: String
       }
     }
   },
   methods: {
     createUser: function(newUser) {
       const User = {
-        lName: this.form.lastName, 
-        FName: this.form.firstName,
-        email: this.form.userName,
+        lastName: this.form.lName, 
+        FirstName: this.form.fName,
+        email: this.form.userEmail,
         role: this.form.userRole,
         password: this.form.userPassword, 
-        place: this.form.workPlace
+        workPlace: this.form.place
       }
       console.log('Object from parent: ', User)
       http.post('users', User)

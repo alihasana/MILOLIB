@@ -10,16 +10,17 @@ router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
     User.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, user) => {
       if (err) res.status(500).json({ success: false, message: err.message })
-        else if (!user) res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
-          else {
-            if (!user.comparePasswords(req.body.password)) {
-              res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
-            } else {
+      else if (!user) res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
+      else if (user.active !== true) res.status(400).json({ success: false, message: 'Inactive account. Please contact an administrator.' }) // condition pas parfaite, elle n'est remplie que lorsque il y a false ou 'false'. Si active: 'uneStringAuPif' , ça passe :/.
+      else {
+        if (!user.comparePasswords(req.body.password)) {
+          res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
+        } else {
           // JWT.SIGN(PAYLOAD, SECRETKEY, CALLBACK(err, result){...})
           jwt.sign({ email: user.email, _id: user._id }, process.env.SECRETKEY, (err, result) => {
             if (err) res.status(500).json({ success: false, message: err.message })
-              else res.status(200).json({ success: true, message: 'Welcome !', content: { token: process.env.AUTHBEARER + ' ' + result, user: user.role } })
-            })
+            else res.status(200).json({ success: true, message: 'Welcome !', content: { token: process.env.AUTHBEARER + ' ' + result, user: user.role } })
+          })
         }
       }
     })
@@ -31,6 +32,7 @@ router.post('/signup', (req, res) => {
     if (helper.regexEmail.test(req.body.email)) {
       let newUser = new User(req.body)
       newUser.password = bcrypt.hashSync(req.body.password, 10)
+      newUser.calendar = {}
       newUser.save((err, user) => {
         if (err) {
           if (err.message.match(/^E11000 duplicate key error.+/)) {

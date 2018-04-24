@@ -1,15 +1,13 @@
   <template>
     <div class="container">
-      <router-view></router-view>
-      <div class="agenda">
-        <agenda :agendaRangePropC="agendaRangeInC" :agendaSlotPropC="agendaSlotInC"></agenda>
-      </div>
+     <!--  <router-view :agendaRangeProp="agendaRangeInC" :agendaSlotProp="agendaSlotInC" :agendaRangePropC="agendaRangeInC" :agendaSlotPropC="agendaSlotInC" v-on:newTimeRangeToDisplay="getNewTimeRangeToDisplay($event)" v-on:newSlotsToDisplay="getNewSlotsToDisplay($event)"></router-view> -->
+       <router-view></router-view>
+      <!-- <div class="agenda">
+        <agenda :agendaSlotPropC="agendaSlotInC"></agenda>
+      </div> -->
       <div class="datePicker">
         <datePicker :agendaRangeProp="agendaRangeInC" :agendaSlotProp="agendaSlotInC" v-on:newTimeRangeToDisplay="getNewTimeRangeToDisplay($event)" v-on:newSlotsToDisplay="getNewSlotsToDisplay($event)"></datePicker>
       </div>
-      <!-- <div class="eventTypeSetting">
-        <eventTypeSetting></eventTypeSetting>
-      </div> -->
     </div>
   </template>
 
@@ -18,8 +16,6 @@
 /* eslint-disable */
 import agenda from "./components/agenda";
 import datePicker from "./components/datePicker";
-import eventTypeSetting from "./components/eventTypeSetting";
-
 
 import * as cHelpers from './calendarHelpers';
 
@@ -34,14 +30,12 @@ export default {
   name: "calendar",
   data() {
     return {
-      msg: "Calendar Vue",
-      agendaRangeInC:'',
+      agendaRangeInC:[],
       agendaSlotInC:[]
     };
   },
   components: {
     datePicker,
-    eventTypeSetting,
     agenda
   },
   methods: {

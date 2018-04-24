@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<h5>{{ msg }}</h5>
+		<!-- <h5>{{$store.state.hello}}</h5>
+		<h5>Today: {{$store.state.now | dateFormatFull}}</h5>
+		<h5>DefaultTimeRange: {{$store.state.agendaRangeTime}}</h5> -->
 		<div class="agenda">
 			<div class="agendaHeader">
 				<b-navbar-nav>
@@ -11,9 +13,9 @@
 							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_module</i></b-button>
 						</li>
 						<li class="navNavigate">
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_before</i></b-button>
-							<span class="weekNumber">Semaine{{current}}</span>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">navigate_next</i></b-button>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
+							<span class="weekNumber">Semaine {{weekNumber}}</span>
+							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getNextDays()"><i class="material-icons">navigate_next</i></b-button>
 						</li>
 					</b-nav-form>
 				</b-navbar-nav>
@@ -25,22 +27,21 @@
 			</div>
 			<table class="agendaBody">
 				<thead class="agendaBodyDays">
-					<tr class="day" v-for="(day,index) in agendaRangePropC" :key="index">
+					<tr class="day" v-for="(day,index) in TimeRangeToDisplay" :key="index">
 						<p class="dayName">{{day | dateFormatDayName}}</p>
 						<p class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</p>
 					</tr>
 				</thead>
 				<tbody class="agendaBodySlots">
-					<tr class="buttonSlots" v-for="(day,index) in agendaRangePropC" :key="index">
-						<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
-							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId">{{buttonId}}</b-button></li>
+					<tr class="buttonSlots" v-for="(day,index) in TimeRangeToDisplay" :key="index">
+							<ul class="slotUl" v-on:buttonsIdsUpdated="updateButtons($event)" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
+								<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li>
+							<!-- <li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,agendaSlotPropC)">{{buttonId}}</b-button></li> -->
+
 						</ul>
 					</tr>
 				</tbody>
 			</table>
-			<div>
-				<button v-on:click="createButtonId(agendaRangePropC)">Click to create ButtonID</button>
-			</div>
 		</div>
 	</div>
 </template>
@@ -49,68 +50,94 @@
 /* eslint-disable */
 import moment from 'moment';
 import 'moment/locale/fr';
+import { store } from '../../../store/store';
 import * as cHelpers from '.././calendarHelpers';
+import http from '../../../helpers/http';
+import _ from 'underscore';
 
 
 //description of component
 	//This component will display the conseiller agenda.
-	// by default, the agenda is filled in with buttons with NonAvailable ids
+	// by default, 
+	//the agenda is filled in with buttons with NonAvailable ids, for the next month
 	// when the agenda get the 'available' rangeTime and slots from backend,
 		//it will update the display on the current agenda if no conflict
 
 	//! WORK IN PROGRESS
 
 	// TODO
-	// the buttonID are well changed when slots 'available' are retreived, but the class is still not rendered in display.
-	//create a function display agenda, that would take in parameter a time range, and slots, and that will then update the display.
-
-
+	
 export default {
 
 	name: "agenda",
-	props:['agendaRangePropC', 'agendaSlotPropC'],
+	props:['agendaSlotPropC'],
+	computed:{
+		getTimeRange(){
+			return this.$store.state.agendaRangeTime;
+		},
+		endDisplay(){
+			return cHelpers.limitDisplay('week', this.beginDisplay);
+		},
+		TimeRangeToDisplay(){
+			return this.getTimeRange.slice(this.beginDisplay, this.endDisplay)
+		},
+		week(){
+			return cHelpers.getWeekNumber(this.$store.state.now);
+		},
+		// getSlots(){
+		// 	return this.$store.commit('updateSlots',agendaSlots);
+		// }
+	},
 	data() {
 		return {
-			msg: "agenda Vue will be displayed by default with calendar",
-			day:'',
-      		agendaRangeInA: '',
-      		slotsInA:[],
       		hourList:['08:00','08:15','08:30','08:45','09:00','09:15', '09:30', '09:45',
       		'10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45', '15:00','15:15','15:30','15:45','16:00','16:15','16:30','16:45','17:00','17:15','17:30','17:45','18:00'],
-      		current:'',
+      		day:'',
+      		weekNumber:'',
+      		beginDisplay:'',
       		buttonId:'',
-      		buttonClass : '',
-      		buttonIdList:[]
+      		buttonIdList:[],
+      		newButtonIdList:[],
+      		buttonClass :'',
+      		slotsInA:[],
       	};
 	},
-	components: {},
 	created(){
-		this.current = cHelpers.getWeekNumber('now');
-		this.slotsInA = this.agendaSlotPropC;
-		this.agendaRangeInA = this.agendaRangePropC;
+		console.log('this week:', this.week)
+		this.beginDisplay = 0;
+		this.weekNumber = cHelpers.filterInt(this.week);
+		// this.slotsInA = this.getSlots;
+		// this.slotsInA = this.agendaSlotPropC;
+		this.updateAgenda(this.getTimeRange, this.slotsInA);
 		//for now only to test we will get back the slots from Calendar component.
 		//as soon as route ok, we will retreive the slots from back end
-		// http.get('url')
-		// 			.then(
-		// 				res => {
-		// 				console.log('res:',res);
-		// 				this.slotsInA = res.data.slots;
-		// 				//here we will get the back the slots and launch an update agenda function
-		// 				})
-		// 			.catch(
-		// 				error => {
-		// 			    console.log('error:', error);
-		// 			    //should display message to user that there is an error
-		// 			});
-	},
-	updated(){
-		this.updateButtonId(this.agendaSlotPropC,this.buttonIdList);
-		this.changeClassButton(this.buttonId);
+		http.get('/calendar')
+					.then(
+						res => {
+						console.log('res:',res);
+						// this.slotsInA = res.data;
+						//here we will get the back the slots and launch an update agenda function
+						})
+					.catch(
+						error => {
+					    console.log('error:', error);
+					    //should display message to user that there is an error
+					});
 	},
 	methods: {
+		updateAgenda: function(timeRange, slots){
+			//this function will take timeRange and Slots as parameters, and will be launched after hhtp.GET
+			if (slots){
+				this.createButtonId(timeRange);
+				this.updateButtonId(slots, this.buttonIdList);
+			}
+			else{
+				this.createButtonId(timeRange);
+			}	
+		},
 		createButtonId: function(timeRange){
-			//should be launched each time get.http request
-			//based on a timeRange of days, et based on the hours to display in agenda
+			//is launched in updateAgenda
+			//based on a timeRange of days, and based on the hours to display in agenda
 			//this function create buttons with Id representatives of the date, hour.
 			//by default, they also represent status N( Non available)
 			let reg = /:/;
@@ -155,10 +182,9 @@ export default {
 			}
 			this.$emit('buttonsIdsUpdated', idList);
 			console.log('les buttonId sont updatés!:', idList);
-
 		},
 		updateButtons: function(newList){
-			//not sure this function is usefull, not working now, i have tried to render the change of buttonsId in the agenda with and event, but not working.
+			//this function enable to update the display further to listening the event'buttonsIdsUpdated'
 			this.buttonIdList = newList;
 		},
 		changeClassButton : function(btnId){
@@ -179,11 +205,53 @@ export default {
 				return this.buttonClass;
 			}
 		},
-		updateAgenda: function(timeRange, slots){
-			//this function will take timeRange and Slots as parameters, and will be launched after hhtp.GET
-			this.createButtonId(timeRange);
-			this.updateButtonId(slots, this.buttonIdList);
-
+		getNextDays: function(){
+			this.beginDisplay += 7;
+			this.weekNumber +=1;
+		},
+		getPreviousDays: function(){
+			this.beginDisplay -= 7;
+			this.weekNumber -=1;
+		},
+		setAppointment: function(btnId, slots){
+			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
+			let matchingSlot = '';
+			//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
+			//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
+			if (btnId.charAt(btnId.length - 1) == 'A'){
+				for (let i=0; i<slots.length; i++){
+					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
+					let id = btnId.slice(0,16);
+					if (sl == id){
+						matchingSlot = slots[i];
+						console.log('the matching slot is:', matchingSlot);
+						let postBody = matchingSlot;
+						console.log('postBody: ', postBody);
+						http.post('/???', postBody)
+						// 		.then(
+						// 			res => {
+						// 			console.log('res:',res);
+						// 			//display message that the booking is OK
+									// this.updateButtonId(res.data,btnId);
+									// this.changeClassButton (btnId);
+						// 			})
+						// 		.catch(
+						// 			error => {
+						// 		    console.log('error:', error);
+						// 		    //should display message to user that the selected period/range time has already 'booked' slots
+						// 		});
+						let newBtnId = btnId.slice(0,16)+'-'+'B';
+						let newButtonIdList = _.without(this.buttonIdList, btnId);
+						console.log('old buttonId:',btnId);
+						console.log('new ButtonID is:', newBtnId);
+						newButtonIdList.push(newBtnId);
+						newButtonIdList.sort();
+						this.$emit('buttonsIdsUpdated', newButtonIdList);
+						console.log('newbuttonIdList:', newButtonIdList);
+						this.updateAgenda(this.agendaRangeInA, this.slotsInA);
+					}
+				}
+			}
 		}
 	},
 	filters: {
@@ -345,7 +413,7 @@ export default {
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
     border-right: 1px solid #d4d4d4;
-	background-color: white;
+	background-color: pink;
 	color:grey;
   	border-radius:0;
   	width: 100%;
