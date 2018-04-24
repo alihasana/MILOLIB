@@ -47,9 +47,9 @@
               <i class="material-icons">date_range</i><span>Agenda</span>
             </router-link></em>
           </b-nav-item>
-          <b-nav-item-dropdown right v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
+          <b-nav-item-dropdown no-caret right v-if="role === 'Administrateur/Conseiller' || role === 'Conseiller'">
           <template slot="button-content">
-            <em><i class="material-icons">perm_data_setting</i><span>Paramètres de l'agenda</span></em>
+            <div><i class="material-icons">perm_data_setting</i><span>Paramètres de l'agenda</span></div>
           </template>
             <b-dropdown-item>
               <router-link tag="div" :to="{name: 'availabilitySetting'}">
