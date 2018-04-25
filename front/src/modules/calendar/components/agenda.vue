@@ -31,9 +31,8 @@
 				</thead>
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
-						<ul class="slotUl" v-for="(buttonId, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
-							<!-- <li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li> -->
-							<li class="slotLi"><b-button v-bind:class="classId" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li>
+						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
+							<li class="slotLi"><b-button v-bind:class="classId[index]" v-bind:id="button.id" v-on:click="setAppointment(button,getSlots)">{{button.id}}</b-button></li>
 						</ul>
 					</tr>
 				</tbody>
@@ -114,7 +113,9 @@ export default {
 			return this.filterButtonIdToDisplay(this.timeRangeToDisplay, this.buttonIdList);
 		},
 		classId(){
-			return this.changeClassButton(this.buttonId);
+			return this.btnIdToDisplay.map(function(button){
+				return button.class
+			});
 		}
 	},
 	data() {
@@ -142,8 +143,6 @@ export default {
 	created(){
 		this.beginDisplay = 0;
 		this.weekNumber = cHelpers.filterInt(this.week);
-		// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
-		// this.updateAgenda(this.getTimeRange, this.getSlots, this.buttonIdList);
 		http.get('/calendar')
 					.then(
 						res => {
@@ -164,10 +163,6 @@ export default {
 					});
 	},
 	methods: {
-		// updateAgenda: function(timeRange, slots, list){
-		// 	this.createButtonId(timeRange);
-		// 	this.updateButtonId(slots, list)
-		// },
 		createButtonId: function(timeRange){
 			//based on a timeRange of days, and based on the hours to display in agenda
 			//this function create buttons with Id representatives of the date, hour.
@@ -178,7 +173,11 @@ export default {
 					let id;
 					id = moment(timeRange[i]).format('YYYY-MM-DD').toString()+ '-' + this.hourList[j]+ '-' +'N';
 					id = id.replace(reg, '-');
-					this.buttonIdList.push(id);
+					let button = {
+						id: id,
+						class:'N'
+					}
+					this.buttonIdList.push(button);
 				}
 			}
 			console.log('buttonIdList:', this.buttonIdList);
@@ -189,26 +188,29 @@ export default {
 			for (let i=0; i<slots.length; i++){
 				for (let j=0; j<idList.length; j++){
 					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
-					let id = idList[j].slice(0,16);
+					let id = idList[j].id.slice(0,16);
 					if (sl == id) {
-						console.log('here are the buttonsIds that should be modified:', idList[j]);
 						if(slots[i].available === true){
-							idList[j]=idList[j].slice(0,16)+'-'+'A';
+							idList[j].id = idList[j].id.slice(0,16)+'-'+'A';
+							idList[j].class = 'A';
 						}
 						if(slots[i].available === false){
-							idList[j]=idList[j].slice(0,16)+'-'+'B';
+							idList[j]=idList[j].id.slice(0,16)+'-'+'B';
+							idList[j].class = 'B';
 						}
 					}
 				}
 			}
 			console.log('les boutons ont bien été updatés avec les slots');
+			console.log('buttonIdList:', this.buttonIdList);
+			return this.buttonIdList;
 		},
 		filterButtonIdToDisplay: function(timeRange, btnIdList){
 			for (let i=0; i<timeRange.length; i++){
 				let trday
 				trday = moment(timeRange[i]).format('YYYY-MM-DD').toString();
 				for (let j=0; j<btnIdList.length; j++){
-					let btnid = btnIdList[j].slice(0,10);
+					let btnid = btnIdList[j].id.slice(0,10);
 					if (trday == btnid){
 						this.filteredButtonIdList.push(btnIdList[j]);
 					}
@@ -217,47 +219,23 @@ export default {
 			console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
 			return this.filteredButtonIdList;
 		},
-		buttonIdIsInDay: function(day,id){
+		buttonIdIsInDay: function(day,btn){
 			// this is a conditional function, called in V-for to display under the day only the button with ID matching the day
 			let a = moment(day).format('YYYY-MM-DD').toString();
-			let b = id.slice(0,10);
+			let b = btn.id.slice(0,10);
 			if(a == b) {
 				return true;
-			}
-		},
-		changeClassButton : function(btnId){
-			// console.log('je veux changer la classe de mes boutons!');
-			if (btnId.charAt(btnId.length - 1) == 'A'){
-				this.buttonClass = 'Available';
-				// console.log(' buttonClass: ', this.buttonClass);
-				return this.buttonClass;
-			}
-			if (btnId.charAt(btnId.length - 1) == 'B'){
-				this.buttonClass = 'Booked';
-				// console.log(' buttonClass: ', this.buttonClass);
-				return this.buttonClass;
-			}
-			else {
-				this.buttonClass = 'NonAvailable';
-				// console.log(' buttonClass: ', this.buttonClass);
-				return this.buttonClass;
 			}
 		},
 		getNextDays: function(){
 			this.beginDisplay += 7;
 			this.weekNumber +=1;
 			this.filteredButtonIdList = [];
-			this.filterButtonIdToDisplay
-
-			// this.buttonIdList = [];
-			// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
 		},
 		getPreviousDays: function(){
 			this.beginDisplay -= 7;
 			this.weekNumber -=1;
 			this.filteredButtonIdList = [];
-			// this.buttonIdList = [];
-			// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
 		},
 		setAppointment: function(btnId, slots){
 			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
@@ -449,7 +427,7 @@ export default {
 	padding: 0;
 }
 
-.Available{
+.A{
 	border-top: 1px dotted #e5e5e5;
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
@@ -463,7 +441,7 @@ export default {
     margin-top: 0px;
 }
 
-.NonAvailable{
+.N{
 	border-top: 1px dotted #e5e5e5;
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
@@ -477,7 +455,7 @@ export default {
     margin-top: 0px;
 }
 
-.Booked{
+.B{
 	border-top: 1px dotted #e5e5e5;
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
