@@ -112,14 +112,23 @@ export default {
       http.post('/appointmenttype', postBody)
       .then(
         res => {
-          console.log('res:',res);
-              //here will confirm that the new settings are well saved
+          console.log('res:',res.data);
+              swal({
+                    type: "success",
+                    title: "paramétrage de vos types de RDV et références",
+                    text: "OK: les types sélectionnés sont:" +res.data,
+                    });
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';
             })
       .catch(
         error => {
-          console.log('error:', error);
+          console.log('error:', error.response.data.message);
+            swal({
+                    type: "error",
+                    title: "paramétrage de vos types de RDV et références",
+                    text: "non effectué: "+error.response.data.message
+                    });
               //should display message to user that the events setting could not been saved
             });
 

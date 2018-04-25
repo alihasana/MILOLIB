@@ -135,13 +135,15 @@ export default {
 		this.beginDisplay = 0;
 		this.weekNumber = cHelpers.filterInt(this.week);
 		// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
-		this.updateAgenda(this.getTimeRange, this.getSlots, this.buttonIdList);
+		// this.updateAgenda(this.getTimeRange, this.getSlots, this.buttonIdList);
 		http.get('/calendar')
 					.then(
 						res => {
 						console.log('res:',res);
-						//here we will get the back the slots and pass them to the store
-						// this.$store.commit('getSlotsAvailables', res.data);
+						this.$store.commit('getSlotsAvailables', res.data.content);
+						this.buttonIdList =[];
+						this.createButtonId(this.getTimeRange);
+						this.updateButtonId(this.getSlots, this.buttonIdList);
 						})
 					.catch(
 						error => {
@@ -153,10 +155,13 @@ export default {
 			          	});
 					});
 	},
+	// updated(){
+	// 	this.updateButtonId(this.getSlots, this.buttonIdList);
+	// },
 	methods: {
 		updateAgenda: function(timeRange, slots, list){
 			this.createButtonId(timeRange);
-			// this.updateButtonId(slots, list)
+			this.updateButtonId(slots, list)
 		},
 		createButtonId: function(timeRange){
 			//is launched in updateAgenda
@@ -440,7 +445,7 @@ export default {
 	border-bottom:1px dotted #e5e5e5;
 	border-left: 1px solid #d4d4d4;
     border-right: 1px solid #d4d4d4;
-	background-color: #F8F8F8;
+	background-color: #BEBEBE;
 	color:#888888;
   	border-radius:0;
   	width: 100%;

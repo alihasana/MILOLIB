@@ -139,9 +139,9 @@ export default {
 			console.log('postBody: ', postBody);
 
 			//this is for now
-			this.$store.commit('getSlotsAvailables', this.slotsInAS);
-			this.$store.commit('updateRangeTime', this.agendaRangeInAS)
-			this.$router.push({name: 'agenda'});
+			// this.$store.commit('getSlotsAvailables', this.slotsInAS);
+			// this.$store.commit('updateRangeTime', this.agendaRangeInAS)
+			// this.$router.push({name: 'agenda'});
 
 			//this when the back-end OK
 			// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available:false, status
@@ -149,11 +149,12 @@ export default {
 						.then(
 							res => {
 							console.log('res:',res);
-							this.$store.commit('slotsAvailables', res.data);
+							// this.$store.commit('slotsAvailables', res.data);
 							this.$store.commit('updateRangeTime', this.agendaRangeInAS)
 							swal({
 				            type: "success",
-				            title: "paramétrage de vos disponibilités: OK!"
+				            title: "paramétrage de vos disponibilités",
+				            text: "OK!"
 				          	});
 							this.$router.push({name: 'agenda'});
 							})
@@ -162,7 +163,8 @@ export default {
 						    console.log('error:', error.response.data.message);
 						    swal({
 				            type: "error",
-				            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
+				            title: "paramétrage de vos disponibilités",
+				            text: "impossible, merci de vérifier que les plages sélectionnées sont appropriées ou ne comportent pas de RDV"
 				          	});
 						});
 		}
