@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
   // console.log('Le req.body ' + req.body)
   console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-    // console.log('Le calendar non modifié ' + calendar)
+    // console.log('Le calendar NON modifié ' + calendar)
     if (err) res.status(500).json({ success: false, message: err.message })
     else {
 
@@ -27,17 +27,13 @@ router.post('/', (req, res) => {
       // for (let i = 0; i < req.body.length; i++) {
       //   calendar.slots.push(req.body[i])
       // }
-      var arr = []
-      for (let i = 0; i < req.body.length; i++) {
-        arr.push(req.body[i])
-      }
-      console.log('LE ARRAY MA GEULE ' + arr)
 
-      for (let i = 0; i < req.body.length; i++) {
-        calendar.slots.push(req.body[i])
+      for (let key of Object.keys(req.body)) {
+        calendar.slots.push(req.body[key])
       }
-      // calendar.markModified('slots.start') // apriori inutile lors de la création, juste pour l'update
-      // calendar.markModified('slots.end')
+
+      console.log('Le calendar modifié ' + calendar)
+
       calendar.save((err) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: 'TEST ' + calendar.slots })
@@ -46,16 +42,16 @@ router.post('/', (req, res) => {
   })
 })
 
-// router.get('/', (req, res) => {
-//   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-//     if (err) res.status(500).json({ success: false, message: err.message })    
-//     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
-//     else {
-//       // TODO : filtrer les slots not available
-//       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-//     }
-//   })
-// })
+router.get('/', (req, res) => {
+  Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
+    if (err) res.status(500).json({ success: false, message: err.message })    
+    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
+    else {
+      // TODO : filtrer les slots not available
+      res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
+    }
+  })
+})
 
 router.get('/:id', (req, res) => {
   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
@@ -77,12 +73,17 @@ router.put('/', (req, res) => { // multiples slots change
 //   console.log(req.body)
 //   console.log('Object.keys : ' + Object.keys(req.body))
 //   console.log('LENGHT : ' + req.body.length)
-//   // for (let key of Object.keys(req.body)) {
-//   //   res.locals.user.calendar.slots.push(req.body[key])
-//   // }
-//   for (let i = 0; i < req.body.length; i++) {
-//     res.locals.user.calendar.slots.push(req.body[i])
-//   }
+// for (let i = 0; i < req.body.length; i++) {
+//   calendar.slots.push(req.body[i])
+// }
+// for (let key of Object.keys(req.body)) {
+//   calendar.slots.push(req.body[key])
+// }
+// var arr = []
+// for (let i = 0; i < req.body.length; i++) {
+//   arr.push(req.body[i])
+// }
+// console.log('LE ARRAY MA GEULE ' + arr)
 
 //   res.locals.user.markModified('calendar.slots.start')
 //   res.locals.user.markModified('calendar.slots.end')

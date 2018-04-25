@@ -42,22 +42,22 @@ let done = 0
 for (let i = 0; i < staff.length; i++) {
   console.log('A : ' + done)
   staff[i].save((err, user) => {
-    console.log('B : ' + done)
-    if (err) console.log('ERROR ! : ' + err.message)
+    // console.log('B : ' + done)
+    if (err) console.log('ERROR In user.save() ! : ' + err.message)
     else {
-      console.log('C : ' + done)
+      // console.log('C : ' + done)
       var newCalendar = new Calendar({ userId: user._id })
       newCalendar.save((err, calendar) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
+        if (err) console.log('ERROR In calendar.save() ! : ' + err.message)
         done++
         console.log('D : ' + done)
+        if (done === staff.length) {
+          console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+          exit()
+        }
       })
       console.log('E : ' + done)
       // done++      
-      if (done === staff.length) {
-        console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
-        exit()
-      }
     }
   })
 }
