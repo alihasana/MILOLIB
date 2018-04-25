@@ -31,8 +31,9 @@
 				</thead>
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
-						<ul class="slotUl" v-for="(buttonId, index) in buttonIdList" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
-							<li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li>
+						<ul class="slotUl" v-for="(buttonId, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,buttonId)" :key="index">
+							<!-- <li class="slotLi"><b-button v-bind:class="changeClassButton(buttonId)" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li> -->
+							<li class="slotLi"><b-button v-bind:class="classId" v-bind:id="buttonId" v-on:click="setAppointment(buttonId,getSlots)">{{buttonId}}</b-button></li>
 						</ul>
 					</tr>
 				</tbody>
@@ -108,6 +109,12 @@ export default {
 		},
 		week(){
 			return cHelpers.getWeekNumber(this.$store.state.now);
+		},
+		btnIdToDisplay(){
+			return this.filterButtonIdToDisplay(this.timeRangeToDisplay, this.buttonIdList);
+		},
+		classId(){
+			return this.changeClassButton(this.buttonId);
 		}
 	},
 	data() {
@@ -120,6 +127,7 @@ export default {
       		buttonId:'',
       		buttonIdList:[],
       		buttonClass :'',
+      		filteredButtonIdList: [],
       		form: {
 					rdv: null
 				},
@@ -155,16 +163,12 @@ export default {
 			          	});
 					});
 	},
-	// updated(){
-	// 	this.updateButtonId(this.getSlots, this.buttonIdList);
-	// },
 	methods: {
-		updateAgenda: function(timeRange, slots, list){
-			this.createButtonId(timeRange);
-			this.updateButtonId(slots, list)
-		},
+		// updateAgenda: function(timeRange, slots, list){
+		// 	this.createButtonId(timeRange);
+		// 	this.updateButtonId(slots, list)
+		// },
 		createButtonId: function(timeRange){
-			//is launched in updateAgenda
 			//based on a timeRange of days, and based on the hours to display in agenda
 			//this function create buttons with Id representatives of the date, hour.
 			//by default, they also represent status N( Non available)
@@ -197,6 +201,21 @@ export default {
 					}
 				}
 			}
+			console.log('les boutons ont bien été updatés avec les slots');
+		},
+		filterButtonIdToDisplay: function(timeRange, btnIdList){
+			for (let i=0; i<timeRange.length; i++){
+				let trday
+				trday = moment(timeRange[i]).format('YYYY-MM-DD').toString();
+				for (let j=0; j<btnIdList.length; j++){
+					let btnid = btnIdList[j].slice(0,10);
+					if (trday == btnid){
+						this.filteredButtonIdList.push(btnIdList[j]);
+					}
+				}
+			}
+			console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
+			return this.filteredButtonIdList;
 		},
 		buttonIdIsInDay: function(day,id){
 			// this is a conditional function, called in V-for to display under the day only the button with ID matching the day
@@ -227,12 +246,16 @@ export default {
 		getNextDays: function(){
 			this.beginDisplay += 7;
 			this.weekNumber +=1;
+			this.filteredButtonIdList = [];
+			this.filterButtonIdToDisplay
+
 			// this.buttonIdList = [];
 			// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
 		},
 		getPreviousDays: function(){
 			this.beginDisplay -= 7;
 			this.weekNumber -=1;
+			this.filteredButtonIdList = [];
 			// this.buttonIdList = [];
 			// this.updateAgenda(this.timeRangeToDisplay, this.getSlots, this.buttonIdList);
 		},
