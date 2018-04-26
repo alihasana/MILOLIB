@@ -40,28 +40,26 @@ let staff = [
 //First Method (same as in the vidéo https://www.youtube.com/watch?v=V30Rpqi6kYE)
 let done = 0
 for (let i = 0; i < staff.length; i++) {
-  console.log('A : ' + done)
   staff[i].save((err, user) => {
-    // console.log('B : ' + done)
     if (err) console.log('ERROR In user.save() ! : ' + err.message)
     else {
-      // console.log('C : ' + done)
       var newCalendar = new Calendar({ userId: user._id })
       newCalendar.save((err, calendar) => {
         if (err) console.log('ERROR In calendar.save() ! : ' + err.message)
         done++
-        console.log('D : ' + done)
         if (done === staff.length) {
           console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
           exit()
         }
       })
-      console.log('E : ' + done)
-      // done++      
+      // done++
+      // if (done === staff.length) {
+      //   console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+      //   exit()
+      // }  
     }
   })
 }
-//Problemes asynchrone, là le seeder marche mais il ne se ferme pas (done++ fait que dalle).
 
 function exit() {
   mongoose.disconnect()

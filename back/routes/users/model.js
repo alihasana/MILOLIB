@@ -11,6 +11,8 @@ let UserSchema = new mongoose.Schema(
     lastName: { type: String },
     phone: { type: String },
     workPlace: { type: String },
+    calendar: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true, ref: 'Calendar' },
+    appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },     
     // eventsTypes: [{}], // Les types de rdv possibles et leur durées
   },
   { timestamps: true }

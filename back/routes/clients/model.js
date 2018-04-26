@@ -13,6 +13,7 @@ let ClientSchema = new mongoose.Schema(
     descolarise: { type: Boolean, required: false },
     infAge: { type: Boolean, required: false },
     commune: String,
+    appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },    
   },
   { timestamps: true }
 )
