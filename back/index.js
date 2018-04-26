@@ -18,6 +18,7 @@ import auth from './routes/auth/auth'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
 import calendar from './routes/calendar/calendar'
+import event from './routes/calendar/event'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
 
@@ -61,6 +62,7 @@ router.use(verifyToken)
 // Protected routes
 router.use('/users', users)
 router.use('/profile', profile)
+router.use('/event', event)
 router.use('/calendar', calendar)
 
 app.use(router)
