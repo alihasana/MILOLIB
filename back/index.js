@@ -17,7 +17,6 @@ dotEnv.config()
 import auth from './routes/auth/auth'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
-import appointmenttype from './routes/appointmentType/appointmentType'
 import calendar from './routes/calendar/calendar'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
