@@ -48,8 +48,10 @@ for (let i = 0; i < staff.length; i++) {
         if (err) console.log('ERROR In calendar.save() ! : ' + err.message)
         done++
         if (done === staff.length) {
-          console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
-          exit()
+          setTimeout(() => { // setTimeout because of index creation. Shitty fix I know :)
+            console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+            exit()
+          }, 3000)
         }
       })
       // done++

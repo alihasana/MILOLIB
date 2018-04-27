@@ -5,40 +5,45 @@ import User from './../users/model'
 import Client from './../clients/model'
 import Calendar from './model'
 import controller from './controller'
-import util from 'util'
+// import util from 'util'
 
 let router = express.Router()
 
 router.post('/', (req, res) => {
-  // console.log('Le req.body ' + req.body)
-  console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
+  // console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-    // console.log('Le calendar NON modifié ' + calendar)
     if (err) res.status(500).json({ success: false, message: err.message })
     else {
-      if (!calendar) { // Create calendar if needed
-        let newCalendar = new Calendar({ userId: user._id })
-        newCalendar.save((err, calendar) => {
-          if (err) return res.status(500).json({ success: false, message: err.message })
-        })
-      }
+      console.log('Le calendar find one ' + JSON.stringify(calendar, null, 4))
+      
+      // if (!calendar) { // Create calendar if needed
+      //   controller.asyncCall(res.locals)
+      // }
 
-      // TODO : tester le filtre slots
+      // if (!calendar) { // Create calendar if needed
+      //   let newCalendar = new Calendar({ userId: res.locals.user.id })
+      //   newCalendar.save((err, calendar) => {
+      //     if (err) return res.status(500).json({ success: false, message: err.message })
+      //   })
+      // }
+
+      // Verify slots conflicts 
       for (let key of Object.keys(req.body)) {
-        if (controller.checkSlotsConflict(calendar, req.body[key].start)) {
+        if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
           return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
         }
       }
-
+      
+      // ADD Slots
       for (let key of Object.keys(req.body)) {
         calendar.slots.push(req.body[key])
       }
+      // console.log('Le calendar modifié ' + JSON.stringify(calendar, null, 4))
 
-      console.log('Le calendar modifié ' + calendar)
-
-      calendar.save((err) => {
+      // A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
+      calendar.save((err, calendar) => {
         if (err) res.status(500).json({ success: false, message: err.message })
-        else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: 'TEST ' + calendar.slots })
+        else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
       })
     }
   })
@@ -51,13 +56,54 @@ router.get('/', (req, res) => {
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
     else {
       // TODO : filtrer les slots not available
-      // calendar.populate('userId')
-      // res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-      calendar.populate('userId').execPopulate(function (err, calendar) {
-      })
       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
     }
   })
+})
+
+
+// -------------------------------------------------------------------
+//                        NON FONCTIONNELS 
+// -------------------------------------------------------------------
+
+// Events type: dont know wat im doing :D
+router.put('/lol', (req, res) => {
+  Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
+    else {
+      for (let i = 0; i < req.body.length; i++) {
+        calendar.eventsTypes.push(req.body[i])
+      }
+
+      res.status(200).json({ success: true, message: 'lol' })
+    }
+  })
+
+  calendar.save((err) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else res.status(200).json({ success: true, message: 'C\'est ok. Event ajoutées' })
+  })
+})
+
+router.put('/lol2', (req, res) => {
+  if (req.body.active) {
+    User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
+      if (err) {
+        if (err.message.match(/^Cast to ObjectId failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid ID' })
+        }
+        else if (err.message.match(/^Cast to boolean failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid request.' })
+        } else res.status(500).json({ success: false, message: err.message })
+      }
+      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+      else {
+        if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
+        else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
+      }
+    })
+  } else res.status(400).json({ success: false, message: 'Invalid request.' })
 })
 
 

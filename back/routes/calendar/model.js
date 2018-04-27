@@ -3,9 +3,12 @@ import SlotSchema from '../../schema/slot'
 
 let CalendarSchema = new mongoose.Schema(
 	{
-    userId: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true, ref: 'User' },
-		slots: [SlotSchema]
-		// eventsTypes: [{}], // Les types de rdv possibles et leur durées
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true, sparse: true, ref: 'User' },
+		slots: [SlotSchema],
+    eventsTypes: [{
+        name: { type: String },
+        duration: { type: String }
+      }],
 	},
 	{ timestamps: true }
 )
