@@ -32,36 +32,40 @@
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-							<li class="slotLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="setAppointment(button,getSlots)">{{button.id}}</b-button></li>
+							<!-- <li class="slotLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="setAppointment(button,getSlots)">{{button.id}}</b-button></li> -->
+							<li class="slotLi"><b-button v-b-modal.modalPrendreRDV v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >{{button.id}}</b-button></li>
+							<!-- il faudra faire en sorte qu'en fonction de la classe, la modal approprié s'ouvre pour proposer les fonctionalités, ou bien faire une modale multi action? -->
 						</ul>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
+
 		<!-- RDV POP-UP-->
 		<div>
-			<!-- button -->
-			<!-- <b-btn v-b-modal.modalPrevent>Fixer un RDV</b-btn> -->
-			<!-- Modal Component -->
-			<!-- <b-modal id="modalPrevent" ref="modal" title="Fixer un nouveau rendez-vous" @ok="handleOk" @shown="clearName">
-				<form @submit.stop.prevent="handleSubmit">
-					<b-form-input type="text" placeholder="Heure du rdv" v-model="name" disabled=""></b-form-input> -->
+				<b-modal id="modalPrendreRDV" ref="modal" title="Creer un nouveau rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
+				<form @submit.stop.prevent="bookApt">
+					<!-- heure du RDV -->
+					<b-form-input type="text" v-model="matchingSlot.start" disabled=""></b-form-input>
 					<!-- list -->
-					<!-- <b-form-group id="" label="Type de rdv:" label-for="">
-						<b-form-select id="" :options="rdv" required v-model="form.rdv">
-						</b-form-select>
-					</b-form-group> -->
+					<b-form-select v-model="formRDV.selectedTypeRDV" class="mb-3">
+						<option value="" disabled>-- Sélectionnez un type de RDV --</option>
+						<option v-for="eventType in getEventTypes"v-bind:value="eventType">{{eventType.type}}</option>
+					</b-form-select>
+					<!-- <div>Selected: <strong>{{ formRDV.selectedTypeRDV }}</strong></div> -->
 					<!-- inputs -->
-					<!-- <b-form-input type="text" placeholder="Nom" v-model="name"></b-form-input>
-					<b-form-input type="text" placeholder="Prénom" v-model="name"></b-form-input>
-					<b-form-input type="text" placeholder="Téléphone" v-model="name"></b-form-input>
-					<b-form-input type="email" placeholder="E-mail" v-model="name"></b-form-input> -->
+					<b-form-input type="text" placeholder="Nom" v-model="formRDV.lastNameRDV"></b-form-input>
+					<b-form-input type="text" placeholder="Prénom" v-model="formRDV.firstNameRDV"></b-form-input>
+					<b-form-input type="text" placeholder="Téléphone" v-model="formRDV.phoneRDV"></b-form-input>
+					<b-form-input type="email" placeholder="E-mail" v-model="formRDV.mailRDV"></b-form-input>
 					<!-- comment -->
-					<!-- <b-form-textarea type="text" placeholder="Ajouter un commentaire" :rows="6" :max-rows="6">
+					<b-form-textarea type="text" v-model="formRDV.textRDV" placeholder="Ajouter un commentaire" :rows="6" :max-rows="6">
 					</b-form-textarea>
+					<b-button type="submit" variant="primary">Submit</b-button>
+      				<b-button type="reset" variant="danger">Reset</b-button>
 				</form>
-			</b-modal> -->
+			</b-modal>
 		</div> 
 
 	</div>
@@ -85,6 +89,7 @@ import swal from "sweetalert2";
 	//the agenda is filled in with buttons with NonAvailable ids, for the next month
 	// when the agenda get the 'available' or 'booked' slots from backend,
 		//it will pass them to the store if no conflict
+	//On click on some "available" button, a modal to create a RDV is opening
 
 
 	//! WORK IN PROGRESS
@@ -116,6 +121,9 @@ export default {
 			return this.btnIdToDisplay.map(function(button){
 				return button.class
 			});
+		},
+		getEventTypes(){
+			return this.$store.state.eventTypes
 		}
 	},
 	data() {
@@ -129,15 +137,18 @@ export default {
       		buttonIdList:[],
       		buttonClass :'',
       		filteredButtonIdList: [],
-      		form: {
-					rdv: null
-				},
-			rdv: [{
-					text: 'Choisir un type de rendez-vous',
-					value: null
-				},
-				'Suivi emploi', 'Suivi formation', 'Suivi projet pro', 'Aides financières', 'Apprentisage', 'Autres'
-			]
+      		matchingSlot:'',
+      		formRDV:{
+      			selectedTypeRDV:'',
+      			lastNameRDV:'',
+      			firstNameRDV:'',
+      			phoneRDV:'',
+      			mailRDV:'',
+      			initialSlot:''
+      		},
+      		cancelDisabled:true,
+      		okDisabled:true,
+      		hideFooter:true
       	}
 	},
 	created(){
@@ -237,50 +248,59 @@ export default {
 			this.weekNumber -=1;
 			this.filteredButtonIdList = [];
 		},
-		setAppointment: function(btn, slots){
-			console.log('je souhaite prendre RDV, j actionne le buttonId', btn);
-			let matchingSlot = '';
-			//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
-			//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
-			if (btn.id.charAt(btn.id.length - 1) == 'A'){
+		getMatchingSlot: function(btn, slots){
+			console.log('j actionne le buttonId', btn);
+			// if (btn.id.charAt(btn.id.length - 1) == 'A'){
 				for (let i=0; i<slots.length; i++){
 					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
 					let id = btn.id.slice(0,16);
 					if (sl == id){
-						matchingSlot = slots[i];
-						console.log('the matching slot is:', matchingSlot);
-						//il faudra aussi récupérer les infos du jeune(nom prenom mail)
-						let postBody = matchingSlot;
-						console.log('postBody: ', postBody);
-						// http.post('/???', postBody)
-						// 		.then(
-						// 			res => {
-						// 			console.log('res:',res);
-						// 			swal({
-						//             type: "success",
-						//             title: "Votre RDV a bien été crée: OK!"
-						//           	});
-						// 			this.$router.push({name: 'agenda'});
-						//			when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
-						// 			})
-						// 		.catch(
-						// 			error => {
-						// 		    console.log('error:', error.response.data.message);
-						// 		    swal({
-						//             type: "error",
-						//             title: "Votre RDV n'a pas été crée"
-						//           	});
-						// 		});
+						this.matchingSlot = slots[i];
+						console.log('the matching slot is:', this.matchingSlot);
 					}
 				}
-			}
-			else {
-				swal({
-		            type: "error",
-		            title: "Prendre un RDV",
-		            text: "la plage horaire sélectionnée n'est pas disponible"
-		          	});
-			}
+			// }
+			// else {
+			// 	swal({
+		 //            type: "error",
+		 //            title: "Prendre un RDV",
+		 //            text: "la plage horaire sélectionnée n'est pas disponible"
+		 //          	});
+			// }
+		},
+		bookApt(){
+			console.log('je prends RDV, voici les infos:', this.formRDV);
+			this.formRDV.initialSlot = this.matchingSlot;
+			let postBody = this.formRDV;
+			console.log('postBody: ', postBody);
+			this.$refs.modal.hide()
+			
+			//this is for now, until route is OK
+			swal({
+	            type: "success",
+	            title: "Votre RDV a bien été crée: OK!"
+	        });
+			
+
+			// http.post('/???', postBody)
+			// 		.then(
+			// 			res => {
+			// 			console.log('res:',res);
+			// 			swal({
+			//             type: "success",
+			//             title: "Votre RDV a bien été crée: OK!"
+			//           	});
+			// 			this.$router.push({name: 'agenda'});
+			//			when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
+			// 			})
+			// 		.catch(
+			// 			error => {
+			// 		    console.log('error:', error.response.data.message);
+			// 		    swal({
+			//             type: "error",
+			//             title: "Votre RDV n'a pas été crée"
+			//           	});
+			// 		});
 		}
 	},
 	filters: {

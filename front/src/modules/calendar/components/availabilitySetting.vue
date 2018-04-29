@@ -55,7 +55,6 @@ import http from '../../../helpers/http';
 	// The list of days ( moment object) in which the conseiller will have availabilities will be passed to Store and add to timeRange if necessary
 
 //To do:
-// - this component should open only after clicking on create my agenda in datePicker component
 // - Should the hours selection pre-filled? or maybe the conseiller could tick a default checkbox to prefill all days with opening hours?
 // - error handeling: if the range not suitable // what about if they select hour like 3:18?
 //what about one slot is not complete?
@@ -134,17 +133,8 @@ export default {
 			}
 		},
 		checkAvailability: function(availableSlots){
-			console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles et récupérer les slots avec toutes les propriétés. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. les slots et la time range sont passés au store');
 			let postBody = availableSlots;
 			console.log('postBody: ', postBody);
-
-			//this is for now
-			// this.$store.commit('getSlotsAvailables', this.slotsInAS);
-			// this.$store.commit('updateRangeTime', this.agendaRangeInAS)
-			// this.$router.push({name: 'agenda'});
-
-			//this when the back-end OK
-			// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available:false, status
 			http.post('/calendar', postBody)
 						.then(
 							res => {

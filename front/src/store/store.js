@@ -16,11 +16,12 @@ export const store = new Vuex.Store({
  	//----User datas---------
  		// role: '',
  	//----Calendar Datas-----
- 		hello:'hello',
  		//--initialization of the calendar
  		now: cHelpers.getCurrentDate(),
  		agendaRangeTime:cHelpers.InitializeDefaultTimeRange(),
- 		agendaSlots:[]
+ 		//--data from db
+ 		agendaSlots:[],
+ 		eventTypes:[]
  	},
  	mutations:{
  		getSlotsAvailables(state, slots){
@@ -32,6 +33,9 @@ export const store = new Vuex.Store({
  			newTimeRange.push(state.agendaRangeTime);
  			state.agendaRangeTime = _.uniq(_.flatten(newTimeRange));
  			console.log('agendaRangeTime:', state.agendaRangeTime);
+ 		},
+ 		getEventTypes(state, eventTypes){
+ 			state.eventTypes = eventTypes;
  		}
  	}
  })

@@ -41,7 +41,7 @@
 
 import moment from 'moment';
 import 'moment/locale/fr';
-
+import swal from "sweetalert2";
 import * as cHelpers from '.././calendarHelpers';
 import http from '../../../helpers/http';
 
@@ -109,6 +109,10 @@ export default {
       console.log('j envoie mes types de RDV et leur durée au back end pour qu il les store en DB');
       let postBody = SelectedEventTypes;
       console.log('postBody: ', postBody);
+
+      //for now while the route is not working
+      this.$store.commit('getEventTypes', SelectedEventTypes);
+
       http.post('/event', postBody)
       .then(
         res => {
@@ -118,6 +122,8 @@ export default {
                     title: "paramétrage de vos types de RDV et références",
                     text: "OK: les types sélectionnés sont:" +res.data,
                     });
+              // when the route will be working
+              // this.$store.commit('getEventTypes', res.data.content);
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';
             })
