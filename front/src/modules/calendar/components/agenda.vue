@@ -32,7 +32,7 @@
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-							<li class="slotLi"><b-button v-bind:class="classId[index]" v-bind:id="button.id" v-on:click="setAppointment(button,getSlots)">{{button.id}}</b-button></li>
+							<li class="slotLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="setAppointment(button,getSlots)">{{button.id}}</b-button></li>
 						</ul>
 					</tr>
 				</tbody>
@@ -237,15 +237,15 @@ export default {
 			this.weekNumber -=1;
 			this.filteredButtonIdList = [];
 		},
-		setAppointment: function(btnId, slots){
-			console.log('je souhaite prendre RDV, j actione le buttonId', btnId);
+		setAppointment: function(btn, slots){
+			console.log('je souhaite prendre RDV, j actionne le buttonId', btn);
 			let matchingSlot = '';
 			//et je vais envoyer au back le slot correspondant, en lui demandant de vérifier
 			//s'il est bien disponible. Si oui il le passe en booked avant de me le renvoyer
-			if (btnId.charAt(btnId.length - 1) == 'A'){
+			if (btn.id.charAt(btn.id.length - 1) == 'A'){
 				for (let i=0; i<slots.length; i++){
 					let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
-					let id = btnId.slice(0,16);
+					let id = btn.id.slice(0,16);
 					if (sl == id){
 						matchingSlot = slots[i];
 						console.log('the matching slot is:', matchingSlot);
@@ -271,9 +271,15 @@ export default {
 						//             title: "Votre RDV n'a pas été crée"
 						//           	});
 						// 		});
-
 					}
 				}
+			}
+			else {
+				swal({
+		            type: "error",
+		            title: "Prendre un RDV",
+		            text: "la plage horaire sélectionnée n'est pas disponible"
+		          	});
 			}
 		}
 	},
