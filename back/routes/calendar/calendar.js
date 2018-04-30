@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import User from './../users/model'
 import Client from './../clients/model'
 import Calendar from './model'
+import Appointment from './../../models/appointment'
 import controller from './controller'
 // import util from 'util'
 
