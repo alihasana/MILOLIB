@@ -32,15 +32,23 @@ router.post('/signup', (req, res) => {
     if (helper.regexEmail.test(req.body.email)) {
       let newUser = new User(req.body)
       newUser.password = bcrypt.hashSync(req.body.password, 10)
-      // newUser.calendar = {}
       newUser.save((err, user) => {
         if (err) {
           if (err.message.match(/^E11000 duplicate key error.+/)) {
             res.status(400).json({ success: false, message: 'Email already used' })
           } else res.status(500).json({ success: false, message: err.message })
         } else {
-          helper.beforeSendUser(user)
-          res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+          let newCalendar = new Calendar({ userId: user._id })
+          newCalendar.save((err, calendar) => {
+            if (err) res.status(500).json({ success: false, message: err.message })
+            else {
+              // //WIP a voir avec Luke
+              // //envoie de mail ici
+              // //WIP
+              helper.beforeSendUser(user)
+              res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
+            }
+          })
         }
       })
     } else res.status(400).json({ success: false, message: 'Valid email required.' })

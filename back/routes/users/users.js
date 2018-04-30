@@ -40,7 +40,6 @@ router.get('/:id', (req, res) => {
 router.put('/:id', (req, res) => { // WIP, a voir
   if (res.locals.user.role == 'Administrateur') {
     delete req.body.active
-    // delete req.body.appointment // WIP
     if (req.body.password) {
       req.body.password = bcrypt.hashSync(req.body.password, 10)
     }

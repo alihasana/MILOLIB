@@ -5,7 +5,7 @@ let CalendarSchema = new mongoose.Schema(
 	{
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, sparse: true, ref: 'User' },
 		slots: [SlotSchema],
-    eventsTypes: [{
+    appointmentTypes: [{
         name: { type: String },
         duration: { type: String }
       }],

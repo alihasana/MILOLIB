@@ -5,10 +5,9 @@ let ClientSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    active: { type: Boolean, required: true, default: true },
-    role: { type: String, required: true, default: 'peon' },
-    prenom: { type: String, required: false },
-    nom: { type: String, required: false },
+    role: { type: String, required: true, default: 'no role' },
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
     phone: { type: String },
     descolarise: { type: Boolean, required: false },
     infAge: { type: Boolean, required: false },

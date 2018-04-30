@@ -1,11 +1,12 @@
 import User from './../routes/users/model'
+import Client from './../routes/clients/model'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
 let followerSeed = () => {
 	return new Promise(resolve => {
 		let followers = [
-			new User({
+			new Client({
 				email: 'follower',
 				password: bcrypt.hashSync('follower', 10),
 				role: 'follower'  

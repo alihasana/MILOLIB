@@ -6,14 +6,13 @@ let UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
-    role: { type: String, required: true, default: 'peon' },
+    role: { type: String, required: true, default: 'no role' },
     firstName: { type: String },
     lastName: { type: String },
     phone: { type: String },
     workPlace: { type: String },
     calendar: { type: mongoose.Schema.Types.ObjectId, sparse: true, ref: 'Calendar' },
     appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },     
-    // eventsTypes: [{}], // Les types de rdv possibles et leur durées
   },
   { timestamps: true }
 )

@@ -1,4 +1,3 @@
-// WARNING WIP !!!
 import express from 'express'
 import mongoose from 'mongoose'
 import User from './../users/model'
@@ -15,16 +14,9 @@ router.post('/', (req, res) => {
     if (err) res.status(500).json({ success: false, message: err.message })
     else {
       console.log('Le calendar find one ' + JSON.stringify(calendar, null, 4))
-      
-      // if (!calendar) { // Create calendar if needed
-      //   controller.asyncCall(res.locals)
-      // }
 
       // if (!calendar) { // Create calendar if needed
-      //   let newCalendar = new Calendar({ userId: res.locals.user.id })
-      //   newCalendar.save((err, calendar) => {
-      //     if (err) return res.status(500).json({ success: false, message: err.message })
-      //   })
+      //   controller.asyncCall(res.locals)
       // }
 
       // Verify slots conflicts 
@@ -33,14 +25,14 @@ router.post('/', (req, res) => {
           return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
         }
       }
-      
+
       // ADD Slots
       for (let key of Object.keys(req.body)) {
         calendar.slots.push(req.body[key])
       }
       // console.log('Le calendar modifié ' + JSON.stringify(calendar, null, 4))
 
-      // A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
+      // TODO: A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
       calendar.save((err, calendar) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
@@ -55,34 +47,61 @@ router.get('/', (req, res) => {
     if (err) res.status(500).json({ success: false, message: err.message })
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
     else {
-      // TODO : filtrer les slots not available
+      // TODO: A voir comment filter les slots lors du .find()
+      // Filtre provisoire
+      for (let key of Object.keys(calendar.slots)) {
+        if (calendar.slots[key].available !== true) {
+          delete calendar.slots[key]
+        }
+      }
       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
     }
   })
 })
 
+router.get('/testFind', (req, res) => {
+  Calendar.find({}, (err, calendars) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else if (!calendars) res.status(404).json({ success: false, message: 'Calendars not found' })
+    else {
+      // TODO : filtrer les slots not available
+      res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
+    }
+  })
+})
+
+router.put('/appointmentTypes', (req, res) => {
+  Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
+    else {
+      calendar.appointmentTypes = req.body
+      calendar.save((err) => {
+        if (err) res.status(500).json({ success: false, message: err.message })
+        else res.status(200).json({ success: true, message: 'C\'est ok. Appointment Types modifiés' })
+      })
+    }
+  })
+})
 
 // -------------------------------------------------------------------
 //                        NON FONCTIONNELS 
 // -------------------------------------------------------------------
 
-// Events type: dont know wat im doing :D
+// Appointment Types: dont know wat im doing :D
 router.put('/lol', (req, res) => {
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
     if (err) res.status(500).json({ success: false, message: err.message })
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
     else {
       for (let i = 0; i < req.body.length; i++) {
-        calendar.eventsTypes.push(req.body[i])
+        calendar.appointmentTypes.push(req.body[i])
       }
-
-      res.status(200).json({ success: true, message: 'lol' })
+      calendar.save((err) => {
+        if (err) res.status(500).json({ success: false, message: err.message })
+        else res.status(200).json({ success: true, message: 'C\'est ok. Appointment Types ajoutées' })
+      })
     }
-  })
-
-  calendar.save((err) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else res.status(200).json({ success: true, message: 'C\'est ok. Event ajoutées' })
   })
 })
 
@@ -108,7 +127,7 @@ router.put('/lol2', (req, res) => {
 
 
 //Populate test
-router.get('/test', (req, res) => {
+router.get('/testPopulate', (req, res) => {
   Calendar.findOne({ userId: res.locals.user.id }).populate('userId').exec((err, calendar) => {
     if (err) res.status(500).json({ success: false, message: err.message })
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
@@ -142,22 +161,19 @@ router.get('/test', (req, res) => {
 
 // OSEF -->
 
-// router.get('/:id', (req, res) => {
+// router.get('slots/:id', (req, res) => {
 //   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
 //     res.status(200).json({ success: true, message: 'Your slot, you ding dong.', content: res.locals.user.calendar.slots.id(req.params.id) })
 //   } else res.status(404).json({ success: false, message: 'Slot not found.' })
 // })
 
-
-// router.put('/:id', (req, res) => { // one slot change
-//   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
-//     res.locals.user.calendar.slots.available = !res.locals.user.calendar.slots.available
-//   } else res.status(404).json({ success: false, message: 'Slot not found.' })
+// // Route inutile ? 'multiples slots change' est suffisant
+// router.put('/slots/:id', (req, res) => { // one slot change
 // })
 
-
-// router.put('/', (req, res) => { // multiples slots change
-
+// // Dans le front un truc du genre: 
+// // On cliques sur les slots que l'on veux modifier, ils se push dans un array qui est ensuite envoyer au back quand on clique sur un bouton "Modify".
+// router.put('/slots', (req, res) => { // multiples slots change
 // })
 
 

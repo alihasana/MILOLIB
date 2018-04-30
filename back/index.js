@@ -1,4 +1,3 @@
-// Basic imports
 import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
@@ -88,8 +87,8 @@ mongoose.connect(process.env.DB, {}, err => {
   } else {
     console.log('Connection to the Database established...')
     // LAUNCHING SERVER TO THE MOON
-    // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1407
-    let port = process.env.PORT || 1407
+    // On défini un port depuis le fichier de config .env, si la variable n'existe pas on utilise le port 1408
+    let port = process.env.PORT || 1408
     app.listen(port, () => console.log('App listens on port: ' + port))
     // app.listen(port, () => console.log('App listens on port: ' + port + '\u0007')) // With Sound
   }
