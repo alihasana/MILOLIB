@@ -138,7 +138,7 @@ export default {
       		buttonClass :'',
       		filteredButtonIdList: [],
       		matchingSlot:'',
-      		eventType:'',
+      		eventType:{},
       		formRDV:{
       			selectedTypeRDV:'',
       			eventType:'',
