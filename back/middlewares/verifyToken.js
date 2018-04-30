@@ -35,7 +35,7 @@ let verifyToken = (req, res, next) => {
           Collection.findById(decode._id, (err, user) => {
             if (err) res.status(500).json({ success: false, message: err.message })
             else if (!user) res.status(401).json({ success: false, message: 'Unauthozired' })
-            else if (user.active !== true) res.status(403).json({ success: false, message: 'Inactive account. Please contact an administrator.' })
+            else if (decode.userCollection === 'User' && user.active !== true) res.status(403).json({ success: false, message: 'Inactive account. Please contact an administrator.' })
             else {
               res.locals.user = user
               // res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
