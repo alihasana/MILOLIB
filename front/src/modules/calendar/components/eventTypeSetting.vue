@@ -79,7 +79,7 @@ export default {
           for (let k=0; k<this.types.length; k++){
             if(this.types[k].rdvType == sel[i] && this.types[k].duration>0){
               this.eventTypeFilteredInETV.push({
-                type: this.types[k].rdvType,
+                name: this.types[k].rdvType,
                 duration: this.types[k].duration
               })
             }
@@ -120,8 +120,8 @@ export default {
               swal({
                     type: "success",
                     title: "paramétrage de vos types de RDV et références",
-                    text: "OK: les types sélectionnés sont:" +res.data.content.appointmentTypes,
-                    });
+                    text: res.message
+              });
               // when the route will be working
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';

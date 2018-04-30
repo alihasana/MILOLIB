@@ -51,7 +51,7 @@
 					<!-- list -->
 					<b-form-select v-model="formRDV.selectedTypeRDV" class="mb-3">
 						<option value="" disabled>-- Sélectionnez un type de RDV --</option>
-						<option v-for="eventType in getEventTypes"v-bind:value="eventType">{{eventType.type}}</option>
+						<option v-for="eventType in getEventTypes"v-bind:value="eventType">{{eventType.name}}</option>
 					</b-form-select>
 					<div>Selected: <strong>{{ formRDV.selectedTypeRDV }}</strong></div>
 					<!-- inputs -->
@@ -141,7 +141,6 @@ export default {
       		eventType:{},
       		formRDV:{
       			selectedTypeRDV:'',
-      			eventType:'',
       			// lastNameRDV:'',
       			// firstNameRDV:'',
       			// phoneRDV:'',
@@ -277,11 +276,17 @@ export default {
 			// - le mail client (string)
 			// - l'objet typeRDV( type et duration)
 			// redirige vers get calendar.
-
+			this.formRDV.initialSlot = this.matchingSlot;
+			let durationRDV = this.formRDV.selectedTypeRDV.duration;
+			console.log('durationRDV:', durationRDV);
+			let startRDV = moment(this.matchingSlot.start);
+			console.log('startRDV:', startRDV);
+			let endRDV = moment(startRDV).add(durationRDV, 'minutes');
+			console.log('endRDV', endRDV);
 
 
 			console.log('je prends RDV, voici les infos:', this.formRDV);
-			this.formRDV.initialSlot = this.matchingSlot;
+			
 			
 
 
