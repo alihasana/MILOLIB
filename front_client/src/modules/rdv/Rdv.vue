@@ -26,6 +26,10 @@
       </div>
     </div>
   </form>
+  <br>
+  <!-- <div>
+    <h1> Choisir une date : </h1>
+  </div> -->
 </div>
 </template>
 
@@ -45,23 +49,26 @@ export default {
   components: {},
   methods: {
         takeRdv() {
-        //  http
-        // .post("/auth/login", this.user)
-        // .then(res => {
+         http
+        .get("/clients/appointment/" + this.selected)
+        .then(res => {
+          console.log(this.selected);
+          this.selected = res.data.content;
+          console.log(this.selected);
           swal({
               type: "success",
               title: "Vous allez maintenant choisir la date du rendez-vous !",
-              // text: res.data.message
+              // text: res.data.content
             });
-          this.$router.push("/dashboard");
-        // })
-        // .catch(error => {
-        //   swal({
-        //     type: "error",
-        //     title: "Oups ! Une erreur s'est produite !",
-        //     text: error.response.data.message
-        //   });
-        // });
+          // this.$router.push("/calendar");
+        })
+        .catch(error => {
+          swal({
+            type: "error",
+            title: "Oups ! Une erreur s'est produite !",
+            // text: error.res.data.content
+          });
+        });
     }
   }
 };
