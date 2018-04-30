@@ -47,6 +47,7 @@ router.post('/appointment', (req, res) => {
   // req.body = {
   //   calendarId: String,
   //   slotsId: [String],
+  //   appointmentType: String,
   // }
   // Peut être un array de slots complets, plus simple a save mais je pense au final plus relou a valider.
   // je sais pas, c'est compliqué :D
@@ -60,7 +61,6 @@ router.post('/appointment', (req, res) => {
     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
     else {
       if (!req.body && !req.body.slotsId && !req.body.slotsId[0]) return res.status(400).json({ success: false, message: 'Bad request' })
-      // Logic here ;D
       console.log(calendar.slots.id(req.body.slotsId[0]))
       var appointmentSlots = []
       for (let key of Object.keys(req.body.slotsId)) {
@@ -80,7 +80,7 @@ router.post('/appointment', (req, res) => {
         if (err) res.status(500).json({ success: false, message: err.message })
         else {
           let newAppointment = new Appointment({
-            name: req.body.appointmentName,
+            appointmentType: req.body.appointmentType,
             participants: [req.locals.user.id],
             slots: appointmentSlots,
           })
