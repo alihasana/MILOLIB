@@ -54,6 +54,7 @@ router.get('/', (req, res) => {
           delete calendar.slots[key]
         }
       }
+      // TODO: add 'Appointments' list and merge it with calendar before send.
       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
     }
   })
