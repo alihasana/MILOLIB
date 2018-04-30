@@ -22,7 +22,8 @@ router.get('/chooseRdv/:appointmentType', (req, res) => {
       for (let calendarKey of Object.keys(calendars)) {
         for (let key of Object.keys(calendars[calendarKey].slots)) {
           if (calendars[calendarKey].slots[key].available !== true) {
-            delete calendars[calendarKey].slots[key] // output: null
+            // delete calendars[calendarKey].slots[key] // output: null
+            calendars[calendarKey].slots.splice(key, 1)
             // calendars[calendarKey].slots[key] = 'lol' // output: 'lol'
             // calendars[calendarKey].slots[key] = null // output: null
             // calendars[calendarKey].slots[key] = undefined // output: null
