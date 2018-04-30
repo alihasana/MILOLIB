@@ -79,6 +79,7 @@ router.put('/appointmentTypes', (req, res) => {
       calendar.appointmentTypes = req.body
       calendar.save((err) => {
         if (err) res.status(500).json({ success: false, message: err.message })
+        // TODO : content necessaire ? apriori non
         else res.status(200).json({ success: true, message: 'C\'est ok. Appointment Types modifiés' })
       })
     }
@@ -88,43 +89,6 @@ router.put('/appointmentTypes', (req, res) => {
 // -------------------------------------------------------------------
 //                        NON FONCTIONNELS 
 // -------------------------------------------------------------------
-
-// Appointment Types: dont know wat im doing :D
-router.put('/lol', (req, res) => {
-  Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
-    else {
-      for (let i = 0; i < req.body.length; i++) {
-        calendar.appointmentTypes.push(req.body[i])
-      }
-      calendar.save((err) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
-        else res.status(200).json({ success: true, message: 'C\'est ok. Appointment Types ajoutées' })
-      })
-    }
-  })
-})
-
-router.put('/lol2', (req, res) => {
-  if (req.body.active) {
-    User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
-      if (err) {
-        if (err.message.match(/^Cast to ObjectId failed.+/)) {
-          res.status(400).json({ success: false, message: 'Invalid ID' })
-        }
-        else if (err.message.match(/^Cast to boolean failed.+/)) {
-          res.status(400).json({ success: false, message: 'Invalid request.' })
-        } else res.status(500).json({ success: false, message: err.message })
-      }
-      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
-      else {
-        if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
-        else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
-      }
-    })
-  } else res.status(400).json({ success: false, message: 'Invalid request.' })
-})
 
 
 //Populate test

@@ -1,8 +1,7 @@
 	<template>
 		<div>
-			<h5>{{ msg }}</h5>
 			<b-form>
-				<b-form-group label="Paramétrage de mes disponibilités dans une semaine type">
+				<b-form-group class="title" label="Paramétrage de mes disponibilités dans une semaine type">
 					<b-form-checkbox-group id="disposInWeek" name="disposInWeek" v-model="selected">
 						<b-list-group>
 							<b-list-group-item class="disposInDay" v-for="(day,index) in weekDays" :key="index">
@@ -35,7 +34,6 @@
 				<hr>
 				<b-button variant="outline-primary" v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</b-button>
 				<hr>
-				<div>Selected: <strong>{{ selected }}</strong></div>
 			</b-form>
 		</div>
 	</template>
@@ -53,14 +51,10 @@ import http from '../../../helpers/http';
 //description of component
 	//This component anable to pre-set availabilities periods recurrent in the week
 	//from the period selected in the datePicker:
-	//it will convert all the selected days ( get from datepicker component) and available times to slots with property start and end. it will send these slots to backend; 
-	//it will return:
-	//- a list of slots objects of 15 minutes, with properties 'start' 'end' 'available':true, status
-	//- a list of days ( moment object) in which the conseiller will have availabilities
+	//it will convert all the selected days and available times to 15 minutes slots with property start and end. it will send these slots to backend which will return new slots objects with properties 'start' 'end' 'available':true, status
+	// The list of days ( moment object) in which the conseiller will have availabilities will be passed to Store and add to timeRange if necessary
 
 //To do:
-// - this component should open only after clicking on create my agenda in datePicker component
-// - the hours selection should only be visible when the day is selected
 // - Should the hours selection pre-filled? or maybe the conseiller could tick a default checkbox to prefill all days with opening hours?
 // - error handeling: if the range not suitable // what about if they select hour like 3:18?
 //what about one slot is not complete?
@@ -71,7 +65,6 @@ export default {
 	props:['planNewRangeProp', 'planNewRangeProp'],
 	data() {
 		return {
-			msg: "availabilitySetting Vue",
 			day:'',
 			weekDays:[
 				{ dayname:'Lundi', index:0, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
@@ -136,44 +129,36 @@ export default {
 				}
 				allDaysSlots.push(_.flatten(daySlots));
 				this.slotsInAS = _.flatten(allDaysSlots);
-				// this.$emit('slotsAreReady', this.slotsInAS)
 				this.checkAvailability(this.slotsInAS);
+			}
+		},
+		checkAvailability: function(availableSlots){
+			let postBody = availableSlots;
+			console.log('postBody: ', postBody);
+			http.post('/calendar', postBody)
+						.then(
+							res => {
+							console.log('res:',res);
+							// this.$store.commit('slotsAvailables', res.data);
+							this.$store.commit('updateRangeTime', this.agendaRangeInAS)
+							swal({
+				            type: "success",
+				            title: "paramétrage de vos disponibilités",
+				            text: "OK!"
+				          	});
+							this.$router.push({name: 'agenda'});
+							})
+						.catch(
+							error => {
+						    console.log('error:', error.response.data.message);
+						    swal({
+				            type: "error",
+				            title: "paramétrage de vos disponibilités",
+				            text: "impossible, merci de vérifier que les plages sélectionnées sont appropriées ou ne comportent pas de RDV"
+				          	});
+						});
 		}
-	},
-	checkAvailability: function(availableSlots){
-		console.log('j\'envoie mes données au back pour vérifier que les plages choisies sont bien disponibles et récupérer les slots avec toutes les propriétés. Pour l instant cela ne fonctionne pas et je travaille avec mes slots du front. Quand le back sera operationnel, je renverrai les slots au store');
-		let postBody = availableSlots;
-		console.log('postBody: ', postBody);
-
-		//this is for now
-		this.$store.commit('slotsAvailables', this.slotsInAS);
-		this.$router.push({name: 'agenda'});
-
-		//this when the back-end OK
-		// back end should check if the sent slots are not in conflict with booked slots and return new slots with properties start, end, available, status
-		http.post('/calendar', postBody)
-					.then(
-						res => {
-						console.log('res:',res);
-						this.$store.commit('slotsAvailables', res.data);
-						swal({
-			            type: "success",
-			            title: "paramétrage de vos disponibilités: OK!"
-			          	});
-						this.$router.push({name: 'agenda'});
-						})
-					.catch(
-						error => {
-					    console.log('error:', error.response.data.message);
-					    swal({
-			            type: "error",
-			            title: "paramétrage de vos disponibilités: impossible, merci de vérifier que les plages sélectionnées ne comporte pas de RDV"
-			          	});
-					});
-	}
-
-}
-	
+}	
 };
 
 </script>
@@ -181,8 +166,22 @@ export default {
 <style scoped>
 
 .disposInDay{
+	font-size: 12px;
+	font-weight: normal;
+	text-align: left;
+}
 
-text-align: left;
+.form-group{
+	margin-top: 10px;
+}
+
+.title{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.list-group{
+	margin-top: 10px;
 }
 
 </style>

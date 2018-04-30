@@ -12,6 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/sass/main.scss'
 import 'material-design-icons/iconfont/material-icons.css'
 
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)

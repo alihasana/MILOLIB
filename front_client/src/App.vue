@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app-background">
     <router-view name="header"></router-view>
     <router-view></router-view>
   </div>
@@ -9,13 +9,15 @@
 import Auth from "@/modules/auth/Auth";
 import Dashboard from "@/modules/dashboard/Dashboard";
 import Rdv from "@/modules/rdv/Rdv";
+import calendar from "@/modules/rdv/calendar"
 
 export default {
   name: "App",
   components: {
     Auth,
     Dashboard,
-    Rdv
+    Rdv,
+    calendar
   }
 };
 </script>

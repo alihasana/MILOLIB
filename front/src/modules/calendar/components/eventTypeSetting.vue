@@ -1,17 +1,18 @@
 <template>
   <div class="eventTypeSetting">
-      <h5>{{msg}}</h5>
     <div class="eventTypeSetting__row">
-      <b-form>
-        <b-form-group label="Paramétrage de mes types de RDV">
+      <b-form class="list">
+        <b-form-group class="title" label="Paramétrage de mes types de RDV">
           <b-form-checkbox-group id="eventSettings" name="eventSettings" v-model="selected">
             <b-list-group>
               <b-list-group-item v-for="(type,index) in types" :key="index">
-                <b-row>
-                  <b-col sm="3" class="eventTypeSetting__typesrdv">
+                <b-row >
+                  <b-col sm="1">
+                  </b-col>
+                  <b-col class="eventTypeSetting__typesrdv">
                     <b-form-checkbox :value="type.rdvType">{{ type.rdvType }}</b-form-checkbox>
                   </b-col>
-                  <b-col sm="6">
+                  <b-col class="duration">
                     <b-button variant="link" size="sm" v-on:click="decreaseDuration(type)">
                       <i class="material-icons">remove_circle_outline</i>
                     </b-button>
@@ -20,6 +21,8 @@
                       <i class="material-icons">add_circle_outline</i>
                     </b-button>
                   </b-col>
+                  <b-col sm="1">
+                  </b-col>
                 </b-row>
               </b-list-group-item>
             </b-list-group>
@@ -27,7 +30,6 @@
         </b-form-group>
         <b-button variant="outline-primary" v-on:click="confirmSelectedTypes(selected)" type="button">Confirmer mes types de RDV</b-button>
         <hr>
-        <div>Selected: <strong>{{ selected }}</strong></div>
       </b-form>
     </div>
   </div>
@@ -39,7 +41,7 @@
 
 import moment from 'moment';
 import 'moment/locale/fr';
-
+import swal from "sweetalert2";
 import * as cHelpers from '.././calendarHelpers';
 import http from '../../../helpers/http';
 
@@ -53,7 +55,6 @@ export default {
   name: "eventTypeSetting",
   data() {
     return {
-      msg: "Event Type Settings",
       types:[
       { rdvType:'Premier RDV individuel', index:0, duration:0},
       { rdvType:'Emploi', index:1, duration:0},
@@ -108,17 +109,32 @@ export default {
       console.log('j envoie mes types de RDV et leur durée au back end pour qu il les store en DB');
       let postBody = SelectedEventTypes;
       console.log('postBody: ', postBody);
-      http.post('/appointmenttype', postBody)
+
+      //for now while the route is not working
+      this.$store.commit('getEventTypes', SelectedEventTypes);
+
+      http.post('/event', postBody)
       .then(
         res => {
-          console.log('res:',res);
-              //here will confirm that the new settings are well saved
+          console.log('res:',res.data);
+              swal({
+                    type: "success",
+                    title: "paramétrage de vos types de RDV et références",
+                    text: "OK: les types sélectionnés sont:" +res.data,
+                    });
+              // when the route will be working
+              // this.$store.commit('getEventTypes', res.data.content);
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';
             })
       .catch(
         error => {
-          console.log('error:', error);
+          console.log('error:', error.response.data.message);
+            swal({
+                    type: "error",
+                    title: "paramétrage de vos types de RDV et références",
+                    text: "non effectué: "+error.response.data.message
+                    });
               //should display message to user that the events setting could not been saved
             });
 
@@ -130,6 +146,35 @@ export default {
 
 <style scoped>
 
+.eventTypeSetting{
+   font-size: 12px;
+   width:100%;
+}
 
+.eventTypeSetting__row{
+  width: 100%;
+}
 
+.list{
+  width:70%;
+  margin: auto;
+}
+.title{
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.list-group-item{
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.eventTypeSetting__typesrdv{
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.duration{
+}
 </style>

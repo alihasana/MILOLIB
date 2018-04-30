@@ -10,7 +10,7 @@ import CreateUser from "@/modules/users/components/CreateUser";
 import ProfileUser from "@/modules/profileUser/ProfileUser";
 import calendar from "@/modules/calendar/calendar";
 import agenda from "@/modules/calendar/components/agenda";
-import datePicker from "@/modules/calendar/components/datePicker";
+import availabilityDatePicker from "@/modules/calendar/components/availabilityDatePicker";
 import eventTypeSetting from "@/modules/calendar/components/eventTypeSetting";
 import example from "@/sharedComponents/example";
 import Header from "@/sharedComponents/Header";
@@ -81,7 +81,7 @@ export default new Router({
 				{
 					path: "availabilitySetting",
 					name: "availabilitySetting",
-					component: datePicker
+					component: availabilityDatePicker
 				},
 				{
 					path: "eventTypeSetting",
