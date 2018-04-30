@@ -3,23 +3,22 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import helper from './../../helpers/helper'
-import User from './../users/model'
+import Client from './model'
 let router = express.Router()
 
 router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
-    User.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, user) => {
+    Client.findOne({ email: helper.caseInsensitive(req.body.email) }, (err, client) => {
       if (err) res.status(500).json({ success: false, message: err.message })
-      else if (!user) res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
-      else if (user.active !== true) res.status(403).json({ success: false, message: 'Inactive account. Please contact an administrator.' })
+      else if (!client) res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
       else {
-        if (!user.comparePasswords(req.body.password)) {
+        if (!client.comparePasswords(req.body.password)) {
           res.status(400).json({ success: false, message: 'Email and/or password incorrect.' })
         } else {
           // JWT.SIGN(PAYLOAD, SECRETKEY, CALLBACK(err, result){...})
-          jwt.sign({ email: user.email, _id: user._id, userCollection: 'User' }, process.env.SECRETKEY, (err, result) => {
+          jwt.sign({ email: client.email, _id: client._id, userCollection: 'Client' }, process.env.SECRETKEY, (err, result) => {
             if (err) res.status(500).json({ success: false, message: err.message })
-            else res.status(200).json({ success: true, message: 'Welcome !', content: { token: process.env.AUTHBEARER + ' ' + result, user: user.role } })
+            else res.status(200).json({ success: true, message: 'Welcome !', content: { token: process.env.AUTHBEARER + ' ' + result, user: client.role } })
           })
         }
       }
@@ -30,25 +29,16 @@ router.post('/login', (req, res) => {
 router.post('/signup', (req, res) => {
   if (req.body.email && req.body.password) {
     if (helper.regexEmail.test(req.body.email)) {
-      let newUser = new User(req.body)
-      newUser.password = bcrypt.hashSync(req.body.password, 10)
-      newUser.save((err, user) => {
+      let newClient = new Client(req.body)
+      newClient.password = bcrypt.hashSync(req.body.password, 10)
+      newClient.save((err, client) => {
         if (err) {
           if (err.message.match(/^E11000 duplicate key error.+/)) {
             res.status(400).json({ success: false, message: 'Email already used' })
           } else res.status(500).json({ success: false, message: err.message })
         } else {
-          let newCalendar = new Calendar({ userId: user._id })
-          newCalendar.save((err, calendar) => {
-            if (err) res.status(500).json({ success: false, message: err.message })
-            else {
-              // //WIP a voir avec Luke
-              // //envoie de mail ici
-              // //WIP
-              helper.beforeSendUser(user)
-              res.status(200).json({ success: true, message: 'New user registered successfully!', content: user })
-            }
-          })
+          helper.beforeSendUser(client)
+          res.status(200).json({ success: true, message: 'New client registered successfully!', content: client })
         }
       })
     } else res.status(400).json({ success: false, message: 'Valid email required.' })

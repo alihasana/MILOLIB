@@ -12,6 +12,7 @@ export default {
         locals.user.password = bcrypt.hashSync(body.password, 10)
       }
     }
+    // TODO :
     // J'AI DESACTIVER POUR LE MOMENT PARCE QUE C'EST RELOU SI T'EDIT L'ADMIN
     // QUI A PAS D'EMAIL VALIDE CA BLOQUE, VOIR LE FRONT............
     // if (body.email) {
