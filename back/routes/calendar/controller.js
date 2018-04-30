@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import User from './../users/model'
+import Calendar from './model'
 import helper from './../../helpers/helper'
 import controller from './controller'
 
@@ -11,19 +12,41 @@ export default {
     })
   },
   // WIP, not working
-  asyncCall: async (locals) => {
+  asyncCall: async function(locals) {
     console.log('asyncCall 1')
-    return await controller.createCalendar(locals)
+    // let result = await createCalendar(locals)
+    // return result
+    return await createCalendar(locals)
     console.log('asyncCall 2')
   },
-  createCalendar: (locals) => {
-    console.log('createCalendar 1')    
-    let newCalendar = new Calendar({ userId: locals.user.id })
-    console.log('createCalendar 2')    
-    newCalendar.save((err, calendar) => {
-      if (err) return res.status(500).json({ success: false, message: err.message })
-      console.log('createCalendar 3')      
-    })
-    console.log('createCalendar 4')    
-  },
+  // createCalendar: (locals) => {
+  //   return new Promise((resolve, reject) => {
+  //     console.log('createCalendar 1')
+  //     let newCalendar = new Calendar({ userId: locals.user.id })
+  //     console.log('createCalendar 2')
+  //     resolve('ma bite')
+  //     newCalendar.save((err, calendar) => {
+  //       if (err) reject(err.message)
+  //       // if (err) return res.status(500).json({ success: false, message: err.message })
+  //       console.log('createCalendar 3')
+  //       resolve(calendar)
+  //     })
+  //     // console.log('createCalendar 4')
+  //   })
+  // },
 }
+    function createCalendar(locals) {
+      return new Promise((resolve, reject) => {
+        console.log('createCalendar 1')
+        let newCalendar = new Calendar({ userId: locals.user.id })
+        console.log('createCalendar 2')
+        // resolve('ma bite')
+        newCalendar.save((err, calendar) => {
+          if (err) reject(err.message)
+          // if (err) return res.status(500).json({ success: false, message: err.message })
+          console.log('createCalendar 3')
+          resolve(calendar)
+        })
+        // console.log('createCalendar 4')
+      })
+    }

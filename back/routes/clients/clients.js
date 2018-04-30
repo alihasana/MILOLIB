@@ -81,7 +81,10 @@ router.post('/appointment', (req, res) => {
         else {
           let newAppointment = new Appointment({
             appointmentType: req.body.appointmentType,
-            participants: [req.locals.user.id],
+            participants: {
+              clients: 'WIP',
+              staff: req.locals.user.id,
+            },
             slots: appointmentSlots,
           })
 

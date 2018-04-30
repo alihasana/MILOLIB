@@ -8,15 +8,15 @@ let AppointmentSchema = new mongoose.Schema(
     //   duration: { type: String }
     // },
     appointmentType: String,
-    participants: { type: [mongoose.Schema.Types.ObjectId] },
+    // participants: { type: [mongoose.Schema.Types.ObjectId] },
     // //                      OU
     // participants: { type: [mongoose.Schema.Types.ObjectId], ref: 'Client' },
     // conseiller: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     // //                       OU
-    // participants: {
-    //   clients: { type: [mongoose.Schema.Types.ObjectId], ref: 'Client' },
-    //   staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    // },
+    participants: {
+      clients: { type: [mongoose.Schema.Types.ObjectId], ref: 'Client' },
+      staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    },
     slots: [SlotSchema],
   },
   { timestamps: true }

@@ -16,9 +16,11 @@ router.post('/', (req, res) => {
     else {
       console.log('Le calendar find one ' + JSON.stringify(calendar, null, 4))
 
+      // //WIP, async problems
       // if (!calendar) { // Create calendar if needed
-      //   controller.asyncCall(res.locals)
+      //   calendar = controller.asyncCall(res.locals)
       // }
+      // console.log('Tu prend en copte ? : ' + JSON.stringify(calendar, null, 4))
 
       // Verify slots conflicts 
       for (let key of Object.keys(req.body)) {
@@ -31,7 +33,6 @@ router.post('/', (req, res) => {
       for (let key of Object.keys(req.body)) {
         calendar.slots.push(req.body[key])
       }
-      // console.log('Le calendar modifié ' + JSON.stringify(calendar, null, 4))
 
       // TODO: A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
       calendar.save((err, calendar) => {
@@ -62,16 +63,6 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/testFind', (req, res) => {
-  Calendar.find({}, (err, calendars) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendars) res.status(404).json({ success: false, message: 'Calendars not found' })
-    else {
-      // TODO : filtrer les slots not available
-      res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
-    }
-  })
-})
 
 router.put('/appointmentTypes', (req, res) => {
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
@@ -108,41 +99,44 @@ router.post('/appointment', (req, res) => {
   // TODO: virer dans cette route (et dans le reste du projet) les 'else' inutile qui englobent tout le code. 
   // Les remplacer par un 'return' dans la condition pour stopper l'execution.
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
-    else {
-      if (!req.body && !req.body.slotsId && !req.body.slotsId[0]) return res.status(400).json({ success: false, message: 'Bad request' })
-      console.log(calendar.slots.id(req.body.slotsId[0]))
-      var appointmentSlots = []
-      for (let key of Object.keys(req.body.slotsId)) {
-        if (calendar.slots.id(req.body.slotsId[key]) != null) {  // TODO : verif ecriture condition
-          // Check conflict
-          if (calendar.slots.id(req.body.slotsId[key]).available == false) {
-            return res.status(400).json({ success: false, message: 'Cannot create appointement, slots unavailable' })
-          }
-          // Make slot unavailable in calendar
-          calendar.slots.id(req.body.slotsId[key]).available = false
-          // Add slot to 'appointmentSlots' array
-          appointmentSlots.push(calendar.slots.id(req.body.slotsId[key]))
-        }
-      }
+    if (err) return res.status(500).json({ success: false, message: err.message })
+    else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-      calendar.save((err, calendar) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
-        else {
-          let newAppointment = new Appointment({
-            appointmentType: req.body.appointmentType,
-            participants: [req.locals.user.id],
-            slots: appointmentSlots,
-          })
-
-          newAppointment.save((err, appointment) => {
-            if (err) res.status(500).json({ success: false, message: err.message })
-            res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
-          })
-        }
-      })
+    if (!req.body && !req.body.slotsId && !req.body.slotsId[0] && req.body.appointmentType) {
+      return res.status(400).json({ success: false, message: 'Bad request' })
     }
+
+    console.log(calendar.slots.id(req.body.slotsId[0]))
+    var appointmentSlots = []
+    for (let key of Object.keys(req.body.slotsId)) {
+      if (calendar.slots.id(req.body.slotsId[key]) != null) {  // TODO : verif ecriture condition
+        // Check conflict
+        if (calendar.slots.id(req.body.slotsId[key]).available == false) {
+          return res.status(400).json({ success: false, message: 'Cannot create appointement, slots unavailable' })
+        }
+        // Make slot unavailable in calendar
+        calendar.slots.id(req.body.slotsId[key]).available = false
+        // Add slot to 'appointmentSlots' array
+        appointmentSlots.push(calendar.slots.id(req.body.slotsId[key]))
+      }
+    }
+
+    calendar.save((err, calendar) => {
+      if (err) return res.status(500).json({ success: false, message: err.message })
+      let newAppointment = new Appointment({
+        appointmentType: req.body.appointmentType,
+        participants: {
+          clients: 'lol',
+          staff: req.locals.user.id,
+        },
+        slots: appointmentSlots,
+      })
+
+      newAppointment.save((err, appointment) => {
+        if (err) res.status(500).json({ success: false, message: err.message })
+        res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
+      })
+    })
   })
 })
 
@@ -150,6 +144,16 @@ router.post('/appointment', (req, res) => {
 //                        NON FONCTIONNELS 
 // -------------------------------------------------------------------
 
+router.get('/testFind', (req, res) => {
+  Calendar.find({}, (err, calendars) => {
+    if (err) res.status(500).json({ success: false, message: err.message })
+    else if (!calendars) res.status(404).json({ success: false, message: 'Calendars not found' })
+    else {
+      // TODO : filtrer les slots not available
+      res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
+    }
+  })
+})
 
 //Populate test
 router.get('/testPopulate', (req, res) => {
