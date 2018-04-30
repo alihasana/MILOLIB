@@ -130,7 +130,7 @@ export default {
       // console.log(user.confirmPassword);
       // if (user.password === user.confirmPassword) {
          http
-        .post("/auth/login", this.user)
+        .post("/clientsAuth/signup", this.user)
         .then(res => {
           swal({
               type: "success",

@@ -43,7 +43,7 @@ export default {
     },
     signUp() {
       http
-        .post("/auth/login", this.user)
+        .post("/clientsAuth/login", this.user)
         .then(res => {
           let token = res.data.content.token;
           localStorage.setItem("token", token);

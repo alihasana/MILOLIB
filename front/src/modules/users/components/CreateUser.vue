@@ -46,6 +46,7 @@
 
 <script>
 /* eslint-disable */
+import swal from "sweetalert2";
 import http from "../../../helpers/http";
 export default {
 
@@ -83,7 +84,32 @@ export default {
     }
   },
   methods: {
-    createUser: function(newUser) {
+    // createUser: function(newUser) {
+    //   const User = {
+    //     lastName: this.form.lName, 
+    //     firstName: this.form.fName,
+    //     email: this.form.userEmail,
+    //     role: this.form.userRole,
+    //     password: this.form.userPassword, 
+    //     workPlace: this.form.place
+    //   }
+    //   console.log('Object from parent: ', User)
+    //   http.post('users', User)
+    //   console.log('profil créé: ', User)
+    //   .then(res => {
+    //     swal({
+    //           type: "success",
+    //           title: "L'utilisateur a bien été créé !",
+    //           text: res.data.message
+    //         });
+    //     this.$router.push('/users')
+    //     console.log('Bingo', res);
+    //   })
+    //   .catch(function(error) {
+    //     console.log("Error", error)
+    //   })
+    // },
+    createUser() {
       const User = {
         lastName: this.form.lName, 
         firstName: this.form.fName,
@@ -93,13 +119,23 @@ export default {
         workPlace: this.form.place
       }
       console.log('Object from parent: ', User)
-      http.post('users', User)
+      http.post('/', this.User)
       console.log('profil créé: ', User)
       .then(res => {
+        swal({
+              type: "success",
+              title: "L'utilisateur a bien été créé !",
+              text: res.data.message
+            });
         this.$router.push('/users')
         console.log('Bingo', res);
       })
       .catch(function(error) {
+        swal({
+            type: "error",
+            title: "Oups ! Une erreur s'est produite !",
+            text: error.response.data.message
+          });
         console.log("Error", error)
       })
     },

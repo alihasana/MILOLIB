@@ -10,7 +10,6 @@ let primoSeed = () => {
 				email: 'primo',
 				password: bcrypt.hashSync('primo', 10),
 				role: 'Primo',
-				calendar: {}  
 			})
 		]
 

@@ -6,7 +6,6 @@ import controller from './controller'
 
 export default {
   checkSlotsConflict: (arr2, val) => {
-    console.log('Le arr2 ' + arr2)
     return arr2.some(function (arr2Element) {
       return val === arr2Element.start
     })

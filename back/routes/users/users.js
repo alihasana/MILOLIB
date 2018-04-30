@@ -38,7 +38,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', (req, res) => { // WIP, a voir
-  if (res.locals.user.role == 'Administrateur') {
+  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
     delete req.body.active
     if (req.body.password) {
       req.body.password = bcrypt.hashSync(req.body.password, 10)
@@ -61,7 +61,7 @@ router.put('/:id', (req, res) => { // WIP, a voir
 })
 
 router.post('/', (req, res) => {
-  if (res.locals.user.role == 'Administrateur') {
+  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
     if (req.body.email && req.body.password) {
       if (helper.regexEmail.test(req.body.email)) {
         let newUser = new User(req.body)
@@ -99,7 +99,7 @@ router.post('/', (req, res) => {
 
 // "Soft Delete" user
 router.put('/:id/active', (req, res) => {
-  if (res.locals.user.role == 'Administrateur') {
+  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
     if (req.body.active) {
       User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
         if (err) {
