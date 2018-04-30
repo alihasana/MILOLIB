@@ -7,7 +7,7 @@ let CalendarSchema = new mongoose.Schema(
 		slots: [SlotSchema],
     appointmentTypes: [{
         name: { type: String },
-        duration: { type: String }
+        duration: { type: String } // TODO: duration en nombres de slots plutot qu'en minutes ?
       }],
 	},
 	{ timestamps: true }

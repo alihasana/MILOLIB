@@ -91,3 +91,6 @@ mongoose.connect(process.env.DB, {}, err => {
     // app.listen(port, () => console.log('App listens on port: ' + port + '\u0007')) // With Sound
   }
 })
+
+  // TODO: virer les 'else' inutile qui englobent tout le code. 
+  // Les remplacer par un 'return' dans la condition pour stopper l'execution.
