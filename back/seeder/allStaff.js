@@ -33,6 +33,11 @@ let staff = [
     email: 'admin-conseiller',
     password: bcrypt.hashSync('admin-conseiller', 10),
     role: 'Administrateur/Conseiller',
+  }),
+  new User({
+    email: 'invité',
+    password: bcrypt.hashSync('invité', 10),
+    role: 'Invité',
   })
 ]
 
