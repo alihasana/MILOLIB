@@ -53,11 +53,11 @@
 						<option value="" disabled>-- Sélectionnez un type de RDV --</option>
 						<option v-for="eventType in getEventTypes"v-bind:value="eventType">{{eventType.type}}</option>
 					</b-form-select>
-					<!-- <div>Selected: <strong>{{ formRDV.selectedTypeRDV }}</strong></div> -->
+					<div>Selected: <strong>{{ formRDV.selectedTypeRDV }}</strong></div>
 					<!-- inputs -->
-					<b-form-input type="text" placeholder="Nom" v-model="formRDV.lastNameRDV"></b-form-input>
+					<!-- <b-form-input type="text" placeholder="Nom" v-model="formRDV.lastNameRDV"></b-form-input>
 					<b-form-input type="text" placeholder="Prénom" v-model="formRDV.firstNameRDV"></b-form-input>
-					<b-form-input type="text" placeholder="Téléphone" v-model="formRDV.phoneRDV"></b-form-input>
+					<b-form-input type="text" placeholder="Téléphone" v-model="formRDV.phoneRDV"></b-form-input> -->
 					<b-form-input type="email" placeholder="E-mail" v-model="formRDV.mailRDV"></b-form-input>
 					<!-- comment -->
 					<b-form-textarea type="text" v-model="formRDV.textRDV" placeholder="Ajouter un commentaire" :rows="6" :max-rows="6">
@@ -119,11 +119,11 @@ export default {
 		},
 		classId(){
 			return this.btnIdToDisplay.map(function(button){
-				return button.class
+				return button.class;
 			});
 		},
 		getEventTypes(){
-			return this.$store.state.eventTypes
+			return this.$store.state.eventTypes;
 		}
 	},
 	data() {
@@ -138,11 +138,13 @@ export default {
       		buttonClass :'',
       		filteredButtonIdList: [],
       		matchingSlot:'',
+      		eventType:'',
       		formRDV:{
       			selectedTypeRDV:'',
-      			lastNameRDV:'',
-      			firstNameRDV:'',
-      			phoneRDV:'',
+      			eventType:'',
+      			// lastNameRDV:'',
+      			// firstNameRDV:'',
+      			// phoneRDV:'',
       			mailRDV:'',
       			initialSlot:''
       		},
@@ -158,7 +160,8 @@ export default {
 					.then(
 						res => {
 						console.log('res:',res);
-						this.$store.commit('getSlotsAvailables', res.data.content);
+						this.$store.commit('getSlotsAvailables', res.data.content.slots);
+						this.$store.commit('getEventTypes', res.data.content.appointmentTypes);
 						this.buttonIdList =[];
 						this.createButtonId(this.getTimeRange);
 						this.updateButtonId(this.getSlots, this.buttonIdList);
@@ -269,8 +272,22 @@ export default {
 			// }
 		},
 		bookApt(){
+			// j'envoie
+			// - tous les slots concernés
+			// - le mail client (string)
+			// - l'objet typeRDV( type et duration)
+			// redirige vers get calendar.
+
+
+
 			console.log('je prends RDV, voici les infos:', this.formRDV);
 			this.formRDV.initialSlot = this.matchingSlot;
+			
+
+
+
+
+
 			let postBody = this.formRDV;
 			console.log('postBody: ', postBody);
 			this.$refs.modal.hide()

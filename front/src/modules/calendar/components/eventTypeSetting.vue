@@ -111,19 +111,18 @@ export default {
       console.log('postBody: ', postBody);
 
       //for now while the route is not working
-      this.$store.commit('getEventTypes', SelectedEventTypes);
+      // this.$store.commit('getEventTypes', SelectedEventTypes);
 
-      http.post('/event', postBody)
+      http.put('/calendar/appointmentTypes', postBody)
       .then(
         res => {
           console.log('res:',res.data);
               swal({
                     type: "success",
                     title: "paramétrage de vos types de RDV et références",
-                    text: "OK: les types sélectionnés sont:" +res.data,
+                    text: "OK: les types sélectionnés sont:" +res.data.content.appointmentTypes,
                     });
               // when the route will be working
-              // this.$store.commit('getEventTypes', res.data.content);
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';
             })
