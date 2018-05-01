@@ -245,7 +245,7 @@ router.get('/testPopulate', (req, res) => {
 // for (let i = 0; i < req.body.length; i++) {
 //   arr.push(req.body[i])
 // }
-// console.log('LE ARRAY MA GEULE ' + arr)
+// console.log('LE ARRAY ' + arr)
 
 //   res.locals.user.markModified('calendar.slots.start')
 //   res.locals.user.markModified('calendar.slots.end')

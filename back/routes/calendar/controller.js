@@ -24,7 +24,7 @@ export default {
   //     console.log('createCalendar 1')
   //     let newCalendar = new Calendar({ userId: locals.user.id })
   //     console.log('createCalendar 2')
-  //     resolve('ma bite')
+  //     resolve('test ;)')
   //     newCalendar.save((err, calendar) => {
   //       if (err) reject(err.message)
   //       // if (err) return res.status(500).json({ success: false, message: err.message })
@@ -40,7 +40,7 @@ export default {
         console.log('createCalendar 1')
         let newCalendar = new Calendar({ userId: locals.user.id })
         console.log('createCalendar 2')
-        // resolve('ma bite')
+        // resolve('test ;)')
         newCalendar.save((err, calendar) => {
           if (err) reject(err.message)
           // if (err) return res.status(500).json({ success: false, message: err.message })

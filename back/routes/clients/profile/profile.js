@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 // import bcrypt from 'bcrypt'
 // import User from './../users/model'
-import helper from '../../helpers/helper'
+import helper from './../../../helpers/helper'
 import controller from './controller'
 // const ObjectId = mongoose.Types.ObjectId
 
@@ -32,10 +32,11 @@ router.put('/', (req, res) => {
         res.status(400).json({ success: false, message: 'Profile update failed, new Email already used' })
       } else res.status(500).json({ success: false, message: err.message })
     }
+    
     if (messageArray[0] !== 'Profile updated.') {
       return res.status(400).json({ success: true, message: messageArray[0] + messageArray[1] + messageArray[2] })
     }
-    
+
     res.status(200).json({ success: true, message: messageArray[0] })
   })
 })

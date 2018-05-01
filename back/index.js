@@ -44,11 +44,7 @@ app.use((req, res, next) => {
 })
 
 // BODY PARSER
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-)
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // ROUTER PREFIX API DEFINING (see below)

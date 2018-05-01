@@ -7,7 +7,9 @@ import Calendar from './../calendar/model'
 import Appointment from './../../models/appointment'
 import helper from './../../helpers/helper'
 
+import profile from './profile/profile' 
 let router = express.Router()
+router.use('/profile', profile) // TODO: A test
 
 // WIP
 router.get('/appointment/:appointmentType', (req, res) => {
@@ -39,7 +41,7 @@ router.get('/appointment/:appointmentType', (req, res) => {
   })
 })
 
-// Trés trés WIP
+// WIP
 router.post('/appointment', (req, res) => {
   // req.body est un array d'id de slots OU array de dates ? + id du calendar.
   // id du calendar en params ? peut être, je sais pas
@@ -51,8 +53,8 @@ router.post('/appointment', (req, res) => {
   // findById avec le calendar id OU findOne avec le userID ?
   // TODO: rdv existe déja dans le cas d'un rdv de groupe, créer une route differente pour ce cas.
   Calendar.findById(req.body.calendarId, (err, calendar) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
+    if (err) return res.status(500).json({ success: false, message: err.message })
+    else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
     if (!req.body && !req.body.slotsId && !req.body.slotsId[0]) {
       return res.status(400).json({ success: false, message: 'Bad request' })
@@ -77,7 +79,7 @@ router.post('/appointment', (req, res) => {
     }
 
     calendar.save((err, calendar) => {
-      if (err) res.status(500).json({ success: false, message: err.message })
+      if (err) return res.status(500).json({ success: false, message: err.message })
       let newAppointment = new Appointment({
         appointmentType: req.body.appointmentType,
         participants: {
@@ -88,7 +90,7 @@ router.post('/appointment', (req, res) => {
       })
 
       newAppointment.save((err, appointment) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
+        if (err) return res.status(500).json({ success: false, message: err.message })
         res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
       })
     })
