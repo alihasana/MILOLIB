@@ -34,7 +34,7 @@ app.use(morgan('dev'))
 // Cela permet d'accepter certaines requetes qui seraient autrement invalides car
 // bloquées par le navigateur ou autre..
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Origin', '*') // TODO: add to .env
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
   res.header('Access-Control-Max-Age', '86400')
