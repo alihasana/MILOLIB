@@ -123,11 +123,8 @@ router.put('/appointmentTypes', (req, res) => {
 })
 
 // TODO: test la route
-router.get('/appointment/:slotId')
-.populate('participants.clients')
-.populate('participants.staff')
-.exec((req, res) => {
-  Appointment.findOne({ slots: req.params.slotId }, (err, appointment) => {
+router.get('/appointment/:slotId', (req, res) => {
+  Appointment.findOne({ slots: req.params.slotId }).populate('participants.clients').populate('participants.staff').exec((req, appointment) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
