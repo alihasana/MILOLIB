@@ -137,6 +137,8 @@ router.get('/appointment/:slotId', (req, res) => {
   })
 })
 
+// ERROR TODO : "Calendar validation failed: slots.14.appointment.appointmentType: Cast to String failed for value "{ name: 'Emploi', duration: '30' }" at path "appointment.appointmentType", slots.15.appointment.appointmentType: Cast to String failed for value "{ name: 'Emploi', duration: '30' }" at path "appointment.appointmentType""
+
 router.post('/appointment', (req, res) => {
   // req.body est un array d'id de slots OU array de dates ? + id du calendar.
   // id du calendar en params ? peut être, je sais pas
