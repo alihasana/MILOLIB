@@ -7,13 +7,13 @@ import Calendar from './../calendar/model'
 import Appointment from './../../models/appointment'
 import helper from './../../helpers/helper'
 
-import profile from './profile/profile' 
+import profile from './profile/profile'
 let router = express.Router()
 router.use('/profile', profile) // TODO: A test
 
 // WIP
 router.get('/appointment/:appointmentType', (req, res) => {
-  Calendar.find({ appointmentTypes: { name: req.params.appointmentType } }, (err, calendars) => {
+  Calendar.find({ 'appointmentTypes.name': req.params.appointmentType }, (err, calendars) => {
   // Calendar.find({}, (err, calendars) => { // Find({}) for test purpose 
     console.log('A1' + calendars)
     if (err) return res.status(500).json({ success: false, message: err.message })
@@ -87,7 +87,7 @@ router.post('/appointment', (req, res) => {
           staff: calendar.userId,
         },
         slots: appointmentSlots,
-        description: req.body.description,        
+        description: req.body.description,
       })
 
       newAppointment.save((err, appointment) => {
