@@ -14,7 +14,7 @@ let AppointmentSchema = new mongoose.Schema(
     // conseiller: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     // //                       OU
     participants: {
-      clients: { type: [mongoose.Schema.Types.ObjectId], ref: 'Client' },
+      clients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }],
       staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
     slots: [SlotSchema],

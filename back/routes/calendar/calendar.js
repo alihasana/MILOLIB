@@ -102,12 +102,12 @@ router.put('/appointmentTypes', (req, res) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-    if (req.body && req.body[0]) {
+    if (!req.body && !req.body[0]) {
       return res.status(400).json({ success: false, message: 'Bad request' })
     }
 
     for (let key of Object.keys(req.body)) {
-      if (req.body[key].name && req.body[key].duration) {
+      if (!req.body[key].name && !req.body[key].duration) {
         return res.status(400).json({ success: false, message: 'Bad request' })
         // TODO: duration en nombres de slots plutot qu'en minutes ?
       }
@@ -121,10 +121,15 @@ router.put('/appointmentTypes', (req, res) => {
     })
   })
 })
+const ObjectId = mongoose.Types.ObjectId
 
 // TODO: test la route
 router.get('/appointment/:slotId', (req, res) => {
-  Appointment.findOne({ slots: req.params.slotId }).populate('participants.clients').populate('participants.staff').exec((req, appointment) => {
+  if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
+  Appointment.findOne({ "slots._id": req.params.slotId})
+  .populate('participants.clients') // TODO: VIRER LE PASSWORD, IMPORTANT !
+  .populate('participants.staff') // TODO: VIRER LE PASSWORD, IMPORTANT !
+  .exec((err, appointment) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
