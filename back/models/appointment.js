@@ -18,6 +18,7 @@ let AppointmentSchema = new mongoose.Schema(
       staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
     slots: [SlotSchema],
+    description: { type: String, maxlength: 4132 },
   },
   { timestamps: true }
 )

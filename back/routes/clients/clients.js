@@ -87,6 +87,7 @@ router.post('/appointment', (req, res) => {
           staff: calendar.userId,
         },
         slots: appointmentSlots,
+        description: req.body.description,        
       })
 
       newAppointment.save((err, appointment) => {

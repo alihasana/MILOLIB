@@ -9,6 +9,7 @@ import controller from './controller'
 
 let router = express.Router()
 
+
 router.post('/', (req, res) => {
   // console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
@@ -18,30 +19,55 @@ router.post('/', (req, res) => {
 
       // //WIP, async problems
       // if (!calendar) { // Create calendar if needed
-      //   calendar = controller.asyncCall(res.locals)
+      //   calendar = controller.asyncCall(res.locals);
       // }
-      // console.log('Tu prend en copte ? : ' + JSON.stringify(calendar, null, 4))
 
-      // Verify slots conflicts 
-      for (let key of Object.keys(req.body)) {
-        if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
-          return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
-        }
-      }
+      if (!calendar) { // Create calendar if needed
+        controller.createCalendar(res.locals)
+          .then(function (calendar) {
+            controller.postCalendar(req, res, calendar)
+          })
+          .catch(err => {
+            return res.status(500).json({ success: false, message: err.message })
+          })
+      } else controller.postCalendar(req, res, calendar)
 
-      // ADD Slots
-      for (let key of Object.keys(req.body)) {
-        calendar.slots.push(req.body[key])
-      }
-
-      // TODO: A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
-      calendar.save((err, calendar) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
-        else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
-      })
     }
   })
 })
+
+// router.post('/OLDSCHOOL', (req, res) => {
+//   // console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
+//   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
+//     if (err) res.status(500).json({ success: false, message: err.message })
+//     else {
+//       console.log('Le calendar find one ' + JSON.stringify(calendar, null, 4))
+
+//       // //WIP, async problems
+//       if (!calendar) { // Create calendar if needed
+//         calendar = controller.asyncCall(res.locals);
+//       }
+
+//       // Verify slots conflicts 
+//       for (let key of Object.keys(req.body)) {
+//         if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
+//           return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
+//         }
+//       }
+
+//       // ADD Slots
+//       for (let key of Object.keys(req.body)) {
+//         calendar.slots.push(req.body[key])
+//       }
+
+//       // TODO: A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
+//       calendar.save((err, calendar) => {
+//         if (err) res.status(500).json({ success: false, message: err.message })
+//         else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
+//       })
+//     }
+//   })
+// })
 
 
 router.get('/', (req, res) => {
@@ -61,11 +87,12 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/appointmentTypes', (req, res) => { // TOVIEW: ROUTE UTILE ?
+// TOVIEW: ROUTE UTILE ?
+router.get('/appointmentTypes', (req, res) => {
   Calendar.findOne({ userId: res.locals.user.id }, appointmentTypes, (err, calendar) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
-    
+
     res.status(200).json({ success: true, message: 'Appointment types list', content: calendar.appointmentTypes })
   })
 })
@@ -97,7 +124,7 @@ router.put('/appointmentTypes', (req, res) => {
 
 // TODO: test la route
 router.get('/appointment/:slotId', (req, res) => {
-  Appointment.findOne({ slots: req.params.slotId }, (err, appointment) => {
+  Appointment.findOne({ slots: req.params.slotId }).populate('participants.clients').populate('participants.staff').exec((req, appointment) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
@@ -115,7 +142,7 @@ router.post('/appointment', (req, res) => {
   // }
   // findById avec le calendar id OU findOne avec le userID ?
   // TODO: rdv existe déja dans le cas d'un rdv de groupe, créer une route differente pour ce cas.
-  Client.findOne({ email: mailClient }, (err, client) => {
+  Client.findOne({ email: req.body.mailClient }, (err, client) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!client) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
 
@@ -154,6 +181,7 @@ router.post('/appointment', (req, res) => {
             staff: res.locals.user.id,
           },
           slots: appointmentSlots,
+          description: req.body.description,
         })
 
         newAppointment.save((err, appointment) => {
