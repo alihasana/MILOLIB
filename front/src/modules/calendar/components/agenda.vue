@@ -124,7 +124,8 @@ export default {
 		},
 		getEventTypes(){
 			return this.$store.state.eventTypes;
-		}
+		},
+
 	},
 	data() {
 		return {
@@ -145,7 +146,9 @@ export default {
       			// firstNameRDV:'',
       			// phoneRDV:'',
       			mailRDV:'',
-      			initialSlot:''
+      			textRDV:'',
+      			initialSlot:'',
+      			allSlots:[]
       		},
       		cancelDisabled:true,
       		okDisabled:true,
@@ -167,7 +170,7 @@ export default {
 						})
 					.catch(
 						error => {
-					    console.log('error:', error.response.data.message);
+					    // console.log('error:', error.response.data.message);
 					    swal({
 			            type: "error",
 			            title: "probleme de mise à jour",
@@ -208,7 +211,7 @@ export default {
 							idList[j].class = 'A';
 						}
 						if(slots[i].available === false){
-							idList[j]=idList[j].id.slice(0,16)+'-'+'B';
+							idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
 							idList[j].class = 'B';
 						}
 					}
@@ -261,68 +264,49 @@ export default {
 						console.log('the matching slot is:', this.matchingSlot);
 					}
 				}
-			// }
-			// else {
-			// 	swal({
-		 //            type: "error",
-		 //            title: "Prendre un RDV",
-		 //            text: "la plage horaire sélectionnée n'est pas disponible"
-		 //          	});
-			// }
+		},
+		getSlotsInRange: function(slotList,start,end){
+			for (let i=0; i<slotList.length; i++){
+				if (moment(slotList[i].start).isBetween(start, end, null, '[)')){
+					this.formRDV.allSlots.push(slotList[i]);
+				}
+			}
 		},
 		bookApt(){
-			// j'envoie
-			// - tous les slots concernés
-			// - le mail client (string)
-			// - l'objet typeRDV( type et duration)
-			// redirige vers get calendar.
+			//from the initial slot selected and the duration of the meeting, i create a time range and i check wich slots is belonging to this time range.
+			this.formRDV.allSlots=[];
 			this.formRDV.initialSlot = this.matchingSlot;
-			let durationRDV = this.formRDV.selectedTypeRDV.duration;
-			console.log('durationRDV:', durationRDV);
-			let startRDV = moment(this.matchingSlot.start);
-			console.log('startRDV:', startRDV);
-			let endRDV = moment(startRDV).add(durationRDV, 'minutes');
-			console.log('endRDV', endRDV);
-
-
-			console.log('je prends RDV, voici les infos:', this.formRDV);
-			
-			
-
-
-
-
-
-			let postBody = this.formRDV;
+			let startRDV = moment(this.formRDV.initialSlot.start);
+			let endRDV = moment(startRDV).add(this.formRDV.selectedTypeRDV.duration, 'minutes');
+			this.getSlotsInRange(this.getSlots,startRDV,endRDV);
+			let postBody = {
+			  mailClient: this.formRDV.mailRDV,
+			  slotsId: _.pluck(this.formRDV.allSlots, '_id'),
+			  appointmentType: this.formRDV.selectedTypeRDV,
+			  description: this.formRDV.textRDV
+			}
 			console.log('postBody: ', postBody);
 			this.$refs.modal.hide()
 			
-			//this is for now, until route is OK
-			swal({
-	            type: "success",
-	            title: "Votre RDV a bien été crée: OK!"
-	        });
-			
-
-			// http.post('/???', postBody)
-			// 		.then(
-			// 			res => {
-			// 			console.log('res:',res);
-			// 			swal({
-			//             type: "success",
-			//             title: "Votre RDV a bien été crée: OK!"
-			//           	});
-			// 			this.$router.push({name: 'agenda'});
-			//			when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
-			// 			})
-			// 		.catch(
-			// 			error => {
-			// 		    console.log('error:', error.response.data.message);
-			// 		    swal({
-			//             type: "error",
-			//             title: "Votre RDV n'a pas été crée"
-			//           	});
-			// 		});
+			http.post('/calendar/appointment', postBody)
+					.then(
+						res => {
+						console.log('res:',res);
+						swal({
+			            type: "success",
+			            title: "Votre RDV a bien été crée: OK!"
+			          	});
+						this.$router.push({name: 'calendar'});
+						// when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
+						})
+					.catch(
+						error => {
+					    // console.log('error:', error.response.data.message);
+					    swal({
+			            type: "error",
+			            title: "Votre RDV n'a pas été crée"
+			          	});
+					});
 		}
 	},
 	filters: {
