@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
  		//--initialization of the calendar
  		now: cHelpers.getCurrentDate(),
  		agendaRangeTime:cHelpers.InitializeDefaultTimeRange(),
+ 		// agendaRangeTime:[],
  		//--data from db
  		agendaSlots:[],
  		eventTypes:[]

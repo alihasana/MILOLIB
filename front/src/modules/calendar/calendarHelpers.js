@@ -73,6 +73,7 @@ function getWeekNumber(date){
 	return moment(date).format('ww');
 };
 
+//yes
 // return the name of the day of a moment date
 function getNameOfDay(date){
 	return moment(date).format('dddd');
@@ -125,8 +126,8 @@ function createSlotObject(start, duration, status){
 	let slotObject = Object.create(null);
 	slotObject.start = moment(start);
 	slotObject.end = moment(start).add(duration, 'minutes');
-	slotObject.available = true;
-	slotObject.status = status;
+	// slotObject.available = true;
+	// slotObject.status = status;
 	// slotObject.conseillerCalendar = 'usernameWhatever';
 	return slotObject;
 }
