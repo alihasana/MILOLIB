@@ -50,11 +50,12 @@ export default {
   methods: {
         takeRdv() {
          http
-        .get("/clients/appointment/" + this.selected)
+        .get("/profile/appointment/" + this.selected)
         .then(res => {
-          console.log(this.selected);
-          this.selected = res.data.content;
-          console.log(this.selected);
+          console.log('this.selected:', this.selected);
+          console.log('res.data:', res.data);
+          // this.selected = res.data.content;
+          // console.log(this.selected);
           swal({
               type: "success",
               title: "Vous allez maintenant choisir la date du rendez-vous !",

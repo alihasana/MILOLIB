@@ -1,6 +1,7 @@
 .btn {
 	&,
 	&:link,
+
 	&:visited {
 		text-transform: uppercase;
 		text-decoration: none;
@@ -11,25 +12,25 @@
 		position: relative;
 	}
 
-	&:hover {
-		transform: translateY(-0.3rem);
-		box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);
-	}
+// 	&:hover {
+// 		transform: translateY(-0.3rem);
+// 		box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);
+// 	}
 
-	&:active {
-		transform: translateY(-0.1rem);
-		box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
-	}
+// 	&:active {
+// 		transform: translateY(-0.1rem);
+// 		box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+// 	}
 
-	&--white {
-		border-radius: 10rem;
-		background-color: #fff;
-		color: #444;
-	}
+// 	&--white {
+// 		border-radius: 10rem;
+// 		background-color: #fff;
+// 		color: #444;
+// 	}
 
-	&--menu {
-		background-color: $color-three;
-		color: #444;
-	}
+// 	&--menu {
+// 		background-color: $color-three;
+// 		color: #444;
+// 	}
 }
 

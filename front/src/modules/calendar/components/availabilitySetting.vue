@@ -58,6 +58,7 @@ import http from '../../../helpers/http';
 // - Should the hours selection pre-filled? or maybe the conseiller could tick a default checkbox to prefill all days with opening hours?
 // - error handeling: if the range not suitable // what about if they select hour like 3:18?
 //what about one slot is not complete?
+// make sure the time range is merging properly with the cuurent agenda.
 
 
 export default {
@@ -139,7 +140,6 @@ export default {
 						.then(
 							res => {
 							console.log('res:',res);
-							// this.$store.commit('slotsAvailables', res.data);
 							this.$store.commit('updateRangeTime', this.agendaRangeInAS)
 							swal({
 				            type: "success",

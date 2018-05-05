@@ -50,6 +50,8 @@ import http from '../../../helpers/http';
 
 //TODO
 //- would be greate to turn in color the selected type of meeting for better visualization
+//- get route to display the actual type of appointment
+//(get 'calendar/appontmentTypes')
 
 export default {
   name: "eventTypeSetting",
