@@ -339,7 +339,7 @@ export default {
 			let postBody = {
 			  mailClient: this.formRDV.mailRDV,
 			  slotsId: _.pluck(this.formRDV.allSlots, '_id'),
-			  appointmentType: this.formRDV.selectedTypeRDV,
+			  appointmentType: this.formRDV.selectedTypeRDV.name, // Modif Luke
 			  description: this.formRDV.textRDV
 			}
 			console.log('postBody: ', postBody);
