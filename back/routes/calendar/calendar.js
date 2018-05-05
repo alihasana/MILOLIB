@@ -5,6 +5,7 @@ import Client from './../clients/model'
 import Calendar from './model'
 import Appointment from './../../models/appointment'
 import controller from './controller'
+import helper from '../../helpers/helper'
 // import util from 'util'
 
 let router = express.Router()
@@ -22,6 +23,8 @@ router.post('/', (req, res) => {
       //   calendar = controller.asyncCall(res.locals);
       // }
 
+
+      // TODO : a retest, aprés création du calendar le 'controller.postCalendar(req, res, calendar)' ne marche pas.
       if (!calendar) { // Create calendar if needed
         controller.createCalendar(res.locals)
           .then(function (calendar) {
@@ -127,11 +130,16 @@ const ObjectId = mongoose.Types.ObjectId
 router.get('/appointment/:slotId', (req, res) => {
   if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
   Appointment.findOne({ "slots._id": req.params.slotId})
-  .populate('participants.clients') // TODO: VIRER LE PASSWORD, IMPORTANT !
-  .populate('participants.staff') // TODO: VIRER LE PASSWORD, IMPORTANT !
+  .populate('participants.clients') // TODO: VIRER LE PASSWORD (pre.find?), IMPORTANT !
+  .populate('participants.staff') // TODO: VIRER LE PASSWORD, (pre.find?)IMPORTANT !
   .exec((err, appointment) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
+
+    helper.beforeSendUser(appointment.participants.staff)
+    for (let key of Object.keys(appointment.participants.clients)) {
+      helper.beforeSendUser(key)
+    }
 
     res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
   })
@@ -193,7 +201,7 @@ router.post('/appointment', (req, res) => {
         })
 
         newAppointment.save((err, appointment) => {
-          if (err) res.status(500).json({ success: false, message: err.message })
+          if (err) return res.status(500).json({ success: false, message: err.message })
           res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
         })
       })
@@ -207,8 +215,8 @@ router.post('/appointment', (req, res) => {
 
 router.get('/testFind', (req, res) => {
   Calendar.find({}, (err, calendars) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendars) res.status(404).json({ success: false, message: 'Calendars not found' })
+    if (err) return res.status(500).json({ success: false, message: err.message })
+    else if (!calendars) return res.status(404).json({ success: false, message: 'Calendars not found' })
     else {
       // TODO : filtrer les slots not available
       res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
@@ -219,8 +227,8 @@ router.get('/testFind', (req, res) => {
 //Populate test
 router.get('/testPopulate', (req, res) => {
   Calendar.findOne({ userId: res.locals.user.id }).populate('userId').exec((err, calendar) => {
-    if (err) res.status(500).json({ success: false, message: err.message })
-    else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
+    if (err) return res.status(500).json({ success: false, message: err.message })
+    else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
     res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
   })
 })
