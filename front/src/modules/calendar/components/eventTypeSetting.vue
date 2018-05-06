@@ -176,6 +176,4 @@ export default {
   text-align: left;
 }
 
-.duration{
-}
 </style>

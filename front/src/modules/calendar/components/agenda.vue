@@ -5,14 +5,14 @@
 				<b-navbar-nav>
 					<b-nav-form class="nav">
 						<li class="navDisplay">
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">today</i></b-button>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_week</i></b-button>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit"><i class="material-icons">view_module</i></b-button>
+							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
+							<b-button variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
+							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
 						</li>
 						<li class="navNavigate">
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
+							<b-button variant="primary" class="navNavigate__btn" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
 							<span class="weekNumber">Semaine {{weekNumber}}</span>
-							<b-button variant="primary" size="sm" class="my-2 my-sm-0" type="submit" v-on:click="getNextDays()"><i class="material-icons">navigate_next</i></b-button>
+							<b-button variant="primary" class="navNavigate__btn" type="submit" v-on:click="getNextDays()"><i class="material-icons">navigate_next</i></b-button>
 						</li>
 					</b-nav-form>
 				</b-navbar-nav>
@@ -22,21 +22,21 @@
 					<li class="hourli">{{hour}}</li>
 				</ul>
 			</div>
-			<table class="agendaBody">
-				<thead class="agendaBodyDays">
-					<tr class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
+			<b-container class="agendaBody">
+				<b-row class="agendaBodyDays">
+					<b-col class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<p class="dayName">{{day | dateFormatDayName}}</p>
 						<p class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</p>
-					</tr>
-				</thead>
-				<tbody class="agendaBodySlots">
-					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
+					</b-col>
+				</b-row>
+				<b-row class="agendaBodySlots">
+					<b-col class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-							<li class="slotLi"><b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >{{button.id}}{{button.apt}}</b-button></li>
+							<li class="slotLi"><b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" ><span class="slotLi__button_id">{{button.id | displayButtonId}}</span>{{button.apt}}</b-button></li>
 						</ul>
-					</tr>
-				</tbody>
-			</table>
+					</b-col>
+				</b-row>
+			</b-container>
 		</div>
 
 
@@ -485,6 +485,9 @@ export default {
 		},
 		formatDayHour: function(date) {
 			return moment(date).format('lll');
+		},
+		displayButtonId: function(id){
+			return id.slice(11,16);
 		}
 	}
 
@@ -498,7 +501,8 @@ export default {
 	display: flex;
   	flex-flow: row wrap;
   	width: 100%;
-  	/*background-color: yellow;*/
+  	border-left: 1px solid #d4d4d4;
+  	border-right: 1px solid #d4d4d4;
 }
 
 .agendaHeader{
@@ -507,11 +511,9 @@ export default {
 }
 
 .agendaBodyLeftPanel{
-	/*background-color: blue;*/
 	flex-direction:column;
 	width: 7%;
 	margin-top: 5vw;
-	/*background-color: pink;*/
 }
 
 .agendaBodyDays{
@@ -519,7 +521,6 @@ export default {
 	flex-direction:row;
 	text-align: center;
 	height: 5vw;
-	/*background-color: green;*/
 }
 
 .agendaBody{
@@ -554,6 +555,17 @@ export default {
 	padding: 5px;*/
 }
 
+.navNavigate__btn{
+	background: transparent;
+	border: red;
+	height: 50px;
+}
+
+/*.navNavigate__btn:hover{
+	background: transparent;
+	border: none;
+	height: 40px;
+}*/
 
 .weekNumber{
 	font-weight: bold;
@@ -622,6 +634,11 @@ export default {
 	padding: 0;
 }
 
+.slotLi__button_id{
+	text-align: right;
+	vertical-align: top;
+}
+
 .A{
 	border-top: 1px dotted #e5e5e5;
 	border-bottom:1px dotted #e5e5e5;
@@ -631,10 +648,12 @@ export default {
 	color:grey;
   	border-radius:0;
   	width: 100%;
-    height: 8px;
+    /*height: 8px;*/
     margin-bottom: 0px;
     margin-top: 0px;
     font-size: 6px;
+    text-align: right;
+	vertical-align: top;
 }
 
 .N{
@@ -646,10 +665,13 @@ export default {
 	color:#888888;
   	border-radius:0;
   	width: 100%;
-    height: 8px;
+    /*height: 8px;*/
     margin-bottom: 0px;
     margin-top: 0px;
     font-size: 8px;
+    text-align: right;
+	vertical-align: top;
+
 }
 
 .B{
@@ -660,7 +682,7 @@ export default {
 	background-color: #9900FF;
   	border-radius:0;
   	width: 100%;
-    height: 8px;
+   /* height: 8px;*/
     margin-bottom: 0px;
     margin-top: 0px;
     font-size: 8px;
