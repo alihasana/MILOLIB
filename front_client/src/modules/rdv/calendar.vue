@@ -1,43 +1,40 @@
 <template>
-  <div class="calendar">
-    <b-card>
-      <b-card-header class="card__head">
-        <b-card class="title card__title">Sélectionnez votre RDV</b-card>
+  <div calendarContainer>
+    <b-card class="calendarContainer__card">
+      <b-card-header class="cardhead">
+        Sélectionnez votre RDV
       </b-card-header>
-      <b-card-body>
-
-        <table class="calendar">
-          <thead class="calendar__head">
+      
+      <b-card-body class="cardbody">
+        <b-container class="calendar">
+          <b-row class="calendar__head">
             <b-button class="calendar__navicon"v-on:click="getPreviousDays()">
               <i class="material-icons">navigate_before</i class="material-icons">
-            </b-button>
-            <!-- affichage de la date -->
-            <tr class="calendar__headDays" v-for="(day,index) in dayRangeToDisplay">
-              <ul class="calendar__headDayUl">
-                <li class="calendar__headDayLi">{{day | dateFormatDayName}}</li>
-                <li class="calendar__headDayLi">{{day | dateFormatDayNumberAndMonth}}</li>
-              </ul>
-            </tr>
-            <b-button class="calendar__navicon" v-on:click="getNextDays()">
-              <i class="material-icons">navigate_next</i class="material-icons">
-            </b-button>
-          </thead>
-          <tbody class="calendar__body">
-            <!-- affichage des boutons heures -->
-            <tr class="calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
-              <!-- <ul class="calendar__bodyUl"v-for="(hour, index) in hourList" :key="index">
-                <li class="calendar__bodyLi"><b-button v-on:click="selectTime(hour,day)">{{hour}}</b-button></li> -->
+              </b-button>
+              <!-- affichage de la date -->
+              <b-col class="calendar__headDays" v-for="(day,index) in dayRangeToDisplay" :key="index">
+                <ul class="calendar__headDayUl">
+                  <li class="calendar__headDayLi">{{day | dateFormatDayName}}</li>
+                  <li class="calendar__headDayLi">{{day | dateFormatDayNumberAndMonth}}</li>
+                </ul>
+              </b-col>
+              <b-button class="calendar__navicon" v-on:click="getNextDays()">
+                <i class="material-icons">navigate_next</i class="material-icons">
+                </b-button>
+              </b-row>
+              <b-row class="calendar__body">
+                <!-- affichage des boutons heures -->
+                <b-col class="calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
                 <ul class="calendar__bodyUl"v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-                <li class="calendar__bodyLi"><b-button v-on:click="bookApt(button)">{{hour}}{{button.id}}</b-button></li>
-              </ul>
-            </tr>
-          </tbody>
-        </table>
-      </b-card-body>
-    </b-card>
-  
-</div>
-</template>
+                  <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button,getSlots)">{{button.id | buttonIdFormat}}</b-button></li>
+                </ul>
+              </b-col>
+            </b-row>
+          </b-container>
+        </b-card-body>
+      </b-card>
+    </div>
+  </template>
 
 <script>
 /* eslint-disable */
@@ -58,14 +55,25 @@ export default {
       // duration:'',
       hourList:[],
       //the hours will be dynamically generated from the duration of the appointments.
-      //the duration will be retreived from the store, for now it has been set in an arbitrary
+      //the duration and name of apointmentTypes will be retreived from the store, for now it has been set in an arbitrary
       hour:'',
       day:'',
       beginDisplay:0,
       button:'',
       buttonIdList:[],
       filteredButtonIdList: [],
-      matchingInitalSlot:''
+      matchingInitalSlot:'',
+      apt:{
+        calendarId:'',
+        initialHour:'',
+        endHour:this.getAptendHour,
+        allSlots:[],
+        appointmentType:{
+          name:'',
+          duration:'',
+        }
+        
+      }
     }
   },
   computed:{
@@ -78,18 +86,23 @@ export default {
       return this.getDaysOfTheTimeRange(start, end);
       //actually, the time range should be defined by the availabilities.
       //we will need to get the slots from the store for this and manipulate them to get the time range
-    },
+      //similar function has already been implemented in back-office calendar
+    // },
     // getSlots(){
     //   return this.$store.state.calendarSlots;
     // },
-    // getDurationOfApt(){
-    //the duration will come from the store.
-    //   this.duration = this.$store.state.appointmentTypes.duration;
-    // },
     // getHourList(){
-    //   // this.hourList = this.generateHourList(this.getDurationOfApt);
+    //   this.hourList = this.generateHourList(this.this.apt.appointmentType.duration);
     //   this.hourList = this.generateHourList(this.duration);
     // },
+    // getappointmentType(){
+    // the duration and name will come from the store.
+    //   this.apt.appointmentType = this.$store.state.appointmentTypes;
+    // },
+    // getCalendarId(){
+    //   the calendarId will come from the store
+    //     this.apt.calendarId = this.$store.state.calendarId;
+    },
     endDisplay(){
       return this.beginDisplay+3;
     },
@@ -98,6 +111,14 @@ export default {
     },
     btnIdToDisplay(){
       return this.filterButtonIdToDisplay(this.dayRangeToDisplay, this.buttonIdList);
+    },
+    classId(){
+      return this.btnIdToDisplay.map(function(button){
+        return button.class;
+      });
+    },
+    getAptendHour(){
+      return moment(this.apt.initialHour).add(this.apt.appointmentType.duration, minute)
     }
   },
   created(){
@@ -199,9 +220,44 @@ export default {
       console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
       return this.filteredButtonIdList;
     },
-    bookApt(button){
+    bookApt(button, slotlist){
       console.log('je clique sur le btn :', button);
-      this.getmatchingInitalSlot(button, this.getSlots);
+      //si l'horaire est dispo( en classe A)
+      //i need to call getmatchingInitial slots  
+      //then duration so that i can gather all the slots and send them to back-end
+      if (btn.id.charAt(btn.id.length - 1) == 'A'){
+        // this.getmatchingInitalSlot(button, this.getSlots);
+        // this.getSlotsInRange(slotList,this.apt.initialHour,this.apt.endHour)
+        let postBody = {
+          calendarId:this.apt.calendarId,
+          slots:this.apt.allSlots,
+          appointmentType:this.apt.appointmentType
+        }
+        http.post('client/appointment', postBody)
+        .then(
+            res => {
+            console.log('res:',res);
+            swal({
+                  type: "success",
+                  title: "Confirmation du RDV",
+                  text: "Votre RDV a bien été confirmé, vous allez recevoir un mail de confirmation (fonctionnalité non effective pour l'instant"
+                  });
+            })
+          .catch(
+            error => {
+              // console.log('error:', error.response.data.message);
+              swal({
+                  type: "error",
+                  title: "Confirmation du RDV",
+                  text: "Votre RDV n'a pas pu être confirmé"
+                  });
+              });
+
+
+        //voir avec Anas que ces fonctions s'executent bien l'une quand l'autre est finie, car le résultat de la deuxième dépend de la premiere
+      }
+      
+      
     },
     getmatchingInitalSlot: function(btn, slots){
       console.log('j actionne le buttonId', btn);
@@ -211,13 +267,14 @@ export default {
           if (sl == id){
             this.matchingInitalSlot = slots[i];
             console.log('the matching slot is:', this.matchingInitalSlot);
+            this.apt.initialHour = this.matchingInitalSlot.start;
           }
         }
     },
     getSlotsInRange: function(slotList,start,end){
       for (let i=0; i<slotList.length; i++){
         if (moment(slotList[i].start).isBetween(start, end, null, '[)')){
-          this.formRDV.allSlots.push(slotList[i]);
+          this.apt.allSlots.push(slotList[i]);
         }
       }
     },
@@ -231,6 +288,11 @@ export default {
     },
     dateFormatFullDayHour: function(date){
       return moment(date).format('LLLL');
+    },
+    buttonIdFormat: function(buttonID){
+      let reg = /-/;
+      let cutId = buttonID.slice(11,16);
+      return cutId.replace(reg, ':');
     }
   }
 };
@@ -239,63 +301,4 @@ export default {
 
 <style scoped>
 
-.calendar__navicon {
-    color:#212121;
-  }
-
-  .card__head{
-    padding: 0;
-  }
-
-  .card__title{
-    padding: 0;
-    margin: auto;
-    /*font-weight: bold;*/
-  }
-
-  .calendar{
-    width:100%;
-    margin-top: 0;
-  }
-
-  .calendar__head{
-    display: flex;
-    flex-direction:row;
-    width: 70%;
-    margin-top: 0;
-    justify-content: center;
-    border-bottom: 2px solid #673AB7;
-    margin: auto;
-  }
-
-  .calendar__headDays{
-    font-size: 14px;
-    margin-bottom: 5px;
-    margin-top:5px;
-  }
-
-  .calendar__headDayUl{
-    width: 100px;
-  }
-
-  .calendar__headDayLi{
-    padding: 0px;
-    margin: 0px;
-    list-style:none;
-    width: 100%;
-  }
-
-  .calendar__body{
-    display: flex;
-    flex-direction:row;
-    width: 70%;
-    padding-top: 10px;
-    justify-content: center;
-    margin: auto;
-  }
-
-  .calendar__bodyLi{
-    list-style:none;
-    width: 100px;
-  }
 </style>

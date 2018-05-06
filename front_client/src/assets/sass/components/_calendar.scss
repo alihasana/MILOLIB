@@ -1,0 +1,248 @@
+.calendarContainer {
+    margin-top: 0;
+    color:$color-two;
+
+    &__card {
+    	width: 70%;
+    	margin: auto;
+    }
+}
+
+.cardhead {
+	padding: 0;
+
+	&__title{
+		 padding: 0;
+    	margin: auto;
+	}
+}
+
+.cardbody {
+
+}
+
+.calendar{
+
+	width:100%;
+    // margin-top: 0;
+
+    &__head {
+    display: flex;
+    flex-direction:row;
+    width: 70%;
+    margin-top: 0;
+    justify-content: center;
+    border-bottom: 2px solid $color-two;
+    margin: auto;
+  	}
+
+  	&__navicon {
+    color:$color-two;
+    background-color: transparent;
+    border: transparent;
+    padding: 0px;
+    width: 30px;
+  	}
+
+  	&__navicon:hover {
+  		background-color: transparent;
+    	border: transparent;
+    	box-shadow: none;
+    	color:$color-two;
+    	transform: none;
+    	padding: 0px;
+  	}
+
+  	&__navicon:active {
+  		background-color: transparent;
+    	border: transparent;
+    	box-shadow: none;
+    	color:$color-two;
+    	transform: none;
+    	padding: 0px;
+    }
+
+    &__navicon:visited {
+    	border: transparent;
+		text-transform: none;
+		text-decoration: none;
+		padding: 0px;
+		transition: none;
+	}
+
+  	&__headDays{
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-top:5px;
+  	}
+
+  	&__headDayUl{
+    width: 100%;
+  	}
+
+  	&__headDayLi{
+    padding: 0px;
+    margin: 0px;
+    list-style:none;
+    width: 100%;
+  	}
+
+  	&__body{
+    display: flex;
+    flex-direction:row;
+    width: 70%;
+    padding-top: 10px;
+    justify-content: center;
+    margin: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+  	}
+
+  	&__bodyday{
+    justify-content: center;
+	}
+
+  	&__bodyLi{
+    list-style:none;
+    width: 100%;
+	}
+
+	&__bodyUl{
+    width: 100%;
+  	}
+ }
+
+//*****attention il faudra remplacer N par A, dans la partie commentée*****
+//j'ai fait ça en attendant d'avoir les slots et donc les différentes classes
+
+.N {
+	width: 80%;
+	border-radius: 6px; 
+	height: 30px;
+	font-size: 14px;
+	background-color: transparent;
+	border-color: $color-grey-dark;
+	color: $color-grey-dark;
+}
+
+.N:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+background-color: transparent;
+border-color: $color-grey-dark;
+color: $color-grey-dark;
+}
+
+.N:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+background-color: transparent;
+border-color: $color-grey-dark;
+color: $color-grey-dark;
+}
+
+.N:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	// transition: all 0.2s;
+	// position: relative;
+	background-color: transparent;
+	border-color: $color-grey-dark;
+	color: $color-grey-dark;
+}
+
+
+// .N{
+// 	width: 80%;
+// 	border-radius: 6px; 
+// 	height: 30px;
+// 	font-size: 14px;
+// 	background-color: transparent;
+// 	border-color: $color-two;
+// 	color: $color-two;
+//  }
+
+// .N:visited {
+// text-transform: uppercase;
+// text-decoration: none;
+// padding: 1.5rem 4rem;
+// display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+// background-color: $color-two;
+// border-color: $color-primary;
+// color: $color-primary;
+// }
+
+// .N:hover {
+// 	transform: translateY(-0.3rem);
+// 	box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);
+// 	background-color: $color-two;
+// 	border-color: $color-primary;
+// 	color: $color-primary;
+// }
+
+// .N:active {
+// 	transform: translateY(-0.1rem);
+// 	box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+// 	background-color: $color-two;
+// 	border-color: $color-primary;
+// 	color: $color-primary;
+// }
+  	
+.B {
+	width: 80%;
+	border-radius: 6px; 
+	height: 30px;
+	font-size: 14px;
+	background-color: transparent;
+	border-color: $color-grey-dark;
+	color: $color-grey-dark;
+}
+
+.B:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+background-color: transparent;
+border-color: $color-grey-dark;
+color: $color-grey-dark;
+}
+
+.B:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+background-color: transparent;
+border-color: $color-grey-dark;
+color: $color-grey-dark;
+}
+
+.B:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	// transition: all 0.2s;
+	// position: relative;
+	background-color: transparent;
+	border-color: $color-grey-dark;
+	color: $color-grey-dark;
+}
+

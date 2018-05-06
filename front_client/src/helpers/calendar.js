@@ -15,6 +15,7 @@ function convertTimeInMinutes (hoursMinutes){
 	return totalMinutes;
 }
 
+
 export default{
 	convertTimeInMinutes
 }
