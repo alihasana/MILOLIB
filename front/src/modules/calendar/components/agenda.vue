@@ -32,7 +32,7 @@
 				<tbody class="agendaBodySlots">
 					<tr class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-							<li class="slotLi"><b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >{{button.id}}</b-button></li>
+							<li class="slotLi"><b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >{{button.id}}{{button.apt}}</b-button></li>
 						</ul>
 					</tr>
 				</tbody>
@@ -40,7 +40,7 @@
 		</div>
 
 
-		<!-- Modal "Book an appointment" -->
+		<!-- Modal "Book an appointment" -->		
 		<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = true, the method getRelevantModal is called -->
 		<b-modal id="modalBookApt" ref="modalBookApt" title="Creer un nouveau rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
 			<form @submit.stop.prevent="bookApt">
@@ -158,10 +158,12 @@ export default {
       		day:'',
       		weekNumber:'',
       		beginDisplay:'',
+      		minTimeRange:'',
       		buttonId:'',
       		buttonIdList:[],
-      		buttonClass :'',
+      		// buttonClass :'',
       		filteredButtonIdList: [],
+      		btnIdListToMerge: [],
       		matchingSlot:'',
       		eventType:{},
       		formRDV:{
@@ -181,10 +183,10 @@ export default {
       			initialSlot:'',
       			allSlots:[]
       		},
+      		diplayedModal:'',
       		cancelDisabled:true,
       		okDisabled:true,
-      		hideFooter:true,
-      		diplayedModal:''
+      		hideFooter:true
       	}
 	},
 	created(){
@@ -199,6 +201,8 @@ export default {
 						this.buttonIdList =[];
 						this.createButtonId(this.getTimeRange);
 						this.updateButtonId(this.getSlots, this.buttonIdList);
+						this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);
+						this.$store.commit('getMinTimeRange', this.minTimeRange);
 						})
 					.catch(
 						error => {
@@ -223,7 +227,8 @@ export default {
 					id = id.replace(reg, '-');
 					let button = {
 						id: id,
-						class:'N'
+						class:'N',
+						apt:''
 					}
 					this.buttonIdList.push(button);
 				}
@@ -245,6 +250,7 @@ export default {
 						if(slots[i].available === false){
 							idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
 							idList[j].class = 'B';
+							idList[j].apt = slots[i].appointment;
 						}
 					}
 				}
@@ -253,6 +259,16 @@ export default {
 			console.log('buttonIdList:', this.buttonIdList);
 			return this.buttonIdList;
 		},
+		// mergeButtonId:function(btnIdListToCheck){
+		// 	for (let i=0; i<btnIdListToCheck.length; i++){
+		// 		if (btnIdListToCheck[i].apt = btnIdListToCheck[i+1].apt){
+		// 			this.btnIdListToMerge = [];
+		// 			this.btnIdListToMerge.push(btnIdListToCheck[i]);
+		// 			this.btnIdListToMerge.push(btnIdListToCheck[i+1]);
+		// 			console.log('les buttonsID suivant ont le même RDV: ',this.btnIdListToMerge);
+		// 		}
+		// 	}
+		// },
 		filterButtonIdToDisplay: function(timeRange, btnIdList){
 			for (let i=0; i<timeRange.length; i++){
 				let trday
@@ -281,9 +297,11 @@ export default {
 			this.filteredButtonIdList = [];
 		},
 		getPreviousDays: function(){
-			this.beginDisplay -= 7;
-			this.weekNumber -=1;
-			this.filteredButtonIdList = [];
+			if (this.beginDisplay>=7){
+				this.beginDisplay -= 7;
+				this.weekNumber -=1;
+				this.filteredButtonIdList = [];
+			}
 		},
 		getMatchingSlot: function(btn, slots){
 			console.log('j actionne le buttonId', btn);
@@ -372,7 +390,7 @@ export default {
 			http.get("/calendar/appointment/" + this.confirmedRDV.initialSlot._id)
 					.then(
 						res => {
-						console.log('res:',res);
+						console.log('res after http.get("/calendar/appointment/" + this.confirmedRDV.initialSlot._id):',res);
 						this.confirmedRDV.TypeRDV = res.data.content.appointmentType;
 						this.confirmedRDV.lastNameRDV = res.data.content.participants.clients[0];
 						this.confirmedRDV.firstNameRDV = res.data.content.participants.clients[0];
@@ -616,6 +634,7 @@ export default {
     height: 8px;
     margin-bottom: 0px;
     margin-top: 0px;
+    font-size: 6px;
 }
 
 .N{
@@ -630,11 +649,12 @@ export default {
     height: 8px;
     margin-bottom: 0px;
     margin-top: 0px;
+    font-size: 8px;
 }
 
 .B{
-	border-top: 1px dotted #e5e5e5;
-	border-bottom:1px dotted #e5e5e5;
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
 	border-left: 1px solid #d4d4d4;
     border-right: 1px solid #d4d4d4;
 	background-color: #9900FF;
@@ -643,5 +663,6 @@ export default {
     height: 8px;
     margin-bottom: 0px;
     margin-top: 0px;
+    font-size: 8px;
 }
 </style>

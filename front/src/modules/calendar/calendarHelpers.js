@@ -8,6 +8,8 @@ moment.locale('fr');
 //using twix to get range time
 import twix from 'twix';
 
+import _ from 'underscore';
+
 
 //-------------Our variables ----------------
 
@@ -79,8 +81,9 @@ function getNameOfDay(date){
 	return moment(date).format('dddd');
 }
 
-function addOneMonth(date){
-	return moment(date).add(1,'month');
+//yes
+function addTwoMonth(date){
+	return moment(date).add(2,'month');
 }
 
 function addOneWeek(date){
@@ -100,7 +103,7 @@ function getTimeRange(nb, duration, date) {
 	return tR.afterMoment(date);
 };
 
-
+//YES
 //return an array with days as moment object for a given time range
 function getDaysOfTheTimeRange(start,end){
 	 let arr = moment(start).twix(end).toArray('days');
@@ -113,7 +116,7 @@ function createRange(start,end){
 	return range;
 }
 
-
+//yes
 //create a slot Object : parameters
 // start : start time for the object
 // duration : duration of the period for the object
@@ -132,7 +135,7 @@ function createSlotObject(start, duration, status){
 	return slotObject;
 }
 
-
+//yes
 //return array of slotsobjects for a given period, the duration of slots is determined with nb
 function setSlotsArray(startPoint,endPoint,nb, status){
 			let slotsArray = []
@@ -153,6 +156,7 @@ function getDuration(start,end){
   return moment.duration(x.diff(y));
 }
 
+//yes
 //return a number from a string
 function filterInt (value) {
   if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
@@ -181,14 +185,30 @@ function limitDisplay (durationName, start ){
 	return start + duration;
 }
 
+//YES
+//this function will add 2 month to the start of this week, and create a default time range for agenda
 function InitializeDefaultTimeRange(){
 	let now = getCurrentDate();
 	let nowStartWeek= getWeekFirstDate(now);
-	let nowSWPlusOneMonth = addOneMonth(nowStartWeek);
-	let defaultTimeRange = getDaysOfTheTimeRange(nowStartWeek,nowSWPlusOneMonth);
+	let nowSWPlusTwoMonth = addTwoMonth(nowStartWeek);
+	let defaultTimeRange = getDaysOfTheTimeRange(nowStartWeek,nowSWPlusTwoMonth);
 	return defaultTimeRange;
 }
 
+//YES
+//this function anable to find the lowest date and the bigger date in a slot range.
+function GetMinTimeFromSlotsArray(slotList){
+	let sortedSlots = _.sortBy(slotList, 'date');
+	console.log('sorted: ',sortedSlots);
+	let minDate = sortedSlots[0].start;
+	let maxDate = sortedSlots[sortedSlots.length-1].start;
+	let minTr = {
+		start : minDate,
+		end: maxDate
+	};
+	console.log('minTr:', minTr);
+	return minTr;
+}
 
 export {
 	NotAvailable,
@@ -213,10 +233,11 @@ export {
 	convertTimeInMinutes,
 	setSlotsArray,
 	limitDisplay,
-	addOneMonth,
+	addTwoMonth,
 	InitializeDefaultTimeRange,
 	addOneWeek,
-	substractOneWeek
+	substractOneWeek,
+	GetMinTimeFromSlotsArray
 
 }
 
