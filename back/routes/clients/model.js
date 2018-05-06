@@ -6,11 +6,11 @@ let ClientSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, required: true, default: 'no role' },
-    firstName: { type: String, required: false },
-    lastName: { type: String, required: false },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     phone: { type: String },
-    descolarise: { type: Boolean, required: false },
-    infAge: { type: Boolean, required: false },
+    descolarise: { type: Boolean, required: false }, // TODO: database ou non ?
+    infAge: { type: Boolean, required: false },  // TODO: database ou non ?
     commune: String,
     appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },    
   },

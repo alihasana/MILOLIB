@@ -179,8 +179,8 @@ router.post('/appointment', (req, res) => {
           // Make slot unavailable in calendar
           calendar.slots.id(req.body.slotsId[key]).available = false
           calendar.slots.id(req.body.slotsId[key]).appointment = {
-            // fullName: client.firstName + client.lastName, //TODO: output NaN
-            fullName: client.firstName,
+            fullName: client.firstName + client.lastName,
+            // fullName: client.firstName,
             appointmentType: req.body.appointmentType,
           }
           // Add slot to 'appointmentSlots' array
