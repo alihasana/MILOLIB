@@ -7,7 +7,11 @@ let AppointmentSchema = new mongoose.Schema(
     //   name: { type: String },
     //   duration: { type: String }
     // },
-    appointmentType: String,
+    appointmentType: {
+      _id: false,
+      name: { type: String },
+      duration: { type: String } // TODO: duration en nombres de slots plutot qu'en minutes ?
+    },
     // participants: { type: [mongoose.Schema.Types.ObjectId] },
     // //                      OU
     // participants: { type: [mongoose.Schema.Types.ObjectId], ref: 'Client' },

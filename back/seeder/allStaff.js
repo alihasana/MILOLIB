@@ -13,26 +13,16 @@ mongoose.connect(process.env.DB, {}, (err) => {
 })
 
 
-let staff = [
+let staffNoCalendar = [
   new User({
     email: 'admin',
     password: bcrypt.hashSync('admin', 10),
     role: 'Administrateur',
   }),
   new User({
-    email: 'conseiller',
-    password: bcrypt.hashSync('conseiller', 10),
-    role: 'Conseiller',
-  }),
-  new User({
     email: 'accueil',
     password: bcrypt.hashSync('accueil', 10),
     role: 'Chargé d\'accueil',
-  }),
-  new User({
-    email: 'admin-conseiller',
-    password: bcrypt.hashSync('admin-conseiller', 10),
-    role: 'Administrateur/Conseiller',
   }),
   new User({
     email: 'invité',
@@ -41,9 +31,28 @@ let staff = [
   })
 ]
 
+let staff = [
+  new User({
+    email: 'conseiller',
+    password: bcrypt.hashSync('conseiller', 10),
+    role: 'Conseiller',
+  }),
+  new User({
+    email: 'admin-conseiller',
+    password: bcrypt.hashSync('admin-conseiller', 10),
+    role: 'Administrateur/Conseiller',
+  }),
+]
+
 
 //First Method (same as in the vidéo https://www.youtube.com/watch?v=V30Rpqi6kYE)
 let done = 0
+for (let i = 0; i < staffNoCalendar.length; i++) {
+  staffNoCalendar[i].save((err, user) => {
+    if (err) console.log('ERROR In user.save() ! : ' + err.message)
+  })
+}
+
 for (let i = 0; i < staff.length; i++) {
   staff[i].save((err, user) => {
     if (err) console.log('ERROR In user.save() ! : ' + err.message)
@@ -53,7 +62,7 @@ for (let i = 0; i < staff.length; i++) {
         if (err) console.log('ERROR In calendar.save() ! : ' + err.message)
         done++
         if (done === staff.length) {
-          setTimeout(() => { // setTimeout because of index creation. Shitty fix I know :)
+          setTimeout(() => { // setTimeout because of index creation. Temporary fix.
             console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
             exit()
           }, 3000)

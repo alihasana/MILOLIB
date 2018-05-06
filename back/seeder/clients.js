@@ -1,4 +1,3 @@
-
 import Client from './../routes/clients/model'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
@@ -18,6 +17,8 @@ let client = [
     email: 'client',
     password: bcrypt.hashSync('client', 10),
     role: 'client',
+    firstName: 'John',
+    lastName: 'Doe',
   })
 ]
 
@@ -30,7 +31,7 @@ for (let i = 0; i < client.length; i++) {
     else {
       done++
       if (done === client.length) {
-        setTimeout(() => { // setTimeout because of index creation. Shitty fix I know :)
+        setTimeout(() => { // setTimeout because of index creation. Temporary fix.
           console.log("Client seeding complete. Yeah (づ｡◕‿◕｡)づ !")
           exit()
         }, 3000)

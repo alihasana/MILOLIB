@@ -61,40 +61,37 @@ router.put('/:id', (req, res) => { // WIP, a voir
 })
 
 router.post('/', (req, res) => {
-  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
-    if (req.body.email && req.body.password) {
-      if (helper.regexEmail.test(req.body.email)) {
-        let newUser = new User(req.body)
-        newUser.password = bcrypt.hashSync(req.body.password, 10)
-        newUser.save((err, user) => {
-          if (err) {
-            if (err.message.match(/^E11000 duplicate key error.+/)) {
-              res.status(400).json({ success: false, message: 'Email already used.' })
-            } else res.status(500).json({ success: false, message: err.message })
-          } else {
-            let newCalendar = new Calendar({ userId: user._id })
-            newCalendar.save((err, calendar) => {
-              if (err) res.status(500).json({ success: false, message: err.message })
-              else {
-                // //WIP a voir avec Luke
-                // const msg = {
-                //   to: '',
-                //   from: 'milolib@milolib.com',
-                //   subject: 'Your are register',
-                //   text: 'Congrat you successfully registered into Milolib',
-                // };
-                // //sendMail commenter jusau a ce que compte sendgrid creer
-                // // sendMail(req.body.email, msg)
-                // //WIP
-                helper.beforeSendUser(user)
-                res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
-              }
-            })
-          }
-        })
-      } else res.status(400).json({ success: false, message: 'Valid email required.' })
-    } else res.status(400).json({ success: false, message: 'Missing email and/or password.' })
-  } else res.status(403).json({ succes: false, message: 'Forbidden.' })
+  if (res.locals.user.role != 'Administrateur' || 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  if (!req.body.email || !req.body.password) return res.status(400).json({ success: false, message: 'Missing email and/or password.' })
+  if (!helper.regexEmail.test(req.body.email)) return res.status(400).json({ success: false, message: 'Valid email required.' })
+  let newUser = new User(req.body)
+  newUser.password = bcrypt.hashSync(req.body.password, 10)
+  newUser.save((err, user) => {
+    if (err) {
+      if (err.message.match(/^E11000 duplicate key error.+/)) {
+        res.status(400).json({ success: false, message: 'Email already used.' })
+      } else res.status(500).json({ success: false, message: err.message })
+    } else {
+      let newCalendar = new Calendar({ userId: user._id })
+      newCalendar.save((err, calendar) => {
+        if (err) res.status(500).json({ success: false, message: err.message })
+        else {
+          // //WIP a voir avec Luke
+          // const msg = {
+          //   to: '',
+          //   from: 'milolib@milolib.com',
+          //   subject: 'Your are register',
+          //   text: 'Congrat you successfully registered into Milolib',
+          // };
+          // //sendMail commenter jusau a ce que compte sendgrid creer
+          // // sendMail(req.body.email, msg)
+          // //WIP
+          helper.beforeSendUser(user)
+          res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
+        }
+      })
+    }
+  })
 })
 
 // "Soft Delete" user
