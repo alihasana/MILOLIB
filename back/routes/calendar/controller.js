@@ -9,30 +9,12 @@ export default {
   checkSlotsConflict: (arr, val) => {
     return arr.some(function (arrElement) {
       if (val === arrElement.start) {
-        return arrElement.available === true
+        return arrElement.available === false
       }
       // return val === arrElement.start
     })
   },
-  // WIP, not working
-
-  asyncCall: async function (locals) {
-    console.log('asyncCall 1')
-    // let result = await createCalendar(locals)
-    // return result
-    return await controller.createCalendar(locals)
-    console.log('asyncCall 2')
-  },
-
-  // createCalendar: (locals) => {
-  //   console.log('createCalendar 1')
-  //   let newCalendar = new Calendar({ userId: locals.user.id })
-  //   console.log('createCalendar 2')
-  //   return newCalendar.save( (err, calendar) => {
-  //     if (err) return res.status(500).json({ success: false, message: 'lol' + err.message })
-  //   })
-  // },
-
+  
   createCalendar: (locals) => {
     console.log('createCalendar 1')
     let newCalendar = new Calendar({ })
@@ -59,6 +41,24 @@ export default {
       else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
     })
   },
+
+  // asyncCall: async function (locals) {
+  //   console.log('asyncCall 1')
+  //   // let result = await createCalendar(locals)
+  //   // return result
+  //   return await controller.createCalendar(locals)
+  //   console.log('asyncCall 2')
+  // },
+
+  // createCalendar: (locals) => {
+  //   console.log('createCalendar 1')
+  //   let newCalendar = new Calendar({ userId: locals.user.id })
+  //   console.log('createCalendar 2')
+  //   return newCalendar.save( (err, calendar) => {
+  //     if (err) return res.status(500).json({ success: false, message: 'lol' + err.message })
+  //   })
+  // },
+
 }
 
 

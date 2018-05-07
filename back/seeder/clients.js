@@ -19,7 +19,21 @@ let client = [
     role: 'client',
     firstName: 'John',
     lastName: 'Doe',
-  })
+  }),
+  new Client({
+    email: 'a@a',
+    password: bcrypt.hashSync('a', 10),
+    role: 'client',
+    firstName: 'Mike',
+    lastName: 'Tyson',
+  }),
+  new Client({
+    email: 'z@z',
+    password: bcrypt.hashSync('a', 10),
+    role: 'client',
+    firstName: 'Jimi',
+    lastName: 'Le Hendrix',
+  }),
 ]
 
 
