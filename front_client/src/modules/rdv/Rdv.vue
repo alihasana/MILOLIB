@@ -50,6 +50,7 @@ export default {
   methods: {
         takeRdv() {
          http
+        // .get("/clients/appointment/" + this.selected)
         .get("/profile/appointment/" + this.selected)
         .then(res => {
           console.log('this.selected:', this.selected);

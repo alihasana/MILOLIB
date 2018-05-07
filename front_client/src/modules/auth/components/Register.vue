@@ -7,15 +7,15 @@
         <hr>
         <div class="form-group">
           <label for="nom">Nom </label>
-          <input v-model="user.nom" id="nom" class="form-control" name="nom" type="text" placeholder="Rabbit" required>
+          <input v-model="user.lastName" id="lastName" class="form-control" name="lastName" type="text" placeholder="Rabbit" required>
         </div>
         <div class="form-group">
           <label for="prénom">Prénom </label>
-          <input v-model="user.prénom" id="prénom" class="form-control" name="prénom" type="text" placeholder="Roger" required>
+          <input v-model="user.firstName" id="firstName" class="form-control" name="firstName" type="text" placeholder="Roger" required>
         </div>
         <div class="form-group">
           <label for="téléphone">Téléphone </label>
-          <input v-model="user.téléphone" id="téléphone" class="form-control" name="téléphone" type="tel" placeholder="0123456789" required>
+          <input v-model="user.phone" id="phone" class="form-control" name="phone" type="tel" placeholder="0123456789" required>
         </div>
         <div class="form-group">
           <label for="email">Email </label>
@@ -24,24 +24,24 @@
         <br>
         <div class="form-group">
           <b-form-checkbox id="checkbox1"
-                          v-model="status1"
+                          v-model="user.descolarise"
                           value="true"
                           unchecked-value="false">
             J'ai moins de 26 ans
           </b-form-checkbox>
-          <div>State: <strong>{{status1}}</strong></div>
+          <div>State: <strong>{{user.descolarise}}</strong></div>
           <br>
           <b-form-checkbox id="checkbox2"
-                          v-model="status2"
+                          v-model="user.infAge"
                           value="true"
                           unchecked-value="false">
             Je suis descolarisé
           </b-form-checkbox>
-          <div>State: <strong>{{status2}}</strong></div>
+          <div>State: <strong>{{user.infAge}}</strong></div>
         </div>
         <br>
         <div>
-          <b-form-select v-model="selected" :options="options" class="mb-3" required>
+          <b-form-select v-model="user.commune" :options="options" class="mb-3" required>
             <template slot="first">
               <!-- this slot appears above the options from 'options' prop -->
               <option :value="null" disabled>-- Votre commune --</option>
@@ -58,7 +58,7 @@
             <option value="Tigery">Tigery</option>
             <option value="Vert-St-Denis">Vert-St-Denis</option>
           </b-form-select>
-          <div>Selected: <strong>{{ selected }}</strong></div>
+          <div>commune: <strong>{{ user.commune }}</strong></div>
         </div>
         <br>
         <div class="form-group">
@@ -98,10 +98,10 @@ export default {
   data() {
     return {
       title: "Register",
-      status1: 'false',
-      status2: 'false',
+      descolarise: 'false',
+      infAge: 'false',
       status3: 'false',
-      selected: null,
+      commune: null,
       // options: [
       //   { value: 'A', text: 'Tatooine' },
       //   { value: 'B', text: 'L\'étoile de la mort (ou l\'étoile noire osef)'},
@@ -109,15 +109,15 @@ export default {
       //   { value: 'D', text: 'Coruscant (n\'existe plus lol)' }
       // ],
       user: {
-        nom: "",
-        prénom: "",
-        téléphone: "",
+        lastName: "",
+        firstName: "",
+        phone: "",
         email: "",
-        status1: "",
-        status2: "",
-        selected: "",
+        descolarise: "",
+        infAge: "",
+        commune: "",
         password: "",
-        confirmPassword: ""
+        // confirmPassword: ""
       }
     };
   },
