@@ -8,6 +8,7 @@
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
+							<b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button>
 						</li>
 						<li class="navNavigate">
 							<b-button variant="primary" class="navNavigate__btn" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
@@ -64,8 +65,15 @@
 			<!-- Modal "See appointment details" -->
 			<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = false, the method getRelevantModal is called -->
 			<b-modal id="modalSeeAptDetails" ref="modalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
-					<form @submit.stop.prevent="modifyApt">
+					<b-form @submit.stop.prevent="modifyApt">
 					<p>Les infos du RDV: {{confirmedRDV}}</p>
+					<b-form-input id="exampleInput1"
+                      type="email"
+                      v-model="form.email"
+                      required
+                      placeholder="Enter email">
+                      </b-form-input>
+
 
 					<!-- <b-form-input type="date" v-model="" disabled=""></b-form-input> -->
 					<!-- <b-form-input type="text" v-model="formRDV.selectedTypeRDV.duration" disabled=""></b-form-input>
@@ -86,9 +94,14 @@
 					<b-button type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
 					<b-button type="submit" v-on:click="" variant="warning">Modifier le RDV</b-button>
 					<b-button type="button" v-on:click="cancelApt()" variant="danger">Annuler le RDV</b-button>
-				</form>
+				</b-form>
 			</b-modal>
 
+			<!-- Modal "TEST See appointment details" this one is opening from a button to test-->
+			<!-- but it will not be filled in with apt details, just for display test -->
+			<b-modal id="TestmodalSeeAptDetails">
+				
+			</b-modal>
 		 
 	</div>
 </template>
@@ -369,18 +382,19 @@ export default {
 						console.log('res:',res);
 						swal({
 			            type: "success",
-			            title: "Votre RDV a bien été crée: OK! Pour l'instant vous devez rafraichir la page pour le voir apparaitre dans l'agenda:)"
+			            title: "creation du RDV: ",
+			            text: "Votre RDV a bien été crée: OK! Pour l'instant vous devez rafraichir la page pour le voir apparaitre dans l'agenda:) "
 			          	});
 						this.$router.push({name: 'agenda'});
 						// when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
 						})
 					.catch(
 						error => {
-					    console.log('error:', error.response.data.message);
-					    console.log('res:', res);
+					    console.log('error:', error.response);
 					    swal({
 			            type: "error",
-			            title: "Votre RDV n'a pas été crée"
+			            title: "ECHEC de la creation du RDV: ",
+			            text: error.response.data.message
 			          	});
 					});
 		},
