@@ -78,7 +78,8 @@
 <script>
 /* eslint-disable */
 import swal from "sweetalert2";
-import http from '../../helpers/http'
+import http from '../../helpers/http';
+
 export default {
   name: "ProfileUser",
   data() {
@@ -117,29 +118,31 @@ export default {
         if (this.profile.password === this.profile.confirmPassword) {
           // send only new and old
           console.log('pswd sent data: ', this.profile);
-          // this.profile.password = undefined
           http.put('/profile', this.profile)
-          console.log('data to server: ', this.profile)
-          // .then(res => {
-          //   console.log('réponse then: ', res.data)
-          //   if (res.data) {
-          //     console.log('User details have been updated')
-          //     this.$router.push('/users')
-          //   }
-          // })
-          // .catch(err => {
-          //   console.log(err)
-          // })
-
-        } else {
-          console.log('new and confirmNew do not match'); 
-          swal({
-            text: 'Les mots de passe ne correspondent pas'
-          });
+          .then(res => {
+            console.log('res', res);
+            swal({
+                  type: "success",
+                  title: "Modification du profile: ",
+                  text: "Les modifications demandées ont bien été executées"
+                  });
+            this.$router.push({name: 'users'});
+            })
+          .catch(
+            error => {
+              console.log('error:', error.response.data);
+              swal({
+                  type: "error",
+                  title: "Modification du profile: ",
+                  text:error.response.data
+                  });
+            })
         }
-      },
+      }
     }
-  }
+
+
+  };
   </script>
 
   <style scoped>

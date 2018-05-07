@@ -376,7 +376,8 @@ export default {
 						})
 					.catch(
 						error => {
-					    // console.log('error:', error.response.data.message);
+					    console.log('error:', error.response.data.message);
+					    console.log('res:', res);
 					    swal({
 			            type: "error",
 			            title: "Votre RDV n'a pas été crée"
