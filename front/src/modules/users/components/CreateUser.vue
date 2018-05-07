@@ -62,6 +62,7 @@ export default {
         userRole: null,
         place: null,
       },
+      // User:{}, 
       userRole: [{
         text: 'Assigner un rôle au nouvel utilisateur',
         value: null
@@ -72,44 +73,11 @@ export default {
         {text: 'Sénart', value: 'Sénart'},
         {text: 'Combs-La-Ville', value: 'Combs-La-Ville'},
         {text: 'Moissy-Cramayel', value: 'Moissy-Cramayel'}
-      ],
-      User: {
-        lastName: String, 
-        FirstName: String,
-        email: String,
-        role: String,
-        password: String, 
-        workPlace: String
-      }
+      ]
     }
   },
   methods: {
-    // createUser: function(newUser) {
-    //   const User = {
-    //     lastName: this.form.lName, 
-    //     firstName: this.form.fName,
-    //     email: this.form.userEmail,
-    //     role: this.form.userRole,
-    //     password: this.form.userPassword, 
-    //     workPlace: this.form.place
-    //   }
-    //   console.log('Object from parent: ', User)
-    //   http.post('users', User)
-    //   console.log('profil créé: ', User)
-    //   .then(res => {
-    //     swal({
-    //           type: "success",
-    //           title: "L'utilisateur a bien été créé !",
-    //           text: res.data.message
-    //         });
-    //     this.$router.push('/users')
-    //     console.log('Bingo', res);
-    //   })
-    //   .catch(function(error) {
-    //     console.log("Error", error)
-    //   })
-    // },
-    createUser() {
+     createUser() {
       const User = {
         lastName: this.form.lName, 
         firstName: this.form.fName,
@@ -119,7 +87,7 @@ export default {
         workPlace: this.form.place
       }
       console.log('Object from parent: ', User)
-      http.post('/', this.User)
+      http.post('/users', User)
       console.log('profil créé: ', User)
       .then(res => {
         swal({
