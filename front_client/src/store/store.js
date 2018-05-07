@@ -12,19 +12,52 @@ import _ from 'underscore';
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
- 	state: {
+	state: {
+		// rdv: {
+		// 	_id: '',
+		// 	appointmentTypes: '',
+		// 	slots: '',
+		// 	updatedAt: '',
+		// 	userId: '',
+		// 	createdAt: '',
+		// }
+		calendarId: '',
+		calendarSlots: '',
+		appointmentTypes: '',
+
+
+	},
+	getters: {
+		// getRdv: (state) => {
+		// 	return state.rdv;
+		// }
+		// getRdv: (state) => state.rdv,
+		// getRdv: (state) => state.rdv.userId,
+		getCalendarId: (state) => {
+			return state.calendarId;
+		},
+		getSlots: (state) => {
+			return state.calendarSlots;
+		},
+		getappointmentType: (state) => {
+			return state.appointmentTypes;
+		},
+	}
+})
+// export const store = new Vuex.Store({
+//  	state: {
  	//----User datas---------
  		// role: '',
  	//----Calendar Datas-----
  		//--initialization of the calendar
- 		now: cHelpers.getCurrentDate(),
- 		agendaRangeTime:cHelpers.InitializeDefaultTimeRange(),
+ 		// now: cHelpers.getCurrentDate(),
+ 		// agendaRangeTime:cHelpers.InitializeDefaultTimeRange(),
  		// agendaRangeTime:'',
- 		minTimeEndFromSlot:'',
+ 		// minTimeEndFromSlot:'',
  		//--data from db
- 		agendaSlots:[],
- 		eventTypes:[]
- 	},
+ 		// agendaSlots:[],
+ 		// eventTypes:[]
+ 	// },
  	// getters:{
  	// 	updateRangeTime(state) {
  	// 		let nowStartWeek= cHelpers.getWeekFirstDate(state.now);
@@ -32,18 +65,18 @@ export const store = new Vuex.Store({
  	// 		return cHelpers.getDaysOfTheTimeRange(nowStartWeek,end);
  	// 	}
  	// },
- 	mutations:{
- 		getSlotsAvailables(state, slots){
- 			state.agendaSlots = slots;
- 		},
- 		getMinTimeRange(state, mTimeRange){
- 			state.minTimeEndFromSlot = mTimeRange.end;
- 			let nowStartWeek= cHelpers.getWeekFirstDate(state.now);
- 			let end = cHelpers.addTwoMonth(state.minTimeEndFromSlot);
- 			return state.agendaRangeTime = cHelpers.getDaysOfTheTimeRange(nowStartWeek,end);
- 		},
- 		getEventTypes(state, eventTypes){
- 			state.eventTypes = eventTypes;
- 		}
- 	}
- })
+//  	mutations:{
+//  		getSlotsAvailables(state, slots){
+//  			state.agendaSlots = slots;
+//  		},
+//  		getMinTimeRange(state, mTimeRange){
+//  			state.minTimeEndFromSlot = mTimeRange.end;
+//  			let nowStartWeek= cHelpers.getWeekFirstDate(state.now);
+//  			let end = cHelpers.addTwoMonth(state.minTimeEndFromSlot);
+//  			return state.agendaRangeTime = cHelpers.getDaysOfTheTimeRange(nowStartWeek,end);
+//  		},
+//  		getEventTypes(state, eventTypes){
+//  			state.eventTypes = eventTypes;
+//  		}
+//  	}
+//  })

@@ -3,6 +3,13 @@
     <b-card class="calendarContainer__card">
       <b-card-header class="cardhead">
         Sélectionnez votre RDV
+        <!-- <div>
+          display ID from computed: {{ getCalendarId }}
+          <br>
+          display Types from computed: {{ getappointmentType }}
+          <br>
+          display Slots from computed: {{ getSlots }}
+        </div> -->
       </b-card-header>
       
       <b-card-body class="cardbody">
@@ -47,6 +54,11 @@ import cal from '../../helpers/calendar';
 import moment from 'moment';
 import 'moment/locale/fr';
 import twix from 'twix';
+import { mapGetters } from 'vuex'
+
+import { store } from '../../store/store';
+//setting local format and language
+moment.locale('fr');
 
 
 export default {
@@ -80,6 +92,10 @@ export default {
     }
   },
   computed:{
+    // getRdv() { 
+    //   return this.$store.state.rdv
+    // },
+    // ...mapGetters(['getRdv']),
     getCurrentDay(){
       return moment();
     },
@@ -90,21 +106,21 @@ export default {
       //actually, the time range should be defined by the availabilities.
       //we will need to get the slots from the store for this and manipulate them to get the time range
       //similar function has already been implemented in back-office calendar
-    // },
-    // getSlots(){
-    //   return this.$store.state.calendarSlots;
-    // },
-    // getHourList(){
-    //   this.hourList = this.generateHourList(this.this.apt.appointmentType.duration);
-    //   this.hourList = this.generateHourList(this.duration);
-    // },
-    // getappointmentType(){
+    },
+    getSlots(){
+      return this.$store.state.calendarSlots;
+    },
+    getHourList(){
+      this.hourList = this.generateHourList(this.this.apt.appointmentType.duration);
+      this.hourList = this.generateHourList(this.duration);
+    },
+    getappointmentType(){
     // the duration and name will come from the store.
-    //   this.apt.appointmentType = this.$store.state.appointmentTypes;
-    // },
-    // getCalendarId(){
-    //   the calendarId will come from the store
-    //     this.apt.calendarId = this.$store.state.calendarId;
+      return this.apt.appointmentType = this.$store.state.appointmentTypes;
+    },
+    getCalendarId(){
+      // the calendarId will come from the store
+        return this.apt.calendarId = this.$store.state.calendarId;
     },
     endDisplay(){
       return this.beginDisplay+3;
