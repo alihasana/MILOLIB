@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 
 // TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
+  console.log('req:', req);
   var messageArray = ['Profile updated.', '', '']
   //'res.locals.user' is the actual connected user
   for (let key of Object.keys(req.body)) {
