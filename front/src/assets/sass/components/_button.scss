@@ -1,6 +1,8 @@
 .btn {
 	&,
-	&:link,
+	&:link{
+		height: 32px;
+	}
 	&:visited {
 		text-transform: uppercase;
 		text-decoration: none;

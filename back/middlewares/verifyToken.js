@@ -1,7 +1,8 @@
-import express from "express"
-import mongoose from "mongoose"
-import jwt from "jsonwebtoken"
+import express from 'express'
+import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
 import User from './../routes/users/model'
+import Client from './../routes/clients/model'
 const ObjectId = mongoose.Types.ObjectId
 
 // la premiere partie est égale à un mot defini dans la config, et la seconde est égale au token.
@@ -16,16 +17,32 @@ let verifyToken = (req, res, next) => {
         // res.locals permet de stocker des datas utilisable dans la requête en cours
         res.locals.decode = decode
         if (ObjectId.isValid(decode._id)) {
-          User.findById(decode._id, (err, user) => {
+          if (decode.userCollection === 'User') var Collection = User // Anciennement un 'let', erreur 'SyntaxError'. Pourquoi ?
+          else if (decode.userCollection === 'Client') var Collection = Client
+          else return res.status(400).json({ success: false, message: 'Bad request' })
+          
+          // if (decode.userCollection == 'User' || 'Client') {
+            // if (decode.userCollection === 'User') var Collection = User // Anciennement un 'let', erreur 'SyntaxError'. Pourquoi ?
+            // else var Collection = Client
+            
+          // if (decode.userCollection == 'User' || 'Client') {
+            // if (decode.userCollection === 'User') {
+              //   let Collection = User // Anciennement un 'let', erreur 'SyntaxError'. Pourquoi ?
+              // } else {
+                //   let Collection = Client
+                // } 
+                
+          Collection.findById(decode._id, (err, user) => {
             if (err) res.status(500).json({ success: false, message: err.message })
             else if (!user) res.status(401).json({ success: false, message: 'Unauthozired' })
-            else if (user.active !== true) res.status(400).json({ success: false, message: 'Inactive account. Please contact an administrator.' })
+            else if (decode.userCollection === 'User' && user.active !== true) res.status(403).json({ success: false, message: 'Inactive account. Please contact an administrator.' })
             else {
               res.locals.user = user
-              res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
+              // res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
               next()
             }
           })
+          // } else res.status(400).json({ success: false, message: 'Bad request' })
         } else res.status(400).json({ success: false, message: 'Invalid ID' })
       }
     })

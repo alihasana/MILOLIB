@@ -1,15 +1,15 @@
 import User from './../routes/users/model'
+import Client from './../routes/clients/model'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
 let primoSeed = () => {
 	return new Promise(resolve => {
 		let primos = [
-			new User({
+			new Client({
 				email: 'primo',
 				password: bcrypt.hashSync('primo', 10),
 				role: 'Primo',
-				calendar: {}  
 			})
 		]
 

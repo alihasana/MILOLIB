@@ -9,7 +9,6 @@ let inviteSeed = () => {
 				email: 'invité',
 				password: bcrypt.hashSync('invité', 10),
 				role: 'Invité',
-				calendar: {} 
 			})
 		]
 

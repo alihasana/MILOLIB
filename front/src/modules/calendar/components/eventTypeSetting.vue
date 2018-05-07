@@ -50,6 +50,8 @@ import http from '../../../helpers/http';
 
 //TODO
 //- would be greate to turn in color the selected type of meeting for better visualization
+//- get route to display the actual type of appointment
+//(get 'calendar/appontmentTypes')
 
 export default {
   name: "eventTypeSetting",
@@ -79,7 +81,7 @@ export default {
           for (let k=0; k<this.types.length; k++){
             if(this.types[k].rdvType == sel[i] && this.types[k].duration>0){
               this.eventTypeFilteredInETV.push({
-                type: this.types[k].rdvType,
+                name: this.types[k].rdvType,
                 duration: this.types[k].duration
               })
             }
@@ -111,19 +113,18 @@ export default {
       console.log('postBody: ', postBody);
 
       //for now while the route is not working
-      this.$store.commit('getEventTypes', SelectedEventTypes);
+      // this.$store.commit('getEventTypes', SelectedEventTypes);
 
-      http.post('/event', postBody)
+      http.put('/calendar/appointmentTypes', postBody)
       .then(
         res => {
           console.log('res:',res.data);
               swal({
                     type: "success",
                     title: "paramétrage de vos types de RDV et références",
-                    text: "OK: les types sélectionnés sont:" +res.data,
-                    });
+                    text: res.message
+              });
               // when the route will be working
-              // this.$store.commit('getEventTypes', res.data.content);
               this.$router.push({name: 'agenda'});
               this.eventTypeFilteredInETV = '';
             })
@@ -175,6 +176,4 @@ export default {
   text-align: left;
 }
 
-.duration{
-}
 </style>

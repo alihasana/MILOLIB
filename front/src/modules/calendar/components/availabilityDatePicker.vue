@@ -58,15 +58,17 @@ export default {
 	},
 	methods:{
 		createAgendaRange : function(){
-			if (moment(this.startDateInDP).isAfter(this.$store.state.now)) {
-   				console.log('je vais créer mon agenda de', this.startDateInDP, 'à', this.endDateInDP );
-				this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDP,this.endDateInDP);
+			if (moment(this.startDateInDP).isAfter(this.$store.state.now) && moment(this.endDateInDP).isAfter(this.startDateInDP)) {
+				console.log('je vais créer mon agenda de ( before)', this.startDateInDP, 'à', this.endDateInDP );
+				this.startDateInDPlessOne = moment(this.startDateInDP).subtract(1,'day').format("YYYY-MM-DD");
+   				console.log('je vais créer mon agenda de (after)', this.startDateInDPlessOne, 'à', this.endDateInDP );
+				this.agendaRangeInDP = cHelpers.getDaysOfTheTimeRange(this.startDateInDPlessOne,this.endDateInDP);
 				this.visible=!this.visible;
 			} else {
 				swal({
 		            type: "error",
 		            title: "Dates non valides",
-		            text: "Vous ne pouvez pas plannifier des disponibilités sur des dates antérieures à aujourd'hui!"
+		            text: "Merci de vérifier les dates! Vous ne pouvez pas planifier des disponibilités sur des dates antérieures à aujourd'hui inclus, ni sélectionner une date de fin antérieure à la date de début!"
 		          	});
 			}
 		}

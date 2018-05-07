@@ -2,10 +2,14 @@
 import mongoose from 'mongoose'
 
 let SlotSchema = new mongoose.Schema({
-  start: mongoose.Schema.Types.Mixed,
-  end: mongoose.Schema.Types.Mixed,
-  available: { type: Boolean, required: true, default: true },
-  status: String,
+	start: { type: String },
+	end: { type: String },
+	available: { type: Boolean, required: true, default: true },
+  appointment: {
+    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
+    fullName: String,
+    appointmentType: String,
+  }
 })
 
 export default SlotSchema

@@ -33,6 +33,7 @@
 				</b-form-group>
 				<hr>
 				<b-button variant="outline-primary" v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</b-button>
+				<p>{{selected}}</p>
 				<hr>
 			</b-form>
 		</div>
@@ -57,7 +58,8 @@ import http from '../../../helpers/http';
 //To do:
 // - Should the hours selection pre-filled? or maybe the conseiller could tick a default checkbox to prefill all days with opening hours?
 // - error handeling: if the range not suitable // what about if they select hour like 3:18?
-//what about one slot is not complete?
+//what about one slot is not complete? 
+// make sure the time range is merging properly with the cuurent agenda.
 
 
 export default {
@@ -67,14 +69,18 @@ export default {
 		return {
 			day:'',
 			weekDays:[
-				{ dayname:'Lundi', index:0, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Mardi', index:1, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Mercredi', index:2, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Jeudi', index:3, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Vendredi', index:4, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Samedi', index:5, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
-				{ dayname:'Dimanche', index:6, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' }
+			{ dayname:'Lundi', index:0, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Mardi', index:1, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Mercredi', index:2, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Jeudi', index:3, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Vendredi', index:4, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Samedi', index:5, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' },
+			{ dayname:'Dimanche', index:6, startMorningTime:'', endMorningTime: '', startAfternoonTime: '', endAfternoonTime:'' }
 			],
+			openingHours:{
+				start:'08:00',
+				end:'18:00'
+			},
 			selected:[],
 			agendaRangeInAS:[],
 			agendaRangeFilteredInAS:[],
@@ -101,64 +107,89 @@ export default {
 						}
 					}
 				}
+				console.log('agendaRangeFilteredInAS: ', this.agendaRangeFilteredInAS);
 				//and i create slots of availabilities for these days:
 					//for this i need to get starting and ending for each period in Day:  i need convert string collected in input to duration in minutes
 					//and i need also to get the weekDays matching as well to get back the relevant rangetime.
-				let allDaysSlots = [];
-				let daySlots = [];
-				for (let l=0; l<this.agendaRangeFilteredInAS.length; l++){
-					let daySlotsAM = [];
-					let daySlotsPM = [];
-					let dayNamebis = cHelpers.getNameOfDay(this.agendaRangeFilteredInAS[l]);
-					for(let k=0; k<this.weekDays.length; k++){
-						if(dayNamebis == this.weekDays[k].dayname.toLowerCase()){
+					let allDaysSlots = [];
+					let daySlots = [];
+					for (let l=0; l<this.agendaRangeFilteredInAS.length; l++){
+						let daySlotsAM = [];
+						let daySlotsPM = [];
+						let opening = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.openingHours.start), 'minutes');
+						let closing = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.openingHours.end), 'minutes');
+						let dayNamebis = cHelpers.getNameOfDay(this.agendaRangeFilteredInAS[l]);
+						for(let k=0; k<this.weekDays.length; k++){
+							if(dayNamebis == this.weekDays[k].dayname.toLowerCase()){
+								console.log('there is day matching: ', this.weekDays[k].dayname.toLowerCase())
 							if(this.weekDays[k].startMorningTime && this.weekDays[k].endMorningTime){
 								let startAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startMorningTime), 'minutes');
 								let endAM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endMorningTime), 'minutes');
-								daySlotsAM.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
-								daySlots.push(daySlotsAM);
+								if (moment(startAM).isBetween(opening, closing, null, '[)') && moment(endAM).isBetween(opening, closing, null, '(]') ){
+									daySlotsAM.push(cHelpers.setSlotsArray(startAM,endAM,15,cHelpers.Available));
+									daySlots.push(daySlotsAM);
+								}
+								
 							}
 							if(this.weekDays[k].startAfternoonTime && this.weekDays[k].endAfternoonTime){
 								let startPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].startAfternoonTime), 'minutes');
 								let endPM = moment(this.agendaRangeFilteredInAS[l]).startOf('day').add(cHelpers.convertTimeInMinutes(this.weekDays[k].endAfternoonTime), 'minutes');
-								daySlotsPM.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
-								daySlots.push(daySlotsPM);
+								if (moment(startPM).isBetween(opening, closing, null, '[)') && moment(endPM).isBetween(opening, closing, null, '(]') ){
+									daySlotsPM.push(cHelpers.setSlotsArray(startPM,endPM,15,cHelpers.Available));
+									daySlots.push(daySlotsPM);
+								}
 							}
 						}
 					}
 				}
 				allDaysSlots.push(_.flatten(daySlots));
 				this.slotsInAS = _.flatten(allDaysSlots);
-				this.checkAvailability(this.slotsInAS);
+				console.log('this.slotsInAS:', this.slotsInAS)
+				if (this.slotsInAS[0]){
+					this.checkAvailability(this.slotsInAS);
+				}
+				else{
+					swal({
+					type: "error",
+					title: "paramétrage de vos disponibilités",
+					text: "Attention, certains éléments n'ont pas été renseignés ou ne correspondent pas aux horaires d'ouverture de " + this.openingHours.start + " à " + this.openingHours.end+ " : Echec du paramétrage"
+				});
+				}
 			}
+			else{
+				swal({
+					type: "error",
+					title: "paramétrage de vos disponibilités",
+					text: "Attention, aucun jour n'a été sélectionné: Echec du paramétrage"
+				});
+			};
 		},
 		checkAvailability: function(availableSlots){
 			let postBody = availableSlots;
 			console.log('postBody: ', postBody);
 			http.post('/calendar', postBody)
-						.then(
-							res => {
-							console.log('res:',res);
-							// this.$store.commit('slotsAvailables', res.data);
-							this.$store.commit('updateRangeTime', this.agendaRangeInAS)
+			.then(
+				res => {
+					console.log('res:',res);
+							// this.$store.commit('updateRangeTime', this.agendaRangeInAS)
 							swal({
-				            type: "success",
-				            title: "paramétrage de vos disponibilités",
-				            text: "OK!"
-				          	});
+								type: "success",
+								title: "paramétrage de vos disponibilités",
+								text: "OK! Veuillez patienter pendant la mise à jour de votre agenda"
+							});
 							this.$router.push({name: 'agenda'});
-							})
-						.catch(
-							error => {
-						    console.log('error:', error.response.data.message);
-						    swal({
-				            type: "error",
-				            title: "paramétrage de vos disponibilités",
-				            text: "impossible, merci de vérifier que les plages sélectionnées sont appropriées ou ne comportent pas de RDV"
-				          	});
-						});
+						})
+			.catch(
+				error => {
+					console.log('error:', error.response.data.message);
+					swal({
+						type: "error",
+						title: "paramétrage de vos disponibilités",
+						text: "impossible, merci de vérifier que les plages sélectionnées sont appropriées ou ne comportent pas de RDV"
+					});
+				});
 		}
-}	
+	}	
 };
 
 </script>

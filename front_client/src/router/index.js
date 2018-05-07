@@ -36,7 +36,8 @@ export default new Router({
     name: "dashboard",
     components: {
       default: Dashboard,
-      header: Header
+      header: Header,
+      calendar: calendar
     }
   },
   {

@@ -25,6 +25,7 @@
 
 <script>
   /* eslint-disable */
+  import swal from "sweetalert2";
   export default {
     name: "Header",
     data() {
@@ -38,7 +39,7 @@
         swal({
               type: "success",
               title: "Vous êtes déconnecté !",
-              text: res.data.message
+              // text: res.data.message
             });
         localStorage.removeItem("token");
         this.$router.push("/");

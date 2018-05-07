@@ -20,8 +20,10 @@
       <b-col md="6" class="my-1">
         <b-form-group horizontal class="mb-0">
           <b-input-group>
+            <!-- search a user via filter -->
             <b-form-input v-model="filter" placeholder="Rechercher un utilisateur" />
             <b-input-group-append>
+              <!-- Refresh filter -->
               <b-btn :disabled="!filter" @click="filter = ''">Rafraîchir</b-btn>
             </b-input-group-append>
           </b-input-group>
@@ -44,7 +46,7 @@
     <!-- Main table element -->
     <b-table show-empty
              stacked="md"
-             :items="items"
+             :items ="items"
              :fields="fields"
              :current-page="currentPage"
              :per-page="perPage"
@@ -54,11 +56,15 @@
              @filtered="onFiltered"
              
     >
-      <template slot="name" slot-scope="row">{{row.value.first}} {{row.value.last}} {{user}}</template>
+      <template slot="name" slot-scope="row">
+      {{users}} {{row.value.last}}
+      </template>
+    
+
       <template slot="ref" slot-scope="row"> </template>
-      <template slot="actions" slot-scope="row">
+      <template slot="actions" slot-scope="row"></template>
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-        <b-button size="sm" @click.stop="row.toggleDetails" variant="primary">
+        <!-- <b-button size="sm" @click.stop="row.toggleDetails" variant="primary">
          Voir le profil
         </b-button>
         <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1" variant="primary">
@@ -69,30 +75,39 @@
         </b-button>
         <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1" variant="primary">
           Désactiver
-        </b-button>
-      </template>
+        </b-button> -->
+
+
+
 
       <!-- Voir le détail du profil -->
       <template slot="row-details" slot-scope="row">
-        
            <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
              <b-card>
-
+        <!-- show profil details  -->
         <p>{{ user.email }}<br/>
           </p>
              </b-card>
         <!-- <button v-on:click="redirectToUserList">Modifier</button> -->
       </router-link>
       </template>
+
+
+
         
     </b-table>
 
-    <!-- Info modal -->
-    <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
-      <pre>{{ modalInfo.content }}</pre>
-    </b-modal>
 
+
+
+
+    <!-- Info modal -->
+    <!-- <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
+      <pre>{{ modalInfo.content }}</pre>
+    </b-modal> -->
   </b-container>
+
+
   </div>
 </template>
 
@@ -101,28 +116,28 @@
   import http from '../../../helpers/http'
 
   const items = [
-  { ref: true, role: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-  { ref: false, role: 21, name: { first: 'Larsen', last: 'Shaw' } },
-  {
-    ref: false,
-    role: 9,
-    name: { first: 'Mini', last: 'Navarro' },
-    _rowVariant: 'success'
-  },
-  { ref: false, role: 89, name: { first: 'Geneva', last: 'Wilson' } },
-  { ref: true, role: 38, name: { first: 'Jami', last: 'Carney' } },
-  { ref: false, role: 27, name: { first: 'Essie', last: 'Dunlap' } },
-  { ref: true, role: 40, name: { first: 'Thor', last: 'Macdonald' } },
-  {
-    ref: true,
-    role: 87,
-    name: { first: 'Larsen', last: 'Shaw' },
-    _cellVariants: { role: 'danger', ref: 'warning' }
-  },
-  { ref: false, role: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-  { ref: false, role: 22, name: { first: 'Genevieve', last: 'Wilson' } },
-  { ref: true, role: 38, name: { first: 'John', last: 'Carney' } },
-  { ref: false, role: 29, name: { first: 'Dick', last: 'Dunlap' } }
+  // { ref: true, role: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
+  // { ref: false, role: 21, name: { first: 'Larsen', last: 'Shaw' } },
+  // {
+  //   ref: false,
+  //   role: 9,
+  //   name: { first: 'Mini', last: 'Navarro' },
+  //   _rowVariant: 'success'
+  // },
+  // { ref: false, role: 89, name: { first: 'Geneva', last: 'Wilson' } },
+  // { ref: true, role: 38, name: { first: 'Jami', last: 'Carney' } },
+  // { ref: false, role: 27, name: { first: 'Essie', last: 'Dunlap' } },
+  // { ref: true, role: 40, name: { first: 'Thor', last: 'Macdonald' } },
+  // {
+  //   ref: true,
+  //   role: 87,
+  //   name: { first: 'Larsen', last: 'Shaw' },
+  //   _cellVariants: { role: 'danger', ref: 'warning' }
+  // },
+  // { ref: false, role: 26, name: { first: 'Mitzi', last: 'Navarro' } },
+  // { ref: false, role: 22, name: { first: 'Genevieve', last: 'Wilson' } },
+  // { ref: true, role: 38, name: { first: 'John', last: 'Carney' } },
+  // { ref: false, role: 29, name: { first: 'Dick', last: 'Dunlap' } }
 ]
   export default {
     name: "userList",
@@ -131,6 +146,7 @@
         title: "Your are on the userList",
         users: [],
         items: items,
+        // Table field name
       fields: [
         { key: 'name', label: 'Nom et Prénom de l\'utilisateur', sortable: true },
         { key: 'role', label: 'Rôle de l\'utilisateur', sortable: true, 'class': 'text-center' },
@@ -140,7 +156,7 @@
       currentPage: 1,
       perPage: 5,
       totalRows: items.length,
-      pageOptions: [ 5, 10, 15 ],
+      pageOptions: [ 5, 10, 15, 20 ],
       sortBy: null,
       sortDesc: false,
       filter: null,

@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.babel.js"
+    "start": "nodemon index.babel.js",
+    "seed": "node seeder/babel/allStaff.babel.js",
+    "s_staff": "node seeder/babel/allStaff.babel.js",
+    "s_client": "node seeder/babel/clients.babel.js"
   },
   "author": "Team Citron [Yoann, Ali, Luke]",
   "license": "ISC",

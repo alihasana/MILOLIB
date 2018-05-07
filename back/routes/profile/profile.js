@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 // import bcrypt from 'bcrypt'
 // import User from './../users/model'
 import helper from '../../helpers/helper'
-import controller from './controller';
+import controller from './controller'
 // const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
 })
 
-// TO ADD : updatedDate
+
 // TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '']
@@ -33,8 +33,10 @@ router.put('/', (req, res) => {
       } else res.status(500).json({ success: false, message: err.message })
     }
     if (messageArray[0] !== 'Profile updated.') {
-      res.status(400).json({ success: true, message: messageArray[0] + messageArray[1] + messageArray[2] })
-    } else res.status(200).json({ success: true, message: messageArray[0] })
+      return res.status(400).json({ success: true, message: messageArray[0] + messageArray[1] + messageArray[2] })
+    }
+    
+    res.status(200).json({ success: true, message: messageArray[0] })
   })
 })
 
