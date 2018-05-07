@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => { // WIP, a voir
     req.body.password = bcrypt.hashSync(req.body.password, 10)
   }
   if (req.body.email) {
-    if (!helper.regexEmail.test(body.email)) {
+    if (!helper.regexEmail.test(req.body.email)) {
       return res.status(400).json({ success: false, message: 'Valid email required.' })
     }
   }
@@ -60,7 +60,9 @@ router.put('/:id', (req, res) => { // WIP, a voir
 })
 
 router.post('/', (req, res) => {
-  // if (res.locals.user.role != 'Administrateur' || 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  if (res.locals.user.role != 'Administrateur' || 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  // console.log('Le Req : ', req) // WIP : For testing purpose
+  console.log(res.locals.user)
   if (!req.body.email || !req.body.password) return res.status(400).json({ success: false, message: 'Missing email and/or password.' })
   if (!helper.regexEmail.test(req.body.email)) return res.status(400).json({ success: false, message: 'Valid email required.' })
   let newUser = new User(req.body)
