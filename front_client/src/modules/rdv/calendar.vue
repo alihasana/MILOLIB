@@ -33,7 +33,10 @@
                 <!-- affichage des boutons heures -->
                 <b-col class="calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
                 <ul class="calendar__bodyUl"v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-                  <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button,getSlots)">{{button.id | buttonIdFormat}}</b-button></li>
+                  <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button)">{{button.id | buttonIdFormat}}</b-button></li>
+                  <!-- A decommenter et prendre à la place du dessus quand getSlots fonctionne. -->
+                  <!-- <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button,getSlots)">{{button.id | buttonIdFormat}}</b-button></li> -->
+
                 </ul>
               </b-col>
             </b-row>
@@ -241,14 +244,15 @@ export default {
       //si l'horaire est dispo( en classe A)
       //i need to call getmatchingInitial slots  
       //then duration so that i can gather all the slots and send them to back-end
-      if (btn.id.charAt(btn.id.length - 1) == 'A'){
+      if (button.id.charAt(button.id.length - 1) == 'A'){
         // this.getmatchingInitalSlot(button, this.getSlots);
         // this.getSlotsInRange(slotList,this.apt.initialHour,this.apt.endHour)
         let postBody = {
           calendarId:this.apt.calendarId,
           slots:this.apt.allSlots,
           appointmentType:this.apt.appointmentType
-        }
+        };
+        console.log('postBody:', postBody);
         http.post('client/appointment', postBody)
         .then(
             res => {

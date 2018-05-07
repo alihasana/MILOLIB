@@ -281,6 +281,27 @@ router.post('/:userId/appointment', (req, res) => {
   })
 })
 
+router.delete('/appointment/:appointmentId', (req, res) => {
+  if (!ObjectId.isValid(req.params.appointmentId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
+  Appointment.findById(req.params.appointmentId)
+    .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
+    .populate('participants.staff') // TODO: VIRER LE PASSWORDde façon global (schema)
+    .exec((err, appointment) => {
+      if (appointment.participants.staff != res.locals.user.id) {
+        if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+      }
+      if (err) return res.status(500).json({ success: false, message: err.message })
+      else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
+
+      helper.beforeSendUser(appointment.participants.staff)
+      for (let key of Object.keys(appointment.participants.clients)) {
+        helper.beforeSendUser(key)
+      }
+
+      res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
+    })
+})
+
 // -------------------------------------------------------------------
 //                        NON FONCTIONNELS 
 // -------------------------------------------------------------------

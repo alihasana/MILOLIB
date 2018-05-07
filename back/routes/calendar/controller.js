@@ -6,9 +6,12 @@ import helper from './../../helpers/helper'
 import controller from './controller'
 
 export default {
-  checkSlotsConflict: (arr2, val) => {
-    return arr2.some(function (arr2Element) {
-      return val === arr2Element.start
+  checkSlotsConflict: (arr, val) => {
+    return arr.some(function (arrElement) {
+      if (val === arrElement.start) {
+        return arrElement.available === true
+      }
+      // return val === arrElement.start
     })
   },
   // WIP, not working
