@@ -38,26 +38,25 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', (req, res) => { // WIP, a voir
-  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
-    delete req.body.active
-    if (req.body.password) {
-      req.body.password = bcrypt.hashSync(req.body.password, 10)
+  if (res.locals.user.role != 'Administrateur' || 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  delete req.body.active
+  if (req.body.password) {
+    req.body.password = bcrypt.hashSync(req.body.password, 10)
+  }
+  if (req.body.email) {
+    if (!helper.regexEmail.test(body.email)) {
+      return res.status(400).json({ success: false, message: 'Valid email required.' })
     }
-    if (req.body.email) {
-      if (!helper.regexEmail.test(body.email)) {
-        return res.status(400).json({ success: false, message: 'Valid email required.' })
-      }
+  }
+  User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
+    if (err) {
+      if (err.message.match(/^Cast to ObjectId failed.+/)) {
+        res.status(400).json({ success: false, message: 'Invalid ID' })
+      } else res.status(500).json({ success: false, message: err.message })
     }
-    User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
-      if (err) {
-        if (err.message.match(/^Cast to ObjectId failed.+/)) {
-          res.status(400).json({ success: false, message: 'Invalid ID' })
-        } else res.status(500).json({ success: false, message: err.message })
-      }
-      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
-      else res.status(200).json({ success: true, message: 'User updated!' })
-    })
-  } else res.status(403).json({ success: false, message: 'Forbidden.' })
+    else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+    else res.status(200).json({ success: true, message: 'User updated!' })
+  })
 })
 
 router.post('/', (req, res) => {
@@ -96,25 +95,24 @@ router.post('/', (req, res) => {
 
 // "Soft Delete" user
 router.put('/:id/active', (req, res) => {
-  if (res.locals.user.role == 'Administrateur' || 'Administrateur/Conseiller') {
-    if (req.body.active) {
-      User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
-        if (err) {
-          if (err.message.match(/^Cast to ObjectId failed.+/)) {
-            res.status(400).json({ success: false, message: 'Invalid ID' })
-          }
-          else if (err.message.match(/^Cast to boolean failed.+/)) {
-            res.status(400).json({ success: false, message: 'Invalid request.' })
-          } else res.status(500).json({ success: false, message: err.message })
+  if (res.locals.user.role != 'Administrateur' || 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  if (req.body.active) {
+    User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
+      if (err) {
+        if (err.message.match(/^Cast to ObjectId failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid ID' })
         }
-        else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
-        else {
-          if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
-          else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
-        }
-      })
-    } else res.status(400).json({ success: false, message: 'Invalid request.' })
-  } else res.status(403).json({ success: false, message: 'Forbidden.' })
+        else if (err.message.match(/^Cast to boolean failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid request.' })
+        } else res.status(500).json({ success: false, message: err.message })
+      }
+      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+      else {
+        if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
+        else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
+      }
+    })
+  } else res.status(400).json({ success: false, message: 'Invalid request.' })
 })
 
 export default router
