@@ -62,6 +62,7 @@ export default {
         userRole: null,
         place: null,
       },
+      // User:{}, 
       userRole: [{
         text: 'Assigner un rôle au nouvel utilisateur',
         value: null
@@ -72,11 +73,12 @@ export default {
         {text: 'Sénart', value: 'Sénart'},
         {text: 'Combs-La-Ville', value: 'Combs-La-Ville'},
         {text: 'Moissy-Cramayel', value: 'Moissy-Cramayel'}
-      ],
+
+      ]
     }
   },
   methods: {
-    createUser() {
+     createUser() {
       const User = {
         lastName: this.form.lName, 
         firstName: this.form.fName,
@@ -86,8 +88,10 @@ export default {
         workPlace: this.form.place
       }
       console.log('Object from parent: ', User)
-      http.post('/users', this.User)
-      // console.log('profil créé: ', User)
+      http.post('/users', User)
+      console.log('profil créé: ', User)
+
+
       .then(res => {
         swal({
               type: "success",
