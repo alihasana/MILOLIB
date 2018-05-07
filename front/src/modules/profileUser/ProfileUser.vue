@@ -93,9 +93,9 @@ export default {
             lastName: '', 
             firstName: '', 
             email: '', 
-            oldPswd: '', 
             password: '', 
-            confirmPassword: '', 
+            newPassword: '', 
+            confirmNewPassword: '', 
         }, 
         show: false
       };
@@ -115,7 +115,7 @@ export default {
     methods: {
       updateUserProfile() {
         // check new and confirm new password here
-        if (this.profile.password === this.profile.confirmPassword) {
+        if (this.profile.newPassword === this.profile.confirmNewPassword) {
           // send only new and old
           console.log('pswd sent data: ', this.profile);
           http.put('/profile', this.profile)
@@ -134,7 +134,7 @@ export default {
               swal({
                   type: "error",
                   title: "Modification du profile: ",
-                  text:error.response.data
+                  text:error.response.data.message
                   });
             })
         }
