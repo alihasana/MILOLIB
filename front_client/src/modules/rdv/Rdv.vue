@@ -54,15 +54,15 @@ export default {
         // .get("/profile/appointment/" + this.selected)
         .then(res => {
           console.log('this.selected:', this.selected);
-          console.log('res.data.content._id:', res.data.content._id);
-          console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
-          console.log('res.data.content.slots:', res.data.content.slots);
+          console.log('res:', res);
+          // console.log('res.data.content._id:', res.data.content._id);
+          // console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
+          // console.log('res.data.content.slots:', res.data.content.slots);
           // console.log('res.data.content.updatedAt:', res.data.content.updatedAt);
           // console.log('res.data.content.userId:', res.data.content.userId);
           // console.log('res.data.content.createdAt:', res.data.content.createdAt);
-          this.$store.state.calendarId = res.data.content._id;
-          this.$store.state.calendarSlots = res.data.content.slots;
-          this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          this.$store.commit('getSlots', res.data.content.slots);
+          
           // this.$store.state.rdv.updatedAt = res.data.content.updatedAt;
           // this.$store.state.rdv.userId = res.data.content.userId;
           // this.$store.state.rdv.createdAt = res.data.content.createdAt;
