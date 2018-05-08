@@ -73,6 +73,7 @@ export default {
         {text: 'Sénart', value: 'Sénart'},
         {text: 'Combs-La-Ville', value: 'Combs-La-Ville'},
         {text: 'Moissy-Cramayel', value: 'Moissy-Cramayel'}
+
       ]
     }
   },
@@ -89,6 +90,8 @@ export default {
       console.log('Object from parent: ', User)
       http.post('/users', User)
       console.log('profil créé: ', User)
+
+
       .then(res => {
         swal({
               type: "success",
@@ -108,7 +111,7 @@ export default {
       })
     },
   }
-}
+};
 </script>
 
 <style scoped>
