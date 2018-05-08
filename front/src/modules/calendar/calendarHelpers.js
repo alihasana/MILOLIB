@@ -199,14 +199,14 @@ function InitializeDefaultTimeRange(){
 //this function anable to find the lowest date and the bigger date in a slot range.
 function GetMinTimeFromSlotsArray(slotList){
 	let sortedSlots = _.sortBy(slotList, 'date');
-	console.log('sorted: ',sortedSlots);
+	// console.log('sorted: ',sortedSlots);
 	let minDate = sortedSlots[0].start;
 	let maxDate = sortedSlots[sortedSlots.length-1].start;
 	let minTr = {
 		start : minDate,
 		end: maxDate
 	};
-	console.log('minTr:', minTr);
+	// console.log('minTr:', minTr);
 	return minTr;
 }
 

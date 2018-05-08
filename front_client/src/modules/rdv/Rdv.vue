@@ -14,6 +14,7 @@
           <b-form-select v-model="selected" :options="options" class="mb-3" required>
             <template slot="first">
               <!-- this slot appears above the options from 'options' prop -->
+              </option> -->
               <option :value="null" disabled>-- Sélectionner le type de rendez-vous --</option>
             </template>
             <!-- these options will appear after the ones from 'options' prop -->
@@ -50,9 +51,11 @@ export default {
       title: "Prendre un rendez-vous :",
       selected: null,
       test:'test',
+      options:[],
       id: '',
       slots: '',
       appointmentTypes: '',
+
     };
   },
   components: {},
@@ -64,11 +67,12 @@ export default {
           // this.$store.commit('getappointmentType', this.appointmentTypes);
         // },
         takeRdv() {
+          console.log('je veux passer au back mon rdv');
+          console.log('this.selected:', this.selected);
         http
         .get("/clients/appointment/" + this.selected)
         // .get("/profile/appointment/" + this.selected)
         .then(res => {
-          console.log('this.selected:', this.selected);
           console.log('res:', res);
           // console.log('res.data.content._id:', res.data.content._id);
           // console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
