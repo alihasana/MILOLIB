@@ -19,6 +19,7 @@ import clients from './routes/clients/clients'
 import users from './routes/users/users'
 import profile from './routes/profile/profile'
 import calendar from './routes/calendar/calendar'
+import usersCalendar from './routes/calendar/usersCalendar'
 // Middleware Imports
 import verifyToken from './middlewares/verifyToken'
 
@@ -63,6 +64,7 @@ router.use('/users', users)
 router.use('/clients', clients)
 router.use('/profile', profile)
 router.use('/calendar', calendar)
+router.use('/calendar', usersCalendar) // TODO : test
 
 app.use(router)
 
