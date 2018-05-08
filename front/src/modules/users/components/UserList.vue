@@ -128,8 +128,10 @@
         items: items,
         // Table field name
       fields: [
-        { key: 'email', label: 'Nom et Prénom de l\'utilisateur', sortable: true },
-        { key: 'role', label: 'Rôle de l\'utilisateur', sortable: true, 'class': 'text-center' },
+        { key: 'firstName', label: 'Prénom', sortable: true },
+        { key: 'lastName', label: 'Nom', sortable: true },
+        { key: 'email', label: 'E-mail', sortable: true },
+        { key: 'role', label: 'Rôle', sortable: true, 'class': 'text-center' },
         { key: 'ref', label: 'Réf. (PRP)' },
         { key: 'actions', label: 'Actions' }
       ],
