@@ -150,12 +150,12 @@ export default {
     this.createButtonId(this.getDaysRange);
   },
   methods:{
-    updateStore(){
+    // updateStore(){
           //  this.$store.commit('getCalendarId', this.test);
-          this.$store.commit('getCalendarId', this._id);
-          this.$store.commit('getSlots', this.slots);
-          this.$store.commit('getappointmentType', this.appointmentTypes);
-        },
+        //   this.$store.commit('getCalendarId', this._id);
+        //   this.$store.commit('getSlots', this.slots);
+        //   this.$store.commit('getappointmentType', this.appointmentTypes);
+        // },
     getCurrentDayPlus2month(now){
       return moment(now).add(1,'month');
     },

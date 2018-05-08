@@ -111,7 +111,7 @@ export default {
         .catch(error => {
           swal({
             type: "error",
-            title: "Oups ! Une erreur s'est produite !",
+            title: "Merci de sélectionner un type de rendez-vous.",
             // text: error.res.data.content
           });
         });
