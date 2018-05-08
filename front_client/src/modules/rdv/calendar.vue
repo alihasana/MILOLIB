@@ -1,15 +1,20 @@
 <template>
   <div calendarContainer>
+    <!-- <div>{{this.$store.state.test}}</div>
+    <div>{{this.$store.state.calendarId}}</div>
+    <div>{{this.$store.state.calendarSlots}}</div>
+    <div>{{this.$store.state.appointmentTypes}}</div>
+    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button> -->
     <b-card class="calendarContainer__card">
       <b-card-header class="cardhead">
         Sélectionnez votre RDV
-        <div>
+        <!-- <div>
           display ID from computed: {{ getCalendarId }}
           <br>
           display Types from computed: {{ getappointmentType }}
           <br>
           display Slots from computed: {{ getSlots }}
-        </div>
+        </div> -->
       </b-card-header>
       
       <b-card-body class="cardbody">
@@ -33,9 +38,9 @@
                 <!-- affichage des boutons heures -->
                 <b-col class="calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
                 <ul class="calendar__bodyUl"v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-                  <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button)">{{button.id | buttonIdFormat}}</b-button></li>
+                  <!-- <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button)">{{button.id | buttonIdFormat}}</b-button></li> -->
                   <!-- A decommenter et prendre à la place du dessus quand getSlots fonctionne. -->
-                  <!-- <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button,getSlots)">{{button.id | buttonIdFormat}}</b-button></li> -->
+                  <li class="calendar__bodyLi"><b-button v-bind:class="classId[index]" v-bind:id="button" v-on:click="bookApt(button,getSlots)">{{button.id | buttonIdFormat}}</b-button></li>
 
                 </ul>
               </b-col>
@@ -145,6 +150,12 @@ export default {
     this.createButtonId(this.getDaysRange);
   },
   methods:{
+    updateStore(){
+          //  this.$store.commit('getCalendarId', this.test);
+          this.$store.commit('getCalendarId', this._id);
+          this.$store.commit('getSlots', this.slots);
+          this.$store.commit('getappointmentType', this.appointmentTypes);
+        },
     getCurrentDayPlus2month(now){
       return moment(now).add(1,'month');
     },
@@ -245,8 +256,8 @@ export default {
       //i need to call getmatchingInitial slots  
       //then duration so that i can gather all the slots and send them to back-end
       if (button.id.charAt(button.id.length - 1) == 'A'){
-        // this.getmatchingInitalSlot(button, this.getSlots);
-        // this.getSlotsInRange(slotList,this.apt.initialHour,this.apt.endHour)
+        this.getmatchingInitalSlot(button, this.getSlots);
+        this.getSlotsInRange(slotList,this.apt.initialHour,this.apt.endHour)
         let postBody = {
           calendarId:this.apt.calendarId,
           slots:this.apt.allSlots,

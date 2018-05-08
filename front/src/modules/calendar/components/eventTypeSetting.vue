@@ -70,8 +70,6 @@ export default {
       eventTypeFilteredInETV:[]
     }
   },
-  components: {
-  },
   methods: {
     confirmSelectedTypes: function(sel){
       console.log('selected types are: ', sel);

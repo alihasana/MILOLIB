@@ -8,7 +8,7 @@
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
-							<b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button>
+							<!-- <b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button> -->
 						</li>
 						<li class="navNavigate">
 							<b-button variant="primary" class="navNavigate__btn" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
