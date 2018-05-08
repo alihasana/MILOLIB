@@ -1,20 +1,8 @@
 <template>
   <div class="">
-    <h2 class="heading-secondary">Liste des utilisateurs</h2>
-    <!-- <div class="row userlist__row"> -->
-          <!--Il faudrait plutôt mettre des boutons, car le lien doit permettre de modifier, supprimer, accéder au calendrier, et accéder au détails de l'utilisateur-->
-      <!-- <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
-        <p>{{ user.email }}<br/>
-          <i class="material-icons">edit</i>
-          <i class="material-icons">event</i>
-          <i class="material-icons">delete_forever</i>
-          </p> -->
-        <!-- <button v-on:click="redirectToUserList">Modifier</button> -->
-      <!-- </router-link>
-    </div> -->
-
-
+    <h2 class="heading-secondary" v-html="title"></h2>
     <b-container fluid>
+      
     <!-- Search tool -->
     <b-row>
       <b-col md="6" class="my-1">
@@ -45,10 +33,10 @@
 
     <!-- Main table element -->
     <b-table show-empty 
-              striped hover 
-              :items="users" 
-              :fields="fields"
              stacked="md"
+             striped hover 
+             :items="users" 
+             :fields="fields"
              :current-page="currentPage"
              :per-page="perPage"
              :filter="filter"
@@ -56,31 +44,15 @@
              :sort-desc.sync="sortDesc"
              @filtered="onFiltered"
              >
-      <!-- <template slot="ref" slot-scope="row"> </template> -->
-      <template slot="actions" slot-scope="row">
+        <!-- Action buttons -->
+        <template slot="actions" slot-scope="row">
+        <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">profil</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Calendrier</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Désactiver</b-btn>
+          <b-btn size="sm" variant="danger" @click.stop="details(row.item)">Désactiver</b-btn>
       </template>
      
-        <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-        <!-- <b-button size="sm" @click.stop="row.toggleDetails" variant="primary">
-         Voir le profil
-        </b-button>
-        <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1" variant="primary">
-          Voir le calendrier
-        </b-button>
-        <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1" variant="primary">
-          Modifier
-        </b-button>
-        <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1" variant="primary">
-          Désactiver
-        </b-button> -->
-
-
-
-
       <!-- Voir le détail du profil -->
       <template slot="row-details" slot-scope="row">
            <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
@@ -89,21 +61,16 @@
         <p>{{ user.email }}<br/>
           </p>
              </b-card>
-        <!-- <button v-on:click="redirectToUserList">Modifier</button> -->
       </router-link>
       </template>
-
-
-
-        
     </b-table>
+
+
     <!-- Info modal -->
-    <!-- <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
+    <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
       <pre>{{ modalInfo.content }}</pre>
-    </b-modal> -->
+    </b-modal>
   </b-container>
-
-
   </div>
 </template>
 
@@ -111,32 +78,25 @@
   import swal from "sweetalert2";
   import http from '../../../helpers/http'
 
-  const items = [
-  { ref: true, role: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-  { ref: false, role: 21, name: { first: 'Larsen', last: 'Shaw' } },
-  { ref: false, role: 9, name: { first: 'Mini', last: 'Navarro' } },
-  { ref: false, role: 89, name: { first: 'Geneva', last: 'Wilson' } },
-  { ref: true, role: 38, name: { first: 'Jami', last: 'Carney' } },
-  { ref: false, role: 27, name: { first: 'Essie', last: 'Dunlap' } }
-]
+  const items = []
+
   export default {
     name: "userList",
     data() {
       return {
-        title: "Your are on the userList",
+        title: "Liste des utilisateurs",
         users: [],
         items: items,
-        // Table field name
       fields: [
         { key: 'firstName', label: 'Prénom', sortable: true },
         { key: 'lastName', label: 'Nom', sortable: true },
         { key: 'email', label: 'E-mail', sortable: true },
-        { key: 'role', label: 'Rôle', sortable: true, 'class': 'text-center' },
+        { key: 'role', label: 'Rôle', sortable: true },
         { key: 'ref', label: 'Réf. (PRP)' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       totalRows: items.length,
       pageOptions: [ 5, 10, 15, 20 ],
       sortBy: null,
@@ -147,7 +107,7 @@
     },
     computed: {
     sortOptions () {
-      // Create an options list from our fields
+      // Create an option list from our fields
       return this.fields
         .filter(f => f.sortable)
         .map(f => { return { text: f.label, value: f.key } })
