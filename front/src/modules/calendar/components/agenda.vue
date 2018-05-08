@@ -58,51 +58,55 @@
 				</b-form-textarea>
 				<b-button type="submit" v-on:click="" variant="primary">Submit</b-button>
 				<b-button type="reset" v-on:click="clearModalBookApt()"
-      variant="danger">Reset</b-button>
+				variant="danger">Reset</b-button>
 			</form>
 		</b-modal>
 
-			<!-- Modal "See appointment details" -->
-			<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = false, the method getRelevantModal is called -->
-			<b-modal id="modalSeeAptDetails" ref="modalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
-					<b-form @submit.stop.prevent="modifyApt">
-					<p>Les infos du RDV: {{confirmedRDV}}</p>
-					<b-form-input id="exampleInput1"
-                      type="email"
-                      v-model="form.email"
-                      required
-                      placeholder="Enter email">
-                      </b-form-input>
-
-
-					<!-- <b-form-input type="date" v-model="" disabled=""></b-form-input> -->
-					<!-- <b-form-input type="text" v-model="formRDV.selectedTypeRDV.duration" disabled=""></b-form-input>
-					<b-form-input type="text" v-model="formRDV.selectedTypeRDV.duration" disabled=""></b-form-input>
-					<b-form-select v-model="formRDV.selectedTypeRDV" class="mb-3">
-						<option value="" disabled>Sélectionnez un type de RDV </option>
-						<option v-for="eventType in getEventTypes"v-bind:value="eventType">{{eventType.name}}</option>
-					</b-form-select>
-					<div>Selected: <strong>{{ formRDV.selectedTypeRDV }}</strong></div> -->
-					<!-- inputs -->
-					<!-- <b-form-input type="text" placeholder="Nom" v-model="formRDV.lastNameRDV"></b-form-input>
-					<b-form-input type="text" placeholder="Prénom" v-model="formRDV.firstNameRDV"></b-form-input>
-					<b-form-input type="text" placeholder="Téléphone" v-model="formRDV.phoneRDV"></b-form-input> -->
-					<!-- <b-form-input type="email" placeholder="E-mail" v-model="formRDV.mailRDV"></b-form-input>
-					<b-form-textarea type="text" v-model="formRDV.textRDV" placeholder="Ajouter un commentaire" :rows="6" :max-rows="6">
-					</b-form-textarea> -->
-					<b-button type="button" v-on:click="closeModal()" variant="primary">OK</b-button>
-					<b-button type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
-					<b-button type="submit" v-on:click="" variant="warning">Modifier le RDV</b-button>
-					<b-button type="button" v-on:click="cancelApt()" variant="danger">Annuler le RDV</b-button>
-				</b-form>
-			</b-modal>
-
-			<!-- Modal "TEST See appointment details" this one is opening from a button to test-->
-			<!-- but it will not be filled in with apt details, just for display test -->
-			<b-modal id="TestmodalSeeAptDetails">
+		<!-- Modal "See appointment details" -->
+		<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = false, the method getRelevantModal is called -->
+		<b-modal id="modalSeeAptDetails" ref="modalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
+			<b-form @submit.stop.prevent="modifyApt">
+				<p>Les infos du RDV: {{confirmedRDV}}</p>
 				
-			</b-modal>
-		 
+				<b-button type="button" v-on:click="closeModal()" variant="primary">OK</b-button>
+				<b-button type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
+				<b-button type="submit" v-on:click="" variant="warning">Modifier le RDV</b-button>
+				<b-button type="button" v-on:click="cancelApt()" variant="danger">Annuler le RDV</b-button>
+			</b-form>
+		</b-modal>
+
+		<!-- Modal "TEST See appointment details" this one is opening from a button to test-->
+		<!-- but it will not be filled in with apt details, just for display test -->
+		<b-modal id="TestmodalSeeAptDetails" ref="TestmodalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
+			<b-form-group label-text-align @submit.stop.prevent="modifyApt">
+				<label >Type de RDV</label>
+				<b-form-input type="text" v-model="confirmedRDV.TypeRDV.name" required v-bind:disabled="formInputDisabled"></b-form-input>
+				<b-form>
+					<label>RDV le:</label>
+					<!-- on mettra le jour et l'heure du RDV -->
+					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.initialSlot" required v-bind:disabled="formInputDisabled"></b-form-input>
+					<!-- il faudra transformer initialSlot.start au bon format via une computed -->
+					<label>Durée</label>
+					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.duration" required v-bind:disabled="formInputDisabled"></b-form-input>
+				</b-form>
+				<label>Nom</label>
+				<b-form-input type="text" v-model="confirmedRDV.lastNameRDV" required v-bind:disabled="formInputDisabled"></b-form-input>
+				<label>Prenom</label>
+				<b-form-input type="text" v-model="confirmedRDV.firstNameRDV" required v-bind:disabled="formInputDisabled"></b-form-input>
+				<label>Téléphone</label>
+				<b-form-input type="text" v-model="confirmedRDV.phoneRDV" required v-bind:disabled="formInputDisabled"></b-form-input>
+				<label>Mail</label>
+				<b-form-input type="email" v-model="confirmedRDV.mailRDV" required v-bind:disabled="formInputDisabled"></b-form-input>
+				<label>Commentaires</label>
+				<b-form-textarea type="textarea" v-model="confirmedRDV.textRDV" required v-bind:disabled="formInputDisabled" :rows="6" :max-rows="6"></b-form-textarea>
+				<b-button type="button" v-on:click="closeModal()" variant="primary">OK</b-button>
+				<b-button type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
+				<b-button type="submit" v-on:click="amendApt()" variant="warning">Modifier le RDV</b-button>
+				<b-button type="button" v-on:click="cancelApt()" variant="danger">Annuler le RDV</b-button>
+			</b-form-group>
+		</b-modal>
+			
+
 	</div>
 </template>
 
@@ -162,7 +166,7 @@ export default {
 		},
 		getEventTypes(){
 			return this.$store.state.eventTypes;
-		},
+		}
 	},
 	data() {
 		return {
@@ -186,16 +190,28 @@ export default {
       			initialSlot:'',
       			allSlots:[]
       		},
+      		// confirmedRDV:{
+      		// 	TypeRDV:'',
+      		// 	lastNameRDV:'',
+      		// 	firstNameRDV:'',
+      		// 	phoneRDV:'',
+      		// 	mailRDV:'',
+      		// 	textRDV:'',
+      		// 	initialSlot:'',
+      		// 	allSlots:[]
+      		// },
+      		//this is for test only as at the moment no data coming from back as route not OK
       		confirmedRDV:{
-      			TypeRDV:'',
-      			lastNameRDV:'',
-      			firstNameRDV:'',
-      			phoneRDV:'',
-      			mailRDV:'',
-      			textRDV:'',
+      			TypeRDV:'formation',
+      			lastNameRDV:'EL KEBIR',
+      			firstNameRDV:'Asma',
+      			phoneRDV:'0609080706',
+      			mailRDV:'asma@asma.com',
+      			textRDV:'Point à voir lors du RDV: type de formation souhaitée // situation polemploi',
       			initialSlot:'',
       			allSlots:[]
       		},
+      		formInputDisabled:true,
       		diplayedModal:'',
       		cancelDisabled:true,
       		okDisabled:true,
@@ -424,8 +440,9 @@ export default {
 			          	});
 					});
 		},
-		modifyApt(){
+		amendApt(){
 			console.log('je souhaite modifier le RDV');
+			this.changeDisabledAttribute();
 			let postBody = this.formRDV;
 			console.log('postBody:', postBody);
 			http.put("/calendar/appointment/" + this.confirmedRDV.initialSlot._id, postBody)
@@ -435,7 +452,7 @@ export default {
 						})
 					.catch(
 						error => {
-					    // console.log('error:', error.response.data.message);
+					    console.log('error:', error.response.data.message);
 					    swal({
 			            type: "error",
 			            title: "modification du RDV",
@@ -479,6 +496,9 @@ export default {
 	            text: "en validant la présence, le conseiller serait notifié de la venue du client"
 	         });
 			this.closeModal();
+		},
+		changeDisabledAttribute(){
+			return this.formInputDisabled = !this.formInputDisabled;
 		}
 
 	},
