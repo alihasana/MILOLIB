@@ -1,5 +1,7 @@
 <template>
   <div class="rdv">
+    <div>{{this.$store.state.calendarId}}</div>
+    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button>
    <form v-on:submit.prevent>
     <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -36,7 +38,7 @@
 <script>
 /* eslint-disable */
 import swal from "sweetalert2";
-import http from '../../helpers/http'
+import http from '../../helpers/http';
 
 export default {
   name: "Rdv",
@@ -44,10 +46,14 @@ export default {
     return {
       title: "Prendre un rendez-vous :",
       selected: null,
+      test:'test'
     };
   },
   components: {},
   methods: {
+        updateStore(){
+           this.$store.commit('getCalendarId', this.test);
+        },
         takeRdv() {
         http
         .get("/clients/appointment/" + this.selected)
@@ -61,8 +67,16 @@ export default {
           // console.log('res.data.content.updatedAt:', res.data.content.updatedAt);
           // console.log('res.data.content.userId:', res.data.content.userId);
           // console.log('res.data.content.createdAt:', res.data.content.createdAt);
-          this.$store.commit('getSlots', res.data.content.slots);
-          
+          // this.$store.state.calendarId = res.data.content._id;
+          // this.$store.state.calendarSlots = res.data.content.slots;
+          // this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          // this.$store.commit('CalendarId');
+          // this.$store.commit('Slots');
+          // this.$store.commit('appointmentType');
+          // console.log('this.$store.state.calendarId:', this.$store.state.calendarId);
+          // console.log('this.$store.state.calendarSlots:', this.$store.state.calendarSlots);
+          // console.log('this.$store.state.appointmentTypes:', this.$store.state.appointmentTypes);
+
           // this.$store.state.rdv.updatedAt = res.data.content.updatedAt;
           // this.$store.state.rdv.userId = res.data.content.userId;
           // this.$store.state.rdv.createdAt = res.data.content.createdAt;

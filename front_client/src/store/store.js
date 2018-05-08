@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as cHelpers from '.././modules/calendar/calendarHelpers'
+// import * as cHelpers from '.././modules/calendar/calendarHelpers'
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -21,28 +21,39 @@ export const store = new Vuex.Store({
 		// 	userId: '',
 		// 	createdAt: '',
 		// }
-		calendarId: '',
+		calendarId: 'turlututu',
 		calendarSlots: '',
 		appointmentTypes: '',
 
 
 	},
-	getters: {
+	mutations: {
 		// getRdv: (state) => {
 		// 	return state.rdv;
 		// }
 		// getRdv: (state) => state.rdv,
 		// getRdv: (state) => state.rdv.userId,
-		getCalendarId: (state) => {
-			return state.calendarId;
+		getCalendarId: (state, monTest ) => {
+			return state.calendarId= monTest;
 		},
-		getSlots: (state) => {
-			return state.calendarSlots;
-		},
-		getappointmentType: (state) => {
-			return state.appointmentTypes;
-		},
-	}
+		// getSlots: (state) => {
+		// 	return state.calendarSlots;
+		// },
+		// getappointmentType: (state) => {
+		// 	return state.appointmentTypes;
+		// },
+	},
+	// mutations: {
+	// 	CalendarId: (state) => {
+	// 		state.calendarId = "lol";
+	// 	 },
+	// 	Slots: (state) => {
+	// 		state.calendarSlots = "lool";
+	// 	},
+	// 	appointmentType: (state) => {
+	// 		state.appointmentTypes = "loool";
+	// 	},
+ // 	}
 })
 // export const store = new Vuex.Store({
 //  	state: {
