@@ -21,7 +21,9 @@ export const store = new Vuex.Store({
 		// 	userId: '',
 		// 	createdAt: '',
 		// }
-		calendarId: 'turlututu',
+
+		// test: 'turlututu',
+		calendarId: '',
 		calendarSlots: '',
 		appointmentTypes: '',
 
@@ -33,9 +35,20 @@ export const store = new Vuex.Store({
 		// }
 		// getRdv: (state) => state.rdv,
 		// getRdv: (state) => state.rdv.userId,
-		getCalendarId: (state, monTest ) => {
-			return state.calendarId= monTest;
+
+		// getTest: (state, monTest ) => {
+		// 	return state.test = monTest;
+		// },
+		getCalendarId: (state, monId  ) => {
+			return state.calendarId = monId;
 		},
+		getSlots: (state, mesSlots ) => {
+			return state.calendarSlots = mesSlots;
+		},
+		getappointmentType: (state, mesAppointmentTypes) => {
+			return state.appointmentTypes = mesAppointmentTypes;
+		},
+
 		// getSlots: (state) => {
 		// 	return state.calendarSlots;
 		// },

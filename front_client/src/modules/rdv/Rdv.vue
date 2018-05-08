@@ -1,7 +1,10 @@
 <template>
   <div class="rdv">
+    <!-- <div>{{this.$store.state.test}}</div>
     <div>{{this.$store.state.calendarId}}</div>
-    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button>
+    <div>{{this.$store.state.calendarSlots}}</div>
+    <div>{{this.$store.state.appointmentTypes}}</div>
+    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button> -->
    <form v-on:submit.prevent>
     <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -46,14 +49,20 @@ export default {
     return {
       title: "Prendre un rendez-vous :",
       selected: null,
-      test:'test'
+      test:'test',
+      id: '',
+      slots: '',
+      appointmentTypes: '',
     };
   },
   components: {},
   methods: {
-        updateStore(){
-           this.$store.commit('getCalendarId', this.test);
-        },
+        // updateStore(){
+        //   this.$store.commit('getTest', this.test);
+          // this.$store.commit('getCalendarId', this.id);
+          // this.$store.commit('getSlots', this.slots);
+          // this.$store.commit('getappointmentType', this.appointmentTypes);
+        // },
         takeRdv() {
         http
         .get("/clients/appointment/" + this.selected)
@@ -82,6 +91,15 @@ export default {
           // this.$store.state.rdv.createdAt = res.data.content.createdAt;
           // this.selected = res.data.content;
           // console.log(this.selected);
+
+          // this.$store.commit('getTest', this.test);
+          this.id = res.data.content._id;
+          this.$store.commit('getCalendarId', this.id);
+          this.slots = res.data.content.slots;
+          this.$store.commit('getSlots', this.slots);
+          this.appointmentTypes = res.data.content.appointmentTypes;
+          this.$store.commit('getappointmentType', this.appointmentTypes);
+
           this.$router.push("/calendar");
           swal({
               type: "success",
