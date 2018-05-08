@@ -42,7 +42,18 @@ export const store = new Vuex.Store({
 		getappointmentType: (state) => {
 			return state.appointmentTypes;
 		},
-	}
+	},
+	mutations: {
+		CalendarId: (state) => {
+			state.calendarId = "lol";
+		 },
+		Slots: (state) => {
+			state.calendarSlots = "lool";
+		},
+		appointmentType: (state) => {
+			state.appointmentTypes = "loool";
+		},
+ 	}
 })
 // export const store = new Vuex.Store({
 //  	state: {

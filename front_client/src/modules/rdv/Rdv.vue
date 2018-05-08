@@ -60,9 +60,15 @@ export default {
           // console.log('res.data.content.updatedAt:', res.data.content.updatedAt);
           // console.log('res.data.content.userId:', res.data.content.userId);
           // console.log('res.data.content.createdAt:', res.data.content.createdAt);
-          this.$store.state.calendarId = res.data.content._id;
-          this.$store.state.calendarSlots = res.data.content.slots;
-          this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          // this.$store.state.calendarId = res.data.content._id;
+          // this.$store.state.calendarSlots = res.data.content.slots;
+          // this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          this.$store.commit('CalendarId');
+          this.$store.commit('Slots');
+          this.$store.commit('appointmentType');
+          console.log('this.$store.state.calendarId:', this.$store.state.calendarId);
+          console.log('this.$store.state.calendarSlots:', this.$store.state.calendarSlots);
+          console.log('this.$store.state.appointmentTypes:', this.$store.state.appointmentTypes);
           // this.$store.state.rdv.updatedAt = res.data.content.updatedAt;
           // this.$store.state.rdv.userId = res.data.content.userId;
           // this.$store.state.rdv.createdAt = res.data.content.createdAt;

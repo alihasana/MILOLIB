@@ -3,13 +3,13 @@
     <b-card class="calendarContainer__card">
       <b-card-header class="cardhead">
         Sélectionnez votre RDV
-        <!-- <div>
+        <div>
           display ID from computed: {{ getCalendarId }}
           <br>
           display Types from computed: {{ getappointmentType }}
           <br>
           display Slots from computed: {{ getSlots }}
-        </div> -->
+        </div>
       </b-card-header>
       
       <b-card-body class="cardbody">
