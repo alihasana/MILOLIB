@@ -1,17 +1,17 @@
 <template>
   <div class="">
     <h2 class="heading-secondary">Liste des utilisateurs</h2>
-    <div class="row userlist__row">
+    <!-- <div class="row userlist__row"> -->
           <!--Il faudrait plutôt mettre des boutons, car le lien doit permettre de modifier, supprimer, accéder au calendrier, et accéder au détails de l'utilisateur-->
-      <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
+      <!-- <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
         <p>{{ user.email }}<br/>
           <i class="material-icons">edit</i>
           <i class="material-icons">event</i>
           <i class="material-icons">delete_forever</i>
-          </p>
+          </p> -->
         <!-- <button v-on:click="redirectToUserList">Modifier</button> -->
-      </router-link>
-    </div>
+      <!-- </router-link>
+    </div> -->
 
 
     <b-container fluid>
@@ -44,25 +44,26 @@
     </b-row>
 
     <!-- Main table element -->
-    <b-table show-empty
+    <b-table show-empty 
+              striped hover 
+              :items="users" 
+              :fields="fields"
              stacked="md"
-             :items ="items"
-             :fields="fields"
              :current-page="currentPage"
              :per-page="perPage"
              :filter="filter"
              :sort-by.sync="sortBy"
              :sort-desc.sync="sortDesc"
              @filtered="onFiltered"
-             
-    >
-      <template slot="name" slot-scope="row">
-      {{users}} {{row.value.last}}
+             >
+      <!-- <template slot="ref" slot-scope="row"> </template> -->
+      <template slot="actions" slot-scope="row">
+          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">profil</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Calendrier</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Désactiver</b-btn>
       </template>
-    
-
-      <template slot="ref" slot-scope="row"> </template>
-      <template slot="actions" slot-scope="row"></template>
+     
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
         <!-- <b-button size="sm" @click.stop="row.toggleDetails" variant="primary">
          Voir le profil
@@ -96,11 +97,6 @@
 
         
     </b-table>
-
-
-
-
-
     <!-- Info modal -->
     <!-- <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
       <pre>{{ modalInfo.content }}</pre>
@@ -116,28 +112,12 @@
   import http from '../../../helpers/http'
 
   const items = [
-  // { ref: true, role: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-  // { ref: false, role: 21, name: { first: 'Larsen', last: 'Shaw' } },
-  // {
-  //   ref: false,
-  //   role: 9,
-  //   name: { first: 'Mini', last: 'Navarro' },
-  //   _rowVariant: 'success'
-  // },
-  // { ref: false, role: 89, name: { first: 'Geneva', last: 'Wilson' } },
-  // { ref: true, role: 38, name: { first: 'Jami', last: 'Carney' } },
-  // { ref: false, role: 27, name: { first: 'Essie', last: 'Dunlap' } },
-  // { ref: true, role: 40, name: { first: 'Thor', last: 'Macdonald' } },
-  // {
-  //   ref: true,
-  //   role: 87,
-  //   name: { first: 'Larsen', last: 'Shaw' },
-  //   _cellVariants: { role: 'danger', ref: 'warning' }
-  // },
-  // { ref: false, role: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-  // { ref: false, role: 22, name: { first: 'Genevieve', last: 'Wilson' } },
-  // { ref: true, role: 38, name: { first: 'John', last: 'Carney' } },
-  // { ref: false, role: 29, name: { first: 'Dick', last: 'Dunlap' } }
+  { ref: true, role: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
+  { ref: false, role: 21, name: { first: 'Larsen', last: 'Shaw' } },
+  { ref: false, role: 9, name: { first: 'Mini', last: 'Navarro' } },
+  { ref: false, role: 89, name: { first: 'Geneva', last: 'Wilson' } },
+  { ref: true, role: 38, name: { first: 'Jami', last: 'Carney' } },
+  { ref: false, role: 27, name: { first: 'Essie', last: 'Dunlap' } }
 ]
   export default {
     name: "userList",
@@ -148,7 +128,7 @@
         items: items,
         // Table field name
       fields: [
-        { key: 'name', label: 'Nom et Prénom de l\'utilisateur', sortable: true },
+        { key: 'email', label: 'Nom et Prénom de l\'utilisateur', sortable: true },
         { key: 'role', label: 'Rôle de l\'utilisateur', sortable: true, 'class': 'text-center' },
         { key: 'ref', label: 'Réf. (PRP)' },
         { key: 'actions', label: 'Actions' }
