@@ -211,7 +211,6 @@ router.delete('/appointment/:appointmentId', (req, res) => {
                 else if (!client) return res.status(404).json({ success: false, message: 'Client not found' })
 
                 client.appointments.splice(user.appointments.indexOf(appointment.id), 1)
-
                 client.save(err => {
                   if (err) return res.status(500).json({ success: false, message: err.message })
 
