@@ -47,7 +47,7 @@
         <!-- Action buttons -->
         <template slot="actions" slot-scope="row">
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">profil</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Profil</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Calendrier</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
           <b-btn size="sm" variant="danger" @click.stop="details(row.item)">Désactiver</b-btn>

@@ -74,19 +74,21 @@ router.put('/appointmentTypes', (req, res) => {
 })
 
 router.get('/appointment/:slotId', (req, res) => {
+  console.log('reqpparam:', req.params);
   if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
-
-  Appointment.findOne({ "slots._id": req.params.slotId })
+ 
+  Appointment.findOne({ slots: { $elemMatch: { _id: req.params.slotId } }})
+    
     .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
     .populate('participants.staff') // TODO: VIRER LE PASSWORDde façon global (schema)
     .exec((err, appointment) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
-      helper.beforeSendUser(appointment.participants.staff)
-      for (let key of Object.keys(appointment.participants.clients)) {
-        helper.beforeSendUser(key)
-      }
+      // helper.beforeSendUser(appointment.participants.staff)
+      // for (let key of Object.keys(appointment.participants.clients)) {
+      //   helper.beforeSendUser(key)
+      // }
 
       res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
     })
