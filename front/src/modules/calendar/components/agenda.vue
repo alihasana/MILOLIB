@@ -8,7 +8,7 @@
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
 							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
-							<b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button>
+							<!-- <b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button> -->
 						</li>
 						<li class="navNavigate">
 							<b-button variant="primary" class="navNavigate__btn" type="submit" v-on:click="getPreviousDays()"><i class="material-icons">navigate_before</i></b-button>
@@ -94,39 +94,7 @@
 			</b-form-group>
 		</b-modal>
 
-		<!-- Modal "TEST See appointment details" this one is opening from a button to test-->
-		<!-- but it will not be filled in with apt details, just for display test -->
-		<!-- <b-modal id="TestmodalSeeAptDetails" ref="TestmodalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
-			<b-form-group label-text-align @submit.stop.prevent="modifyApt">
-				<label >Type de RDV</label>
-				<b-form-input type="text" v-model="confirmedRDV.TypeRDV.name" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<b-form>
-					<label>RDV le:</label> -->
-					<!-- on mettra le jour et l'heure du RDV -->
-					<!-- <b-form-input type="text" v-model="confirmedRDV.TypeRDV.initialSlot" required v-bind:disabled="detailRDVInputDisabled"></b-form-input> -->
-					<!-- il faudra transformer initialSlot.start au bon format via une computed -->
-					<<!-- label>Durée</label>
-					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.duration" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				</b-form>
-				<label>Nom</label>
-				<b-form-input type="text" v-model="confirmedRDV.lastNameRDV" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<label>Prenom</label>
-				<b-form-input type="text" v-model="confirmedRDV.firstNameRDV" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<label>Téléphone</label>
-				<b-form-input type="text" v-model="confirmedRDV.phoneRDV" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<label>Mail</label>
-				<b-form-input type="email" v-model="confirmedRDV.mailRDV" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<label>Commentaires</label>
-				<b-form-textarea type="textarea" v-model="confirmedRDV.textRDV" required v-bind:disabled="detailRDVInputDisabled" :rows="6" :max-rows="6"></b-form-textarea>
-				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="closeModal()" variant="primary">OK</b-button>
-				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
-				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="changeDisabledAttribute()" variant="warning">Modifier le RDV</b-button>
-				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="cancelApt()" variant="danger">Annuler le RDV</b-button>
-				<b-button v-if="displaySeeAptDetailsBtn_amend" type="button" v-on:click="amendApt()" variant="primary">Confirmer la modification du RDV</b-button>
-			</b-form-group>
-		</b-modal> -->
-			
-
+	
 	</div>
 </template>
 
@@ -246,17 +214,24 @@ export default {
 	created(){
 		this.beginDisplay = 0;
 		this.weekNumber = cHelpers.filterInt(this.week);
-		http.get('/calendar')
+		// this.createButtonId(this.getTimeRange);
+		this.callHttpGetCalendar();
+		// this.updateButtonId(this.getSlots, this.buttonIdList);
+	},
+	methods: {
+		callHttpGetCalendar: function(){
+			http.get('/calendar')
 					.then(
 						res => {
 						console.log('res:',res);
 						this.$store.commit('getSlotsAvailables', res.data.content.slots);
 						this.$store.commit('getEventTypes', res.data.content.appointmentTypes);
-						this.buttonIdList =[];
-						this.createButtonId(this.getTimeRange);
-						this.updateButtonId(this.getSlots, this.buttonIdList);
 						this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);
 						this.$store.commit('getMinTimeRange', this.minTimeRange);
+						this.buttonIdList =[];
+						this.filteredButtonIdList= [];
+						this.createButtonId(this.getTimeRange);
+						this.updateButtonId(this.getSlots, this.buttonIdList);
 						})
 					.catch(
 						error => {
@@ -267,9 +242,9 @@ export default {
 			            text: "Votre agenda n'a pas pu être mis à jour"
 			          	});
 					});
-	},
-	methods: {
+		},
 		createButtonId: function(timeRange){
+			this.buttonIdList = [];
 			//based on a timeRange of days, and based on the hours to display in agenda
 			//this function create buttons with Id representatives of the date, hour.
 			//by default, they also represent status N( Non available)
@@ -287,7 +262,7 @@ export default {
 					this.buttonIdList.push(button);
 				}
 			}
-			console.log('buttonIdList:', this.buttonIdList);
+			// console.log('buttonIdList:', this.buttonIdList);
 			return this.buttonIdList;
 		},
 		updateButtonId: function(slots, idList){
@@ -424,10 +399,11 @@ export default {
 						swal({
 			            type: "success",
 			            title: "creation du RDV: ",
-			            text: "Votre RDV a bien été crée: OK! Pour l'instant vous devez rafraichir la page pour le voir apparaitre dans l'agenda:) "
+			            text: "Votre RDV a bien été crée: OK! Merci de patienter pendant la mise à jour de votre agenda:) "
 			          	});
-						this.$router.push({name: 'agenda'});
+			          	this.callHttpGetCalendar();
 						// when redirected to agenda, a new http.get/calendar will be done, which will update the slots.
+						//le probleme c'est qui est déjà sur la page agenda
 						})
 					.catch(
 						error => {

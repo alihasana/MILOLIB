@@ -1,5 +1,10 @@
 <template>
   <div class="rdv">
+    <!-- <div>{{this.$store.state.test}}</div>
+    <div>{{this.$store.state.calendarId}}</div>
+    <div>{{this.$store.state.calendarSlots}}</div>
+    <div>{{this.$store.state.appointmentTypes}}</div>
+    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button> -->
    <form v-on:submit.prevent>
     <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -9,6 +14,7 @@
           <b-form-select v-model="selected" :options="options" class="mb-3" required>
             <template slot="first">
               <!-- this slot appears above the options from 'options' prop -->
+              </option> -->
               <option :value="null" disabled>-- Sélectionner le type de rendez-vous --</option>
             </template>
             <!-- these options will appear after the ones from 'options' prop -->
@@ -36,7 +42,7 @@
 <script>
 /* eslint-disable */
 import swal from "sweetalert2";
-import http from '../../helpers/http'
+import http from '../../helpers/http';
 
 export default {
   name: "Rdv",
@@ -44,30 +50,60 @@ export default {
     return {
       title: "Prendre un rendez-vous :",
       selected: null,
+      test:'test',
+      options:[],
+      id: '',
+      slots: '',
+      appointmentTypes: '',
+
     };
   },
   components: {},
   methods: {
+        // updateStore(){
+        //   this.$store.commit('getTest', this.test);
+          // this.$store.commit('getCalendarId', this.id);
+          // this.$store.commit('getSlots', this.slots);
+          // this.$store.commit('getappointmentType', this.appointmentTypes);
+        // },
         takeRdv() {
+          console.log('je veux passer au back mon rdv');
+          console.log('this.selected:', this.selected);
         http
         .get("/clients/appointment/" + this.selected)
         // .get("/profile/appointment/" + this.selected)
         .then(res => {
-          console.log('this.selected:', this.selected);
-          console.log('res.data.content._id:', res.data.content._id);
-          console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
-          console.log('res.data.content.slots:', res.data.content.slots);
+          console.log('res:', res);
+          // console.log('res.data.content._id:', res.data.content._id);
+          // console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
+          // console.log('res.data.content.slots:', res.data.content.slots);
           // console.log('res.data.content.updatedAt:', res.data.content.updatedAt);
           // console.log('res.data.content.userId:', res.data.content.userId);
           // console.log('res.data.content.createdAt:', res.data.content.createdAt);
-          this.$store.state.calendarId = res.data.content._id;
-          this.$store.state.calendarSlots = res.data.content.slots;
-          this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          // this.$store.state.calendarId = res.data.content._id;
+          // this.$store.state.calendarSlots = res.data.content.slots;
+          // this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
+          // this.$store.commit('CalendarId');
+          // this.$store.commit('Slots');
+          // this.$store.commit('appointmentType');
+          // console.log('this.$store.state.calendarId:', this.$store.state.calendarId);
+          // console.log('this.$store.state.calendarSlots:', this.$store.state.calendarSlots);
+          // console.log('this.$store.state.appointmentTypes:', this.$store.state.appointmentTypes);
+
           // this.$store.state.rdv.updatedAt = res.data.content.updatedAt;
           // this.$store.state.rdv.userId = res.data.content.userId;
           // this.$store.state.rdv.createdAt = res.data.content.createdAt;
           // this.selected = res.data.content;
           // console.log(this.selected);
+
+          // this.$store.commit('getTest', this.test);
+          this.id = res.data.content._id;
+          this.$store.commit('getCalendarId', this.id);
+          this.slots = res.data.content.slots;
+          this.$store.commit('getSlots', this.slots);
+          this.appointmentTypes = res.data.content.appointmentTypes;
+          this.$store.commit('getappointmentType', this.appointmentTypes);
+
           this.$router.push("/calendar");
           swal({
               type: "success",

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as cHelpers from '.././modules/calendar/calendarHelpers'
+// import * as cHelpers from '.././modules/calendar/calendarHelpers'
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -21,28 +21,52 @@ export const store = new Vuex.Store({
 		// 	userId: '',
 		// 	createdAt: '',
 		// }
+
+		// test: 'turlututu',
 		calendarId: '',
 		calendarSlots: '',
 		appointmentTypes: '',
 
 
 	},
-	getters: {
+	mutations: {
 		// getRdv: (state) => {
 		// 	return state.rdv;
 		// }
 		// getRdv: (state) => state.rdv,
 		// getRdv: (state) => state.rdv.userId,
-		getCalendarId: (state) => {
-			return state.calendarId;
+
+		// getTest: (state, monTest ) => {
+		// 	return state.test = monTest;
+		// },
+		getCalendarId: (state, monId  ) => {
+			return state.calendarId = monId;
 		},
-		getSlots: (state) => {
-			return state.calendarSlots;
+		getSlots: (state, mesSlots ) => {
+			return state.calendarSlots = mesSlots;
 		},
-		getappointmentType: (state) => {
-			return state.appointmentTypes;
+		getappointmentType: (state, mesAppointmentTypes) => {
+			return state.appointmentTypes = mesAppointmentTypes;
 		},
-	}
+
+		// getSlots: (state) => {
+		// 	return state.calendarSlots;
+		// },
+		// getappointmentType: (state) => {
+		// 	return state.appointmentTypes;
+		// },
+	},
+	// mutations: {
+	// 	CalendarId: (state) => {
+	// 		state.calendarId = "lol";
+	// 	 },
+	// 	Slots: (state) => {
+	// 		state.calendarSlots = "lool";
+	// 	},
+	// 	appointmentType: (state) => {
+	// 		state.appointmentTypes = "loool";
+	// 	},
+ // 	}
 })
 // export const store = new Vuex.Store({
 //  	state: {
