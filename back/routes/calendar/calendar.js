@@ -74,6 +74,7 @@ router.put('/appointmentTypes', (req, res) => {
 })
 
 router.get('/appointment/:slotId', (req, res) => {
+  console.log('reqpparam:', req.params);
   if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
   Appointment.findOne({ "slots._id": req.params.slotId })
     .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
@@ -83,10 +84,13 @@ router.get('/appointment/:slotId', (req, res) => {
       else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
       helper.beforeSendUser(appointment.participants.staff)
-      for (let key of Object.keys(appointment.participants.clients)) {
-        helper.beforeSendUser(appointment.participants.clients[key])
-      }
+      helper.beforeSendUser(appointment.participants.clients)
+      // // Boucle pour rdv de groupe
+      // for (let key of Object.keys(appointment.participants.clients)) {
+      //   helper.beforeSendUser(appointment.participants.clients[key])
+      // }
 
+      console.log('L4APPOUOUNH: ', appointment)
       res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
     })
 })
@@ -137,7 +141,7 @@ router.post('/appointment', (req, res) => {
         let newAppointment = new Appointment({
           appointmentType: req.body.appointmentType,
           participants: {
-            clients: [client.id], // TODO: verif si array nécessaires
+            clients: client.id, // TODO: a changer si rdv de groupe
             staff: res.locals.user.id,
           },
           slots: appointmentSlots,
@@ -150,7 +154,7 @@ router.post('/appointment', (req, res) => {
         newAppointment.save((err, appointment) => {
           if (err) return res.status(500).json({ success: false, message: err.message })
           res.locals.user.appointments.push(appointment.id)
-          
+
           res.locals.user.save(err => {
             if (err) return res.status(500).json({ success: false, message: err.message })
             client.appointments.push(appointment.id)
@@ -167,7 +171,6 @@ router.post('/appointment', (req, res) => {
 })
 
 
-// TODO : test la route
 router.delete('/appointment/:appointmentId', (req, res) => {
   if (!ObjectId.isValid(req.params.appointmentId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
   Appointment.findById(req.params.appointmentId)
@@ -185,11 +188,27 @@ router.delete('/appointment/:appointmentId', (req, res) => {
         if (err) return res.status(500).json({ success: false, message: err.message })
         else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-        for (let key of Object.keys(appointment.slots)) {
-          if (calendar.slots.id(appointment.slots[key]) != null) {
-            calendar.slots.id(appointment.slots[key]).available = true
-            calendar.slots.id(appointment.slots[key]).appointment = undefined
-          } else return res.status(400).json({ success: false, message: 'Cannot delete appointement, Slots not found' })
+        // // Le ' for (let key of Object.keys(appointment.slots)) ' ne fonctionne pas,
+        // // pourquoi ? Le console.log 'ICI' montre qu'aprés avoir parcouru l'array,
+        // // il fait un loop avec un objet 'null'. étrange :o .
+        // for (let key of Object.keys(appointment.slots)) {
+        //   console.log('ICI ', calendar.slots.id(appointment.slots[key]._id))
+        //   if (calendar.slots.id(appointment.slots[key]._id) != null) {
+        //     calendar.slots.id(appointment.slots[key]._id).available = true
+        //     calendar.slots.id(appointment.slots[key]._id).appointment = undefined
+        //   } else {
+        //     return res.status(400).json({ success: false, message: 'Cannot delete appointement, Slots not found' })
+        //   }
+        // }
+
+        for (let i = 0; i < appointment.slots.length; i++) {
+          // console.log('ICI ', calendar.slots.id(appointment.slots[i]._id))
+          if (calendar.slots.id(appointment.slots[i]._id) != null) {
+            calendar.slots.id(appointment.slots[i]._id).available = true
+            calendar.slots.id(appointment.slots[i]._id).appointment = undefined
+          } else {
+            return res.status(400).json({ success: false, message: 'Cannot delete appointement, Slots not found' })
+          }
         }
 
         calendar.save(err => {
@@ -199,22 +218,20 @@ router.delete('/appointment/:appointmentId', (req, res) => {
             if (err) return res.status(500).json({ success: false, message: err.message })
             else if (!user) return res.status(404).json({ success: false, message: 'User not found' })
 
-            // var indexOfAppointment = user.appointments.indexOf(appointment.id) // // Inutile si ça marche en desous
             user.appointments.splice(user.appointments.indexOf(appointment.id), 1)
-
             user.save(err => {
               if (err) return res.status(500).json({ success: false, message: err.message })
 
-              //TODO : rajouter une boucle pour gerer tous les clients (dans le cas de rdv de groupe)
+              //TODO : rajouter une boucle pour gerer plusieurs clients (dans le cas de rdv de groupe)
               Client.findById(appointment.participants.clients._id, (err, client) => {
                 if (err) return res.status(500).json({ success: false, message: err.message })
                 else if (!client) return res.status(404).json({ success: false, message: 'Client not found' })
 
-                client.appointments.splice(user.appointments.indexOf(appointment.id), 1)
+                client.appointments.splice(client.appointments.indexOf(appointment.id), 1)
                 client.save(err => {
                   if (err) return res.status(500).json({ success: false, message: err.message })
 
-                  Appointment.deleteOne(req.params.appointmentId, (err) => {
+                  Appointment.deleteOne({ _id: req.params.appointmentId }, (err) => {
                     if (err) return res.status(500).json({ success: false, message: err.message })
                     res.status(200).json({ success: true, message: 'Appointment deleted' })
                   })

@@ -44,6 +44,7 @@ export default {
           let role = res.data.content.user;
           localStorage.setItem("role", role);
           localStorage.setItem("token", token);
+          console.log("res du login: ", token, "res pour le role: ", role);
           // this.$store.state.role = role;
           if (token) {
             if (role === "Administrateur" || role === "Chargé d'accueil") {

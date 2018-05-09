@@ -9,7 +9,8 @@ let AppointmentSchema = new mongoose.Schema(
       duration: { type: String } // TODO: duration en nombres de slots plutot qu'en minutes ?
     },
     participants: {
-      clients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }],
+      clients: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+      // clients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }], // Array de clients pour rdv de groupe
       staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
     slots: [SlotSchema],
