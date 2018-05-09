@@ -12,7 +12,7 @@ let UserSchema = new mongoose.Schema(
     phone: { type: String },
     workPlace: { type: String },
     calendar: { type: mongoose.Schema.Types.ObjectId, sparse: true, ref: 'Calendar' },
-    appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },     
+    appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],     
   },
   { timestamps: true }
 )

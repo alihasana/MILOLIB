@@ -12,7 +12,7 @@ let ClientSchema = new mongoose.Schema(
     descolarise: { type: Boolean, required: false }, // TODO: database ou non ?
     infAge: { type: Boolean, required: false },  // TODO: database ou non ?
     commune: String,
-    appointments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Appointment' },    
+    appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],    
   },
   { timestamps: true }
 )
