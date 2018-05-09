@@ -1,10 +1,5 @@
 <template>
   <div class="rdv">
-    <!-- <div>{{this.$store.state.test}}</div>
-    <div>{{this.$store.state.calendarId}}</div>
-    <div>{{this.$store.state.calendarSlots}}</div>
-    <div>{{this.$store.state.appointmentTypes}}</div>
-    <button class="btn btn-lg btn--white" v-on:click="updateStore()">updateStore</button> -->
    <form v-on:submit.prevent>
     <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -15,7 +10,7 @@
             <template slot="first">
               <!-- this slot appears above the options from 'options' prop -->
               </option> -->
-              <option :value="null" disabled>-- Sélectionner le type de rendez-vous --</option>
+              <option value="null" disabled>-- Sélectionner le type de rendez-vous --</option>
             </template>
             <!-- these options will appear after the ones from 'options' prop -->
             <option value="Premier rendez-vous">Premier rendez-vous (uniquement si vous n'avez jamais eu d'entretien individuel)</option>
@@ -33,9 +28,6 @@
     </div>
   </form>
   <br>
-  <!-- <div>
-    <h1> Choisir une date : </h1>
-  </div> -->
 </div>
 </template>
 
@@ -54,18 +46,11 @@ export default {
       options:[],
       id: '',
       slots: '',
-      appointmentTypes: '',
-
-    };
+      appointmentTypes: ''
+    }
   },
   components: {},
   methods: {
-        // updateStore(){
-        //   this.$store.commit('getTest', this.test);
-          // this.$store.commit('getCalendarId', this.id);
-          // this.$store.commit('getSlots', this.slots);
-          // this.$store.commit('getappointmentType', this.appointmentTypes);
-        // },
         takeRdv() {
           console.log('je veux passer au back mon rdv');
           console.log('this.selected:', this.selected);
