@@ -42,7 +42,6 @@ export default {
     return {
       title: "Prendre un rendez-vous :",
       selected: null,
-      test:'test',
       options:[],
       id: '',
       slots: '',
@@ -51,51 +50,29 @@ export default {
   },
   components: {},
   methods: {
-        takeRdv() {
-          console.log('je veux passer au back mon rdv');
-          console.log('this.selected:', this.selected);
+      takeRdv() {
+        // 1 - check what have been selected
+        console.log('this.selected:', this.selected);
+        // 3 - get the matching calendar from the backend
         http
         .get("/clients/appointment/" + this.selected)
-        // .get("/profile/appointment/" + this.selected)
         .then(res => {
           console.log('res:', res);
-          // console.log('res.data.content._id:', res.data.content._id);
-          // console.log('res.data.content.appointmentTypes:', res.data.content.appointmentTypes);
-          // console.log('res.data.content.slots:', res.data.content.slots);
-          // console.log('res.data.content.updatedAt:', res.data.content.updatedAt);
-          // console.log('res.data.content.userId:', res.data.content.userId);
-          // console.log('res.data.content.createdAt:', res.data.content.createdAt);
-          // this.$store.state.calendarId = res.data.content._id;
-          // this.$store.state.calendarSlots = res.data.content.slots;
-          // this.$store.state.appointmentTypes = res.data.content.appointmentTypes;
-          // this.$store.commit('CalendarId');
-          // this.$store.commit('Slots');
-          // this.$store.commit('appointmentType');
-          // console.log('this.$store.state.calendarId:', this.$store.state.calendarId);
-          // console.log('this.$store.state.calendarSlots:', this.$store.state.calendarSlots);
-          // console.log('this.$store.state.appointmentTypes:', this.$store.state.appointmentTypes);
-
-          // this.$store.state.rdv.updatedAt = res.data.content.updatedAt;
-          // this.$store.state.rdv.userId = res.data.content.userId;
-          // this.$store.state.rdv.createdAt = res.data.content.createdAt;
-          // this.selected = res.data.content;
-          // console.log(this.selected);
-
-          // this.$store.commit('getTest', this.test);
+          //here pass data from the backend to the store
           this.id = res.data.content._id;
           this.$store.commit('getCalendarId', this.id);
           this.slots = res.data.content.slots;
           this.$store.commit('getSlots', this.slots);
           this.appointmentTypes = res.data.content.appointmentTypes;
           this.$store.commit('getappointmentType', this.appointmentTypes);
-
-          this.$router.push("/calendar");
+          this.$store.commit('getselectedAptTypeName', this.selected);
+          // this.$router.push("/calendar");
           swal({
               type: "success",
               title: "Vous allez maintenant choisir la date du rendez-vous !",
               // text: res.data.content
             });
-          // this.$router.push("/calendar");
+          this.$router.push("/calendar");
         })
         .catch(error => {
           swal({

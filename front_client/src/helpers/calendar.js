@@ -1,4 +1,6 @@
-
+import moment from 'moment';
+import 'moment/locale/fr';
+moment.locale('fr');
 
 //return a number from a string
 function filterInt (value) {
@@ -15,7 +17,13 @@ function convertTimeInMinutes (hoursMinutes){
 	return totalMinutes;
 }
 
+function getCurrentDay(){
+      return moment();
+}
+
 
 export default{
-	convertTimeInMinutes
+	filterInt,
+	convertTimeInMinutes,
+	getCurrentDay
 }

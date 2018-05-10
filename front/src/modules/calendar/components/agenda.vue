@@ -506,7 +506,6 @@ export default {
 			this.displaySeeAptDetailsBtn_amend = !this.displaySeeAptDetailsBtn_amend;
 			this.displaySeeAptDetailsBtn = !this.displaySeeAptDetailsBtn;
 		}
-
 	},
 	filters: {
 		dateFormatFull: function(date) {
