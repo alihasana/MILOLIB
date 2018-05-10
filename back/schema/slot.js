@@ -8,7 +8,7 @@ let SlotSchema = new mongoose.Schema({
   appointment: {
     appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' },
     fullName: String,
-    appointmentType: String,
+    appointmentType: String, // TODO: A virer car superflu avec poupulate. virer aussi dans POST.
   }
 })
 

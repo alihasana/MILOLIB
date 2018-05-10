@@ -2,6 +2,7 @@ import User from './../routes/users/model'
 import Calendar from './../routes/calendar/model'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+const ObjectId = mongoose.Types.ObjectId
 
 import dotEnv from 'dotenv'
 dotEnv.config()
@@ -36,11 +37,13 @@ let staff = [
     email: 'conseiller',
     password: bcrypt.hashSync('conseiller', 10),
     role: 'Conseiller',
+    calendar: new ObjectId(),
   }),
   new User({
     email: 'admin-conseiller',
     password: bcrypt.hashSync('admin-conseiller', 10),
     role: 'Administrateur/Conseiller',
+    calendar: new ObjectId(),
   }),
 ]
 
@@ -55,25 +58,23 @@ for (let i = 0; i < staffNoCalendar.length; i++) {
 
 for (let i = 0; i < staff.length; i++) {
   staff[i].save((err, user) => {
-    if (err) console.log('ERROR In user.save() ! : ' + err.message)
-    else {
-      var newCalendar = new Calendar({ userId: user._id })
-      newCalendar.save((err, calendar) => {
-        if (err) console.log('ERROR In calendar.save() ! : ' + err.message)
-        done++
-        if (done === staff.length) {
-          setTimeout(() => { // setTimeout because of index creation. Temporary fix.
-            console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
-            exit()
-          }, 3000)
-        }
-      })
-      // done++
-      // if (done === staff.length) {
-      //   console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
-      //   exit()
-      // }  
-    }
+    if (err) return console.log('ERROR In user.save() ! : ' + err.message)
+    var newCalendar = new Calendar({ userId: user._id, _id: user.calendar })
+    newCalendar.save((err, calendar) => {
+      if (err) return console.log('ERROR In calendar.save() ! : ' + err.message)
+      done++
+      if (done === staff.length) {
+        setTimeout(() => { // setTimeout because of index creation. Temporary fix.
+          console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+          exit()
+        }, 3000)
+      }
+    })
+    // done++
+    // if (done === staff.length) {
+    //   console.log("Staff seeding complete. Yeah (づ｡◕‿◕｡)づ !")
+    //   exit()
+    // }  
   })
 }
 

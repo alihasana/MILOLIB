@@ -6,6 +6,7 @@ import helper from './../../helpers/helper'
 import controller from './controller'
 
 export default {
+
   checkSlotsConflict: (arr, val) => {
     return arr.some(function (arrElement) {
       if (val === arrElement.start) {
@@ -14,21 +15,72 @@ export default {
       // return val === arrElement.start
     })
   },
-  
+
+  checkSlotsConflictWIP: (arr, val) => {
+    return arr.some(function (arrElement) {
+      return 
+    })
+  },
+
+  deleteDuplicateSlotsWIP: (arr, val) => {
+    return arr.some(function (arrElement) {
+      return val === arrElement.start
+    })
+  },
+
   createCalendar: (locals) => {
-    console.log('createCalendar 1')
-    let newCalendar = new Calendar({ })
-    console.log('createCalendar 2')
+    let newCalendar = new Calendar({})
     return newCalendar.save()
   },
 
   postCalendar(req, res, calendar) {
     // Verify slots conflicts 
+
     for (let key of Object.keys(req.body)) {
       if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
         return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
       }
     }
+    
+
+    // //              WIP
+
+    // console.log('A')
+    // for (let bodyKey of Object.keys(req.body)) {
+    //   console.log('B')
+    //   for (let slotsKey of Object.keys(calendar.slots)) {
+    //     console.log('C')
+    //     if (req.body[bodyKey].start === calendar.slots[slotsKey].start) {
+    //       console.log('D')
+    //       if (calendar.slots[slotsKey].available === false) {
+    //         console.log('E 1')
+    //         return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
+    //       } else {
+    //         console.log('E 2')
+    //         calendar.slots[slotsKey] = undefined
+    //         // calendar.slots.splice(slotsKey, 1)
+    //       }
+    //     }
+    //   }
+    // }
+
+
+    // if (req.body[key].start === arrElement.start) {
+    //   calendar.slots[key].start
+    // }
+
+    // for (let key of Object.keys(req.body)) {
+    //   if (controller.deleteDuplicateSlotsWIP(calendar.slots, req.body[key].start)) {
+    //     calendar.slots[key].start
+    //   }
+    // }
+
+
+    // for (let key of Object.keys(req.body)) {
+    //   if (controller.checkSlotsConflictWIP(calendar.slots, req.body[key].start)) {
+        
+    //   }
+    // }
 
     // ADD Slots
     for (let key of Object.keys(req.body)) {
