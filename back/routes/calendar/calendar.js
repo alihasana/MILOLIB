@@ -31,12 +31,14 @@ router.post('/', (req, res) => {
 })
 
 router.get('/', (req, res) => {
-  Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-    if (err) return res.status(500).json({ success: false, message: err.message })
-    else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
+  Calendar.findOne({ userId: res.locals.user.id })
+    .populate('slots.appointment.appointmentId', 'appointmentType')
+    .exec((err, calendar) => {
+      if (err) return res.status(500).json({ success: false, message: err.message })
+      else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-    res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-  })
+      res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
+    })
 })
 
 router.get('/appointmentTypes', (req, res) => {
@@ -106,6 +108,11 @@ router.post('/appointment', (req, res) => {
   // }
   // findById avec le calendar id OU findOne avec le userID ?
   // TODO: rdv existe déja dans le cas d'un rdv de groupe, créer une route differente pour ce cas.
+
+  if (!req.body && !req.body.slotsId && !req.body.slotsId[0] && req.body.appointmentType) {
+    return res.status(400).json({ success: false, message: 'Bad request' })
+  }
+
   Client.findOne({ email: req.body.mailClient }, (err, client) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!client) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
@@ -114,12 +121,9 @@ router.post('/appointment', (req, res) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-      if (!req.body && !req.body.slotsId && !req.body.slotsId[0] && req.body.appointmentType) {
-        return res.status(400).json({ success: false, message: 'Bad request' })
-      }
 
       var appointmentSlots = []
-      console.log('req.body :', req.body)
+      var appointmentId = new ObjectId()
       for (let key of Object.keys(req.body.slotsId)) {
         if (calendar.slots.id(req.body.slotsId[key]) != null) {
           // Check conflict
@@ -130,7 +134,8 @@ router.post('/appointment', (req, res) => {
           calendar.slots.id(req.body.slotsId[key]).available = false
           calendar.slots.id(req.body.slotsId[key]).appointment = {
             fullName: client.firstName + ' ' + client.lastName,
-            appointmentType: req.body.appointmentType.name, // temporaire
+            appointmentId: appointmentId,
+            // appointmentType: req.body.appointmentType.name, // TODO: A virer, outdated
           }
           // Add slot to 'appointmentSlots' array
           appointmentSlots.push(calendar.slots.id(req.body.slotsId[key]))
@@ -140,17 +145,16 @@ router.post('/appointment', (req, res) => {
       calendar.save((err, calendar) => {
         if (err) return res.status(500).json({ success: false, message: err.message })
         let newAppointment = new Appointment({
+          _id: appointmentId,
           appointmentType: req.body.appointmentType,
           participants: {
-            clients: client.id, // TODO: a changer si rdv de groupe
+            clients: client.id, // TODO: a changer en array si rdv de groupe
             staff: res.locals.user.id,
           },
           slots: appointmentSlots,
           description: req.body.description,
         })
 
-        // TODO : id de l'appointement non ajouté aux slots
-        
         newAppointment.save((err, appointment) => {
           if (err) return res.status(500).json({ success: false, message: err.message })
           res.locals.user.appointments.push(appointment.id)
@@ -158,8 +162,8 @@ router.post('/appointment', (req, res) => {
           res.locals.user.save(err => {
             if (err) return res.status(500).json({ success: false, message: err.message })
             client.appointments.push(appointment.id)
-
             client.save(err => {
+
               if (err) return res.status(500).json({ success: false, message: err.message })
               res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
             })
