@@ -43,6 +43,7 @@ import cal from '../../helpers/calendar';
 import moment from 'moment';
 import 'moment/locale/fr';
 import twix from 'twix';
+import _ from 'underscore';
 
 import { mapGetters } from 'vuex'
 
@@ -88,9 +89,9 @@ export default {
         return button.class;
       });
     },
-  // getAptendHour(){
-  // return moment(this.apt.initialHour).add(this.selectedApt.duration, minute);
-  // }
+    getAptendHour(){
+    return moment(this.apt.initialHour).add(this.selectedApt.duration, 'minute');
+  }
   },
   data () {
     return {
@@ -106,7 +107,7 @@ export default {
       apt:{
         calendarId:'',
         initialHour:'',
-        // endHour:this.getAptendHour,
+        endHour:this.getAptendHour,
         allSlots:[],
         appointmentType:{
           name:'',
@@ -135,6 +136,7 @@ export default {
       //   console.log(error)
       //   })
       this.createButtonId(this.getDaysRange)
+      //this is not ideal but at least it works for demo
       setTimeout(this.updateButtonId(this.calendarSlots, this.buttonIdList), 5000);
     },
     getCurrentDayPlus2month: function(now){
@@ -202,9 +204,9 @@ export default {
       }
     },
     updateButtonId: function(slots, idList){
-       console.log('jpl updateButtonId');
-       console.log('slots:', slots);
-       console.log('idList: ', idList);
+       // console.log('jpl updateButtonId');
+       // console.log('slots:', slots);
+       // console.log('idList: ', idList);
       //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
       for (let i=0; i<slots.length; i++){
         for (let j=0; j<idList.length; j++){
@@ -227,7 +229,7 @@ export default {
       return this.buttonIdList;
     },
     filterButtonIdToDisplay: function(timeRange, btnIdList){
-      console.log('jpl filterButtonIdToDisplay');
+      // console.log('jpl filterButtonIdToDisplay');
       for (let i=0; i<timeRange.length; i++){
         let trday
         trday = moment(timeRange[i]).format('YYYY-MM-DD').toString();
@@ -247,15 +249,18 @@ export default {
       //i need to call getmatchingInitial slots  
       //then duration so that i can gather all the slots and send them to back-end
       if (button.id.charAt(button.id.length - 1) == 'A'){
+        this.apt.calendarId = this.calendarId;
+        this.apt.appointmentType = this.selectedApt;
         this.getmatchingInitalSlot(button, this.calendarSlots);
-        this.calendarSlotsInRange(slotList,this.apt.initialHour,this.apt.endHour)
+        this.calendarSlotsInRange(slotlist,this.apt.initialHour,this.apt.endHour)
         let postBody = {
           calendarId:this.apt.calendarId,
-          slots:this.apt.allSlots,
-          appointmentType:this.apt.appointmentType
+          slotsId: _.pluck(this.apt.allSlots, '_id'),
+          appointmentType:this.apt.appointmentType.name
+          //voir avec Luke si OK ou s'il veut tout l'objet
         };
         console.log('postBody:', postBody);
-        http.post('client/appointment', postBody)
+        http.post('clients/appointment', postBody)
         .then(
             res => {
             console.log('res:',res);
@@ -286,6 +291,9 @@ export default {
             this.matchingInitalSlot = slots[i];
             console.log('the matching slot is:', this.matchingInitalSlot);
             this.apt.initialHour = this.matchingInitalSlot.start;
+            this.apt.endHour = this.getAptendHour
+            console.log('this.apt.initialHour:', this.apt.initialHour);
+            console.log('this.getAptendHour:', this.getAptendHour);
           }
         }
     },
