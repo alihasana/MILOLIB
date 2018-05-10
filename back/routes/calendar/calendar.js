@@ -66,9 +66,9 @@ router.put('/appointmentTypes', (req, res) => {
     }
 
     calendar.appointmentTypes = req.body
-    calendar.save((err) => {
+    calendar.save(err => {
       if (err) return res.status(500).json({ success: false, message: err.message })
-      res.status(200).json({ success: true, message: 'Appointment Types modifiés'})
+      res.status(200).json({ success: true, message: 'Appointment Types modifiés' })
     })
   })
 })
@@ -76,20 +76,21 @@ router.put('/appointmentTypes', (req, res) => {
 router.get('/appointment/:slotId', (req, res) => {
   console.log('reqpparam:', req.params);
   if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
- 
-  Appointment.findOne({ slots: { $elemMatch: { _id: req.params.slotId } }})
-    
+  Appointment.findOne({ "slots._id": req.params.slotId })
     .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
     .populate('participants.staff') // TODO: VIRER LE PASSWORDde façon global (schema)
     .exec((err, appointment) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
-      // helper.beforeSendUser(appointment.participants.staff)
+      helper.beforeSendUser(appointment.participants.staff)
+      helper.beforeSendUser(appointment.participants.clients)
+      // // Boucle pour rdv de groupe
       // for (let key of Object.keys(appointment.participants.clients)) {
-      //   helper.beforeSendUser(key)
+      //   helper.beforeSendUser(appointment.participants.clients[key])
       // }
 
+      console.log('L4APPOUOUNH: ', appointment)
       res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
     })
 })
@@ -128,12 +129,11 @@ router.post('/appointment', (req, res) => {
           calendar.slots.id(req.body.slotsId[key]).available = false
           calendar.slots.id(req.body.slotsId[key]).appointment = {
             fullName: client.firstName + ' ' + client.lastName,
-            // fullName: client.firstName,
             appointmentType: req.body.appointmentType.name, // Fix temporire
           }
           // Add slot to 'appointmentSlots' array
           appointmentSlots.push(calendar.slots.id(req.body.slotsId[key]))
-        }
+        } else return res.status(400).json({ success: false, message: 'Cannot create appointement, Slots not found' })
       }
 
       calendar.save((err, calendar) => {
@@ -141,40 +141,106 @@ router.post('/appointment', (req, res) => {
         let newAppointment = new Appointment({
           appointmentType: req.body.appointmentType,
           participants: {
-            clients: [client.id], // TODO: verif si array nécessaires
+            clients: client.id, // TODO: a changer si rdv de groupe
             staff: res.locals.user.id,
           },
           slots: appointmentSlots,
           description: req.body.description,
         })
 
+        // TODO : id de l'appointement non ajouté aux slots
+
+        // TODO : test ajout appointment id au user/client
         newAppointment.save((err, appointment) => {
           if (err) return res.status(500).json({ success: false, message: err.message })
-          res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
+          res.locals.user.appointments.push(appointment.id)
+
+          res.locals.user.save(err => {
+            if (err) return res.status(500).json({ success: false, message: err.message })
+            client.appointments.push(appointment.id)
+
+            client.save(err => {
+              if (err) return res.status(500).json({ success: false, message: err.message })
+              res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
+            })
+          })
         })
       })
     })
   })
 })
 
+
 router.delete('/appointment/:appointmentId', (req, res) => {
   if (!ObjectId.isValid(req.params.appointmentId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
   Appointment.findById(req.params.appointmentId)
     .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
-    .populate('participants.staff') // TODO: VIRER LE PASSWORDde façon global (schema)
+    .populate('participants.staff') // TODO: VIRER LE PASSWORD de façon global (schema)
     .exec((err, appointment) => {
-      if (appointment.participants.staff != res.locals.user.id) {
-        // if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
-      }
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
 
-      helper.beforeSendUser(appointment.participants.staff)
-      for (let key of Object.keys(appointment.participants.clients)) {
-        helper.beforeSendUser(key)
+      if (appointment.participants.staff._id != res.locals.user.id) {
+        if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
       }
 
-      res.status(200).json({ success: true, message: 'Your appointment.', content: appointment })
+      Calendar.findOne({ userId: appointment.participants.staff._id }, (err, calendar) => {
+        if (err) return res.status(500).json({ success: false, message: err.message })
+        else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
+
+        // // Le ' for (let key of Object.keys(appointment.slots)) ' ne fonctionne pas,
+        // // pourquoi ? Le console.log 'ICI' montre qu'aprés avoir parcouru l'array,
+        // // il fait un loop avec un objet 'null'. étrange :o .
+        // for (let key of Object.keys(appointment.slots)) {
+        //   console.log('ICI ', calendar.slots.id(appointment.slots[key]._id))
+        //   if (calendar.slots.id(appointment.slots[key]._id) != null) {
+        //     calendar.slots.id(appointment.slots[key]._id).available = true
+        //     calendar.slots.id(appointment.slots[key]._id).appointment = undefined
+        //   } else {
+        //     return res.status(400).json({ success: false, message: 'Cannot delete appointement, Slots not found' })
+        //   }
+        // }
+
+        for (let i = 0; i < appointment.slots.length; i++) {
+          // console.log('ICI ', calendar.slots.id(appointment.slots[i]._id))
+          if (calendar.slots.id(appointment.slots[i]._id) != null) {
+            calendar.slots.id(appointment.slots[i]._id).available = true
+            calendar.slots.id(appointment.slots[i]._id).appointment = undefined
+          } else {
+            return res.status(400).json({ success: false, message: 'Cannot delete appointement, Slots not found' })
+          }
+        }
+
+        calendar.save(err => {
+          if (err) return res.status(500).json({ success: false, message: err.message })
+
+          User.findById(appointment.participants.staff._id, (err, user) => {
+            if (err) return res.status(500).json({ success: false, message: err.message })
+            else if (!user) return res.status(404).json({ success: false, message: 'User not found' })
+
+            user.appointments.splice(user.appointments.indexOf(appointment.id), 1)
+            user.save(err => {
+              if (err) return res.status(500).json({ success: false, message: err.message })
+
+              //TODO : rajouter une boucle pour gerer plusieurs clients (dans le cas de rdv de groupe)
+              Client.findById(appointment.participants.clients._id, (err, client) => {
+                if (err) return res.status(500).json({ success: false, message: err.message })
+                else if (!client) return res.status(404).json({ success: false, message: 'Client not found' })
+
+                client.appointments.splice(client.appointments.indexOf(appointment.id), 1)
+                client.save(err => {
+                  if (err) return res.status(500).json({ success: false, message: err.message })
+
+                  Appointment.deleteOne({ _id: req.params.appointmentId }, (err) => {
+                    if (err) return res.status(500).json({ success: false, message: err.message })
+                    res.status(200).json({ success: true, message: 'Appointment deleted' })
+                  })
+                })
+              })
+            })
+          })
+        })
+      })
     })
 })
 
@@ -182,124 +248,15 @@ router.delete('/appointment/:appointmentId', (req, res) => {
 // //                        NON FONCTIONNELS 
 // // -------------------------------------------------------------------
 
-// // router.get('/testFind', (req, res) => {
-// //   Calendar.find({}, (err, calendars) => {
-// //     if (err) return res.status(500).json({ success: false, message: err.message })
-// //     else if (!calendars) return res.status(404).json({ success: false, message: 'Calendars not found' })
-// //     else {
-// //       // TODO : filtrer les slots not available
-// //       res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
-// //     }
-// //   })
-// // })
-
-// // //Populate test
-// // router.get('/testPopulate', (req, res) => {
-// //   Calendar.findOne({ userId: res.locals.user.id }).populate('userId').exec((err, calendar) => {
-// //     if (err) return res.status(500).json({ success: false, message: err.message })
-// //     else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
-// //     res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-// //   })
-// // })
-
-// // router.get('/test', (req, res) => {
-// //   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-// //     if (err) res.status(500).json({ success: false, message: err.message })    
-// //     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
-// //     else {
-// //       // calendar.populate('userId').exec((err, result) => {
-// //       //     console.log("Populated citron " + result)
-// //       //   })
-// //       res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-// //     }
-// //   }).populate('userId')
-// // })
-
-// // router.get('/test', (req, res) => {
-// //   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-// //     if (err) res.status(500).json({ success: false, message: err.message })    
-// //     else if (!calendar) res.status(404).json({ success: false, message: 'Calendar not found' })
-// //   }).populate('userId').exec((err, result) => {
-// //     res.status(200).json({ success: true, message: 'Your calendar.', content: calendar })
-// //   })
-// // })
-
-
-
-// // OSEF -->
-
 // // router.get('slots/:id', (req, res) => {
 // //   if (res.locals.user.calendar.slots.id(req.params.id) != null) {
 // //     res.status(200).json({ success: true, message: 'Your slot, you ding dong.', content: res.locals.user.calendar.slots.id(req.params.id) })
 // //   } else res.status(404).json({ success: false, message: 'Slot not found.' })
 // // })
 
-// // // Route inutile ? 'multiples slots change' est suffisant
-// // router.put('/slots/:id', (req, res) => { // one slot change
-// // })
-
 // // // Dans le front un truc du genre: 
 // // // On cliques sur les slots que l'on veux modifier, ils se push dans un array qui est ensuite envoyer au back quand on clique sur un bouton "Modify".
 // // router.put('/slots', (req, res) => { // multiples slots change
-// // })
-
-
-// // router.post('/test', (req, res) => {
-// //   console.log(req.body)
-// //   console.log('Object.keys : ' + Object.keys(req.body))
-// //   console.log('LENGHT : ' + req.body.length)
-// // for (let i = 0; i < req.body.length; i++) {
-// //   calendar.slots.push(req.body[i])
-// // }
-// // for (let key of Object.keys(req.body)) {
-// //   calendar.slots.push(req.body[key])
-// // }
-// // var arr = []
-// // for (let i = 0; i < req.body.length; i++) {
-// //   arr.push(req.body[i])
-// // }
-// // console.log('LE ARRAY ' + arr)
-
-// //   res.locals.user.markModified('calendar.slots.start')
-// //   res.locals.user.markModified('calendar.slots.end')
-
-// //   res.locals.user.save((err) => {
-// //     if (err) res.status(500).json({ success: false, message: err.message })
-// //     else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées' })
-// //   })
-// // })
-
-// // router.post('/OLDSCHOOL', (req, res) => {
-// //   // console.log('Le req.body ' + JSON.stringify(req.body, null, 4))
-// //   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
-// //     if (err) res.status(500).json({ success: false, message: err.message })
-// //     else {
-// //       console.log('Le calendar find one ' + JSON.stringify(calendar, null, 4))
-
-// //       // //WIP, async problems
-// //       if (!calendar) { // Create calendar if needed
-// //         calendar = controller.asyncCall(res.locals);
-// //       }
-
-// //       // Verify slots conflicts 
-// //       for (let key of Object.keys(req.body)) {
-// //         if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
-// //           return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
-// //         }
-// //       }
-
-// //       // ADD Slots
-// //       for (let key of Object.keys(req.body)) {
-// //         calendar.slots.push(req.body[key])
-// //       }
-
-// //       // TODO: A voir si 'content: calendar' ou si pas besoin de content dans la réponse.
-// //       calendar.save((err, calendar) => {
-// //         if (err) res.status(500).json({ success: false, message: err.message })
-// //         else res.status(200).json({ success: true, message: 'C\'est ok. Slots ajoutées', content: calendar })
-// //       })
-// //     }
-// //   })
 // // })
 
 export default router
