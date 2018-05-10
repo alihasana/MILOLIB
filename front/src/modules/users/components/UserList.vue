@@ -34,9 +34,9 @@
     <!-- Main table element -->
     <b-table show-empty 
              stacked="md"
-             striped hover 
-             :items="users" 
+             striped hover small outlined fixed
              :fields="fields"
+             :items="users" 
              :current-page="currentPage"
              :per-page="perPage"
              :filter="filter"
@@ -45,27 +45,48 @@
              @filtered="onFiltered"
              >
         <!-- Action buttons -->
-        <template slot="actions" slot-scope="row">
+        <template slot="show_details" slot-scope="row">
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Profil</b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Calendrier</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="row.toggleDetails" class="mr-2"> {{ row.detailsShowing ? 'Fermer le' : 'Voir'}} Profil</b-btn>
+
+          <b-btn size="sm" variant="success" @click="goUserCalendar(users._id)">Calendrier</b-btn>
+      </template>
+      <!-- Toggle Show profile details -->
+       <template slot="row-details" slot-scope="row">
+      <b-card>      
+
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>Nom : </b></b-col>
+          <b-col>{{ row.item.lastName }} </b-col>
+        </b-row>
+
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>Prénom : </b></b-col>
+          <b-col>{{ row.item.firstName }}  </b-col>
+        </b-row>  
+
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>E-mail : </b></b-col>
+          <b-col>{{ row.item.email }}</b-col>
+        </b-row>
+
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>Rôle : </b></b-col>
+          <b-col>{{ row.item.role }}</b-col>
+        </b-row>
+
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>Lieu(x) d'exercice : </b></b-col>
+          <b-col>{{ row.item.workPlace }}</b-col>
+        </b-row>
+
+
+        <!-- <b-button size="sm" @click="row.toggleDetails">Fermer le profil</b-button> -->
           <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
           <b-btn size="sm" variant="danger" @click.stop="details(row.item)">Désactiver</b-btn>
-      </template>
-     
-      <!-- Voir le détail du profil -->
-      <template slot="row-details" slot-scope="row">
-           <router-link class="userlist__list col-xs-6 col-lg-3" :to="{name:'userDetail' , params: {id: user._id , user: user}}" v-for='user in users' :key="user._id">
-             <b-card>
-        <!-- show profil details  -->
-        <p>{{ user.email }}<br/>
-          </p>
-             </b-card>
-      </router-link>
-      </template>
+      </b-card>
+    </template>
     </b-table>
-
-
     <!-- Info modal -->
     <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
       <pre>{{ modalInfo.content }}</pre>
@@ -84,16 +105,16 @@
     name: "userList",
     data() {
       return {
-        title: "Liste des utilisateurs",
-        users: [],
-        items: items,
+      title: "Liste des utilisateurs",
+      users: [],
+      items: items,
+      // defining the order of the columns, and which columns to display
       fields: [
-        { key: 'firstName', label: 'Prénom', sortable: true },
         { key: 'lastName', label: 'Nom', sortable: true },
-        { key: 'email', label: 'E-mail', sortable: true },
+        { key: 'firstName', label: 'Prénom', sortable: true },
         { key: 'role', label: 'Rôle', sortable: true },
         { key: 'ref', label: 'Réf. (PRP)' },
-        { key: 'actions', label: 'Actions' }
+        { key: 'show_details', label: 'Actions' }
       ],
       currentPage: 1,
       perPage: 10,
@@ -106,12 +127,12 @@
       };
     },
     computed: {
-    sortOptions () {
-      // Create an option list from our fields
-      return this.fields
-        .filter(f => f.sortable)
-        .map(f => { return { text: f.label, value: f.key } })
-    }
+    // sortOptions () {
+    //   // Create an option list from our fields
+    //   return this.fields
+    //     .filter(f => f.sortable)
+    //     .map(f => { return { text: f.label, value: f.key } })
+    // }
   },
     methods: {
       getListUser() {
@@ -129,9 +150,19 @@
               });
           });
       },
-      // redirectToUserList() {
-      //   this.$router.push('ProfileUser')
-      // }
+      goUserCalendar(){
+        console.log('user id is: ', this.users)
+        // http.get('calendar/', + userId )
+        // .then(res => {
+        //   console.log("here is your calendar")
+        // })
+        // .catch(error => {
+        //   if (error) {
+        //     console.log('there is an error with user calendar', error)
+        //   }
+        // })
+      }, 
+     
       info (item, index, button) {
       this.modalInfo.title = `Row index: ${index}`
       this.modalInfo.content = JSON.stringify(item, null, 2)
