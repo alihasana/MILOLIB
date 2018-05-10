@@ -78,7 +78,7 @@ router.get('/appointment/:slotId', (req, res) => {
   if (!ObjectId.isValid(req.params.slotId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
   Appointment.findOne({ "slots._id": req.params.slotId })
     .populate('participants.clients') // TODO: VIRER LE PASSWORD de façon global (schema)
-    .populate('participants.staff') // TODO: VIRER LE PASSWORDde façon global (schema)
+    .populate('participants.staff') // TODO: VIRER LE PASSWORD de façon global (schema)
     .exec((err, appointment) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!appointment) return res.status(404).json({ success: false, message: 'Appointment not found' })
@@ -119,6 +119,7 @@ router.post('/appointment', (req, res) => {
       }
 
       var appointmentSlots = []
+      console.log('req.body :', req.body)
       for (let key of Object.keys(req.body.slotsId)) {
         if (calendar.slots.id(req.body.slotsId[key]) != null) {
           // Check conflict
@@ -129,7 +130,7 @@ router.post('/appointment', (req, res) => {
           calendar.slots.id(req.body.slotsId[key]).available = false
           calendar.slots.id(req.body.slotsId[key]).appointment = {
             fullName: client.firstName + ' ' + client.lastName,
-            appointmentType: req.body.appointmentType.name, // Fix temporire
+            appointmentType: req.body.appointmentType.name, // temporaire
           }
           // Add slot to 'appointmentSlots' array
           appointmentSlots.push(calendar.slots.id(req.body.slotsId[key]))
@@ -149,8 +150,7 @@ router.post('/appointment', (req, res) => {
         })
 
         // TODO : id de l'appointement non ajouté aux slots
-
-        // TODO : test ajout appointment id au user/client
+        
         newAppointment.save((err, appointment) => {
           if (err) return res.status(500).json({ success: false, message: err.message })
           res.locals.user.appointments.push(appointment.id)
