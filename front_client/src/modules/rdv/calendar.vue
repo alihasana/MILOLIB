@@ -270,6 +270,7 @@ export default {
                   title: "Confirmation du RDV",
                   text: "Votre RDV a bien été confirmé, vous allez recevoir un mail de confirmation (fonctionnalité non effective pour l'instant"
                   });
+            this.apt.allSlots = [];
             })
           .catch(
             error => {
@@ -280,6 +281,7 @@ export default {
                   text: "Votre RDV n'a pas pu être confirmé"
                   });
               });
+            this.apt.allSlots = [];
         //voir avec Anas que ces fonctions s'executent bien l'une quand l'autre est finie, car le résultat de la deuxième dépend de la premiere
       }
     },

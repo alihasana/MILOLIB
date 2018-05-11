@@ -60,7 +60,9 @@ router.post('/appointment', (req, res) => {
   // TODO: rdv existe déja dans le cas d'un rdv de groupe, créer une route differente pour ce cas.
 
   if (!req.body && !req.body.slotsId && !req.body.slotsId[0]) {
+    console.log("baq reqeust");
     return res.status(400).json({ success: false, message: 'Bad request' })
+
   }
 
   Calendar.findById(req.body.calendarId, (err, calendar) => {
@@ -71,12 +73,14 @@ router.post('/appointment', (req, res) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!user) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
 
-      var appointmentSlots = []
-      var appointmentId = new ObjectId()
+      var appointmentSlots = [];
+      var appointmentId = new ObjectId();
+      console.log(req.body.slotsId);
       for (let key of Object.keys(req.body.slotsId)) {
         if (calendar.slots.id(req.body.slotsId[key]) != null) {
           // Check conflict
           if (calendar.slots.id(req.body.slotsId[key]).available == false) {
+            console.log("create");
             return res.status(400).json({ success: false, message: 'Cannot create appointement, slots unavailable' })
           }
           // Make slot unavailable in calendar
@@ -110,12 +114,13 @@ router.post('/appointment', (req, res) => {
 
           res.locals.user.save(err => {
             if (err) return res.status(500).json({ success: false, message: err.message })
-            client.appointments.push(appointment.id)
-            client.save(err => {
+              res.status(200).send({success: true, message: "Nouveau RDV confirmé"});
+            // client.appointments.push(appointment.id);
+            // client.save(err => {
 
-              if (err) return res.status(500).json({ success: false, message: err.message })
-              res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
-            })
+            //   if (err) return res.status(500).json({ success: false, message: err.message })
+            //   res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
+            // })
           })
         })
       })

@@ -80,13 +80,14 @@ export default {
           // }
           console.log('res:', res);
           this.commit();
+           swal({
+              type: "success",
+              title: "Vous allez maintenant choisir la date du rendez-vous !",
+              // text: res.data.content
+            });
           this.pushCalendar();
           
-          // swal({
-          //     type: "success",
-          //     title: "Vous allez maintenant choisir la date du rendez-vous !",
-          //     // text: res.data.content
-          //   });
+         
           // this.$router.push("/calendar");
         })
         // .then(this.$router.push("/calendar"))
