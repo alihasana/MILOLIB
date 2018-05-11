@@ -78,7 +78,8 @@ Finally go back to your terminal and write :
 Go to your localhost (default port on 8080) :
 
 ```
-http://localhost:8080/
+http://localhost:8080/ (first npm run dev [front])
+http://localhost:8081/ (second npm run dev [front_client])
 ```
 Enjoy : 
 
