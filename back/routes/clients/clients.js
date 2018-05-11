@@ -6,6 +6,7 @@ import User from './../users/model'
 import Calendar from './../calendar/model'
 import Appointment from './../../models/appointment'
 import helper from './../../helpers/helper'
+const ObjectId = mongoose.Types.ObjectId
 
 import profile from './profile/profile'
 let router = express.Router()
