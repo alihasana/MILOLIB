@@ -148,30 +148,37 @@ No versioning for the moment ...
 ## Authors
 
 * **Sandrine Pradier** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit her Github](https://github.com/SandrinePradier)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Asma El Kabir** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit her Github](https://github.com/asmi77)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Yoann Roule** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/TurukTheCook)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Luke Perrey** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/LuckyLaszlo)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Alihasana Shaik Alauddeen** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/alihasana)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Loïc Aublet** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/HanP77)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Kévin Beauguet** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/KBSimplon)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
