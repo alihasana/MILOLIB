@@ -113,9 +113,9 @@ export default {
         firstName: "",
         phone: "",
         email: "",
-        descolarise: "",
-        infAge: "",
-        commune: "",
+        descolarise: "false",
+        infAge: "false",
+        commune: "null",
         password: "",
         // confirmPassword: ""
       }
@@ -129,7 +129,8 @@ export default {
       // console.log(user.password);
       // console.log(user.confirmPassword);
       // if (user.password === user.confirmPassword) {
-         http
+        if (this.user.commune != "null") {
+        http
         .post("/clientsAuth/signup", this.user)
         .then(res => {
           swal({
@@ -146,13 +147,13 @@ export default {
             text: error.response.data.message
           });
         });
-      // } else {
-      //   swal({
-      //       type: "error",
-      //       title: "Oups ! Les mots de passes sont différents !",
-      //       text: error.response.data.message
-      //     });
-      // }
+      } else {
+        swal({
+            type: "error",
+            title: "Oups ! Merci de sélectionner votre commune !",
+            text: error.response.data.message
+          });
+      }
     }
   },
 };
