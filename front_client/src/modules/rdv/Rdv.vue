@@ -50,6 +50,17 @@ export default {
   },
   components: {},
   methods: {
+      commit(){
+        console.log('commit');
+      this.$store.commit('getCalendarId', this.id);    
+      this.$store.commit('getSlots', this.slots);
+      this.$store.commit('getappointmentType', this.appointmentTypes);
+      this.$store.commit('getselectedAptTypeName', this.selected);
+      },
+      pushCalendar(){
+        console.log('calendar');
+        this.$router.push("/calendar");
+      },
       takeRdv() {
         // 1 - check what have been selected
         console.log('this.selected:', this.selected);
@@ -57,23 +68,27 @@ export default {
         http
         .get("/clients/appointment/" + this.selected)
         .then(res => {
-          console.log('res:', res);
+          
           //here pass data from the backend to the store
           this.id = res.data.content._id;
-          this.$store.commit('getCalendarId', this.id);
           this.slots = res.data.content.slots;
-          this.$store.commit('getSlots', this.slots);
           this.appointmentTypes = res.data.content.appointmentTypes;
-          this.$store.commit('getappointmentType', this.appointmentTypes);
-          this.$store.commit('getselectedAptTypeName', this.selected);
+          // async function goToCalendar(){
+          //   await commit();
+          //   await pushCalendar();
+          // }
+          console.log('res:', res);
+          this.commit();
+          this.pushCalendar();
+          
+          // swal({
+          //     type: "success",
+          //     title: "Vous allez maintenant choisir la date du rendez-vous !",
+          //     // text: res.data.content
+          //   });
           // this.$router.push("/calendar");
-          swal({
-              type: "success",
-              title: "Vous allez maintenant choisir la date du rendez-vous !",
-              // text: res.data.content
-            });
-          this.$router.push("/calendar");
         })
+        // .then(this.$router.push("/calendar"))
         .catch(error => {
           swal({
             type: "error",
@@ -82,6 +97,7 @@ export default {
           });
         });
     }
+
   }
 };
 </script>

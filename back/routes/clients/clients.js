@@ -16,21 +16,26 @@ router.get('/appointment/:appointmentType', (req, res) => {
   Calendar.find({ 'appointmentTypes.name': req.params.appointmentType }, (err, calendars) => {
     // Calendar.find({}, (err, calendars) => { // Find({}) for test purpose 
     console.log('A1' + calendars)
+    
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!calendars || !calendars[0]) return res.status(404).json({ success: false, message: 'No calendars found' })
     // TODO: A voir comment filter les slots lors du .find()
     // Filtre provisoire
+    
     for (let calendarKey of Object.keys(calendars)) {
-      for (let key of Object.keys(calendars[calendarKey].slots)) {
-        if (calendars[calendarKey].slots[key].available !== true) {
+      console.log(calendars[calendarKey].slots.length);
+      //for (let key of Object.keys(calendars[calendarKey].slots)) {
+        for(let i = 0 ; i < calendars[calendarKey].slots.length ; i++){// modif Rudy
+        if (calendars[calendarKey].slots[i].available !== true) {
           // delete calendars[calendarKey].slots[key] // output: null
-          calendars[calendarKey].slots.splice(key, 1)
+          calendars[calendarKey].slots.splice(i, 1)
           // calendars[calendarKey].slots[key] = 'lol' // output: 'lol'
           // calendars[calendarKey].slots[key] = null // output: null
           // calendars[calendarKey].slots[key] = undefined // output: null
         }
       }
     }
+    
     console.log('A2' + JSON.stringify(calendars, null, 4))
 
     // res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
