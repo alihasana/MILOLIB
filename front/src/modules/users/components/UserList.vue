@@ -49,7 +49,7 @@
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
           <b-btn size="sm" variant="primary" @click.stop="row.toggleDetails" class="mr-2"> {{ row.detailsShowing ? 'Fermer le' : 'Voir'}} Profil</b-btn>
 
-          <b-btn size="sm" variant="success" @click="goUserCalendar(row.item._id)">Calendrier</b-btn>
+          <b-btn size="sm" variant="success" @click="goUserCalendar(row.item.calendar, row.item._id)">Calendrier</b-btn>
       </template>
       <!-- Toggle Show profile details -->
        <template slot="row-details" slot-scope="row">
@@ -149,6 +149,7 @@
           .get("/users", {})
           .then(res => {
             this.users = res.data.content;
+            console.log('res.data.content de la usersList', this.users)
           })
           .catch(error => {
             if (error)
@@ -160,12 +161,12 @@
           });
       },
       //fetch user calendar details
-      goUserCalendar(userId){
-        console.log("user id calendar : ", userId)
-        http.get('/calendar/', + userId )
+      goUserCalendar(userCalendar, userId){
+        http.get('/calendar/userCalendar/' + userCalendar + '/' + userId)
         .then(res => {
-          console.log("Available required calendar", res.data)
-        this.$router.push('/calendar/' + userId)
+          console.log("User Calendar data : ", res.data)
+          console.log("Here is the calendar of : ", res.data.content.userId.firstName + ' ' + res.data.content.userId.lastName)
+        this.$router.push('/calendar/' + userCalendar + '/' + userId)
         })
         .catch(error => {
           if (error) {
