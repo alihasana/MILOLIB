@@ -29,7 +29,7 @@
                           unchecked-value="false">
             J'ai moins de 26 ans
           </b-form-checkbox>
-          <div>State: <strong>{{user.descolarise}}</strong></div>
+          <!-- <div>State: <strong>{{user.descolarise}}</strong></div> -->
           <br>
           <b-form-checkbox id="checkbox2"
                           v-model="user.infAge"
@@ -37,7 +37,7 @@
                           unchecked-value="false">
             Je suis descolarisé
           </b-form-checkbox>
-          <div>State: <strong>{{user.infAge}}</strong></div>
+          <!-- <div>State: <strong>{{user.infAge}}</strong></div> -->
         </div>
         <br>
         <div>
@@ -58,7 +58,7 @@
             <option value="Tigery">Tigery</option>
             <option value="Vert-St-Denis">Vert-St-Denis</option>
           </b-form-select>
-          <div>commune: <strong>{{ user.commune }}</strong></div>
+          <!-- <div>commune: <strong>{{ user.commune }}</strong></div> -->
         </div>
         <br>
         <div class="form-group">
@@ -77,7 +77,7 @@
                           unchecked-value="false" required>
             I accept the terms and use
           </b-form-checkbox>
-          <div>State: <strong>{{status3}}</strong></div>
+          <!-- <div>State: <strong>{{status3}}</strong></div> -->
         </div>
         <br>
         <button class="btn btn-lg btn--white" v-on:click="signIn">Register</button>
