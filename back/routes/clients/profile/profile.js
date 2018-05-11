@@ -18,10 +18,14 @@ router.get('/', (req, res) => {
 // TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
   var messageArray = ['Profile updated.', '', '']
-  //'res.locals.user' is the actual connected user
+
+  var password = req.body.password // TODO: Fix pas terrible, a modifier
+  delete req.body.password // TODO: Fix pas terrible, a modifier
   for (let key of Object.keys(req.body)) {
     res.locals.user[key] = req.body[key];
   }
+  req.body.password = password // TODO: Fix pas terrible, a modifier
+  
   res.locals.user.unmarkModified('role')
   if (req.body.password || req.body.email) {
     controller.protectedUpdate(req.body, res.locals, messageArray)
