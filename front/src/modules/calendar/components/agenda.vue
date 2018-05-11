@@ -43,7 +43,7 @@
 
 		<!-- Modal "Book an appointment" -->		
 		<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = true, the method getRelevantModal is called -->
-		<b-modal id="modalBookApt" ref="modalBookApt" title="Creer un nouveau rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
+		<b-modal id="modalBookApt" ref="modalBookApt" centered title="Creer un nouveau rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
 			<form @submit.stop.prevent="bookApt">
 				<p>Heure du RDV: {{matchingSlot.start | formatDayHour}}</p>
 				<b-form-select v-model="formRDV.selectedTypeRDV" class="mb-3">
@@ -54,7 +54,7 @@
 				<label for="email">RDV avec:</label>
 				<b-form-input type="email" placeholder="E-mail" v-model="formRDV.mailRDV"></b-form-input>
 				<label for="commentaire">Commentaires:</label>
-				<b-form-textarea type="text" v-model="formRDV.textRDV" :rows="6" :max-rows="6">
+				<b-form-textarea type="text" placeholder="Pour l'instant les commentaires ne sont pas enregistrés en base de données, donc pas récupérés" v-model="formRDV.textRDV" :rows="6" :max-rows="6">
 				</b-form-textarea>
 				<b-button type="submit" v-on:click="" variant="primary">Submit</b-button>
 				<b-button type="reset" v-on:click="clearModalBookApt()"
@@ -64,15 +64,15 @@
 
 		<!-- Modal "See appointment details" -->
 		<!-- the opening of this modal is triggered on clik on button, after buttonId has been parsed and if available = false, the method getRelevantModal is called -->
-		<b-modal id="modalSeeAptDetails" ref="modalSeeAptDetails" title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
+		<b-modal id="modalSeeAptDetails" ref="modalSeeAptDetails"  centered title="Détails du rendez-vous" v-bind:hide-footer="hideFooter" v-bind:cancel-disabled="cancelDisabled" v-bind:ok-disabled="okDisabled">
 			<b-form-group label-text-align @submit.stop.prevent="modifyApt">
-				<label >Type de RDV</label>
-				<b-form-input type="text" v-model="confirmedRDV.TypeRDV.name" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
-				<b-form>
-					<label>RDV le:</label>
 					<!-- on mettra le jour et l'heure du RDV -->
-					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.initialSlot" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
+					<!-- <b-form-input type="text" v-model="confirmedRDV.TypeRDV.initialSlot.start" required v-bind:disabled="detailRDVInputDisabled"></b-form-input> -->
+					<h3 class="RDVdate"> le {{confirmedRDV.initialSlot.start | formatDayHour}}</h3>
 					<!-- il faudra transformer initialSlot.start au bon format via une computed -->
+				<label >Type de RDV</label>
+					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.name" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
+						<b-form> 
 					<label>Durée</label>
 					<b-form-input type="text" v-model="confirmedRDV.TypeRDV.duration" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
 				</b-form>
@@ -85,7 +85,7 @@
 				<label>Mail</label>
 				<b-form-input type="email" v-model="confirmedRDV.mailRDV" required v-bind:disabled="detailRDVInputDisabled"></b-form-input>
 				<label>Commentaires</label>
-				<b-form-textarea type="textarea" v-model="confirmedRDV.textRDV" required v-bind:disabled="detailRDVInputDisabled" :rows="6" :max-rows="6"></b-form-textarea>
+				<b-form-textarea type="textarea" v-model="confirmedRDV.textRDV" required v-bind:disabled="detailRDVInputDisabled" :rows="6" :max-rows="6" placeholder="Pour l'instant les commentaires ne sont pas enregistrés en base de données, donc pas récupérés"></b-form-textarea>
 				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="closeModal()" variant="primary">OK</b-button>
 				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="validateComing()" variant="success">Valider présence</b-button>
 				<b-button v-if="displaySeeAptDetailsBtn" type="button" v-on:click="changeDisabledAttribute()" variant="warning">Modifier le RDV</b-button>
@@ -179,24 +179,13 @@ export default {
       			initialSlot:'',
       			allSlots:[]
       		},
-      		// confirmedRDV:{
-      		// 	TypeRDV:'',
-      		// 	lastNameRDV:'',
-      		// 	firstNameRDV:'',
-      		// 	phoneRDV:'',
-      		// 	mailRDV:'',
-      		// 	textRDV:'',
-      		// 	initialSlot:'',
-      		// 	allSlots:[]
-      		// },
-      		//this is for test only as at the moment no data coming from back as route not OK
       		confirmedRDV:{
-      			TypeRDV:'formation',
-      			lastNameRDV:'EL KEBIR',
-      			firstNameRDV:'Asma',
-      			phoneRDV:'0609080706',
-      			mailRDV:'asma@asma.com',
-      			textRDV:'Point à voir lors du RDV: type de formation souhaitée // situation polemploi',
+      			TypeRDV:'',
+      			lastNameRDV:'',
+      			firstNameRDV:'',
+      			phoneRDV:'',
+      			mailRDV:'',
+      			textRDV:'',
       			initialSlot:'',
       			allSlots:[]
       		},
@@ -424,14 +413,14 @@ export default {
 					.then(
 						res => {
 							console.log('res:', res);
-						// console.log('res after http.get("/calendar/appointment/" + this.confirmedRDV.initialSlot._id):',res);
-						// this.confirmedRDV.TypeRDV = res.data.content.appointmentType;
-						// this.confirmedRDV.lastNameRDV = res.data.content.participants.clients[0];
-						// this.confirmedRDV.firstNameRDV = res.data.content.participants.clients[0];
-						// this.confirmedRDV.phoneRDV = res.data.content.participants.clients[0];
-						// this.confirmedRDV.mailRDV = res.data.content.participants.clients[0].email;
-						// this.confirmedRDV.textRDV = res.data.content.participants.clients[0];
-						// this.confirmedRDV.allSlots = res.data.content.slots;
+						this.confirmedRDV.TypeRDV = res.data.content.appointmentType;
+						this.confirmedRDV.lastNameRDV = res.data.content.participants.clients.lastName;
+						this.confirmedRDV.firstNameRDV = res.data.content.participants.clients.firstName;
+						this.confirmedRDV.phoneRDV = res.data.content.participants.clients.phone;
+						this.confirmedRDV.mailRDV = res.data.content.participants.clients.email;
+						// this.confirmedRDV.textRDV = res.data.content.participants.clients;
+						this.confirmedRDV.allSlots = res.data.content.slots;
+						this.confirmedRDV.TypeRDV.initialSlot = res.data.content.slots[0].start;
 						})
 					.catch(
 						error => {

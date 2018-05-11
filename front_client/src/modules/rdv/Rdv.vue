@@ -22,7 +22,7 @@
             <option value="Apprentissage">Apprentissage</option>
             <option value="Autre">Autre</option>
           </b-form-select>
-          <div>Selected: <strong>{{ selected }}</strong></div>
+          <!-- <div>Selected: <strong>{{ selected }}</strong></div> -->
         </div>
         <button class="btn btn-lg btn--white" v-on:click="takeRdv">Valider</button>
       </div>

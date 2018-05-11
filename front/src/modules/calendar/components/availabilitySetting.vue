@@ -33,7 +33,7 @@
 				</b-form-group>
 				<hr>
 				<b-button variant="outline-primary" v-on:click="getDisposInWeek(selected)" type="button">Mettre à jour mes dispos sur mon Agenda</b-button>
-				<p>{{selected}}</p>
+			<!-- 	<p>{{selected}}</p> -->
 				<hr>
 			</b-form>
 		</div>
