@@ -31,11 +31,12 @@ Open terminal (if it's not the case)
 Access to : 
 - MILOLIB/back 
 - MILOLIB/front
+- MILOLIB/front_client
 ```
 Install dependencies :
 
 ```
-Make 'npm install' in both path !
+Make 'npm install' in three path !
 ```
 Setup environnement (MILOLIB/back) :
 
@@ -48,12 +49,12 @@ Setup seeder (MILOLIB/back) :
 
 ```
 In terminal make :
-- node seeder/babel/allStaff.babel.js
-- node seeder/babel/clients.babel.js
+- "node seeder/babel/allStaff.babel.js" or "npm run s_staff"
+- "node seeder/babel/clients.babel.js" or "npm run s_client"
 
 Then check if the datas are in your database :
 - milolib->collection->users (5 entries) 
-- milolib->collection->clients (1 entry))
+- milolib->collection->clients (3 entries))
 
 Notes Staff Seeder : 
 Email : admin-conseiller Password : admin-conseiller
@@ -64,12 +65,15 @@ Email : accueil Password : accueil
 
 Notes Client Seeder : 
 Email : client Password : client
+Email : a@a Password : a
+Email : z@z Password : a
 ```
 Finally go back to your terminal and write :
 
 ``` 
 - MILOLIB/back : "npm start"
-- MILOLIB/front : "npm run dev"
+- MILOLIB/front : "npm run dev" or "npm start"
+- MILOLIB/front_client : "npm run dev" or "npm start"
 ```
 Go to your localhost (default port on 8080) :
 
