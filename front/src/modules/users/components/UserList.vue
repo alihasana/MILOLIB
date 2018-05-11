@@ -49,7 +49,7 @@
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
           <b-btn size="sm" variant="primary" @click.stop="row.toggleDetails" class="mr-2"> {{ row.detailsShowing ? 'Fermer le' : 'Voir'}} Profil</b-btn>
 
-          <b-btn size="sm" variant="success" @click="goUserCalendar(users._id)">Calendrier</b-btn>
+          <b-btn size="sm" variant="success" @click="goUserCalendar(row.item._id)">Calendrier</b-btn>
       </template>
       <!-- Toggle Show profile details -->
        <template slot="row-details" slot-scope="row">
@@ -57,33 +57,40 @@
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Nom : </b></b-col>
-          <b-col>{{ row.item.lastName }} </b-col>
+          <b-col class="text-sm-left">{{ row.item.lastName }} </b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Prénom : </b></b-col>
-          <b-col>{{ row.item.firstName }}  </b-col>
+          <b-col class="text-sm-left">{{ row.item.firstName }}  </b-col>
         </b-row>  
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>E-mail : </b></b-col>
-          <b-col>{{ row.item.email }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.email }}</b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Rôle : </b></b-col>
-          <b-col>{{ row.item.role }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.role }}</b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Lieu(x) d'exercice : </b></b-col>
-          <b-col>{{ row.item.workPlace }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.workPlace }}</b-col>
         </b-row>
 
 
         <!-- <b-button size="sm" @click="row.toggleDetails">Fermer le profil</b-button> -->
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
-          <b-btn size="sm" variant="danger" @click.stop="details(row.item)">Désactiver</b-btn>
+       <b-row class="mb-2">
+         <b-col sm="6" class="text-sm-right"> 
+          <b-btn size="sm" variant="primary" @click="goUserDetails(row.item._id)">Modifier</b-btn>
+         </b-col>
+         <b-col sm="6" class="text-sm-left"> 
+          <b-btn size="sm" variant="danger" @click="disableUserProfile(row.item._id, row.item.active)">Désactiver</b-btn>
+         </b-col>
+       </b-row>
+
       </b-card>
     </template>
     </b-table>
@@ -150,19 +157,40 @@
               });
           });
       },
-      goUserCalendar(){
-        console.log('user id is: ', this.users)
-        // http.get('calendar/', + userId )
-        // .then(res => {
-        //   console.log("here is your calendar")
-        // })
-        // .catch(error => {
-        //   if (error) {
-        //     console.log('there is an error with user calendar', error)
-        //   }
-        // })
+      //fetch user calendar details
+      goUserCalendar(userId){
+        console.log("user id calendar : ", userId)
+        http.get('/calendar/', + userId )
+        .then(res => {
+          console.log("Available required calendar", res.data)
+        // this.$router.push('/calendar/' + userId)
+        })
+        .catch(error => {
+          if (error) {
+            console.log('No available calendar has been provided', error)
+            swal({
+              type: "error",
+              title: "No available calendar has been provided"
+            });
+          }
+        })
       }, 
-     
+      goUserDetails(userDetails) {
+      this.$router.push('/users/' + userDetails)
+      }, 
+     disableUserProfile(userId, userActivity) {
+      //  this.active = row.item.active
+       console.log("deactivate user", userId, "user activity: ", userActivity)
+       http.put('users/' + userId + '/' + userActivity)
+       .then(res => {
+         console.log('deactivate ok', res.data)
+       })
+       .catch(error => {
+         if (error) {
+           console.log('deactivate not ok')
+         }
+       })
+     },
       info (item, index, button) {
       this.modalInfo.title = `Row index: ${index}`
       this.modalInfo.content = JSON.stringify(item, null, 2)

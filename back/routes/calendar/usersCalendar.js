@@ -26,9 +26,10 @@ router.post('/:userId', (req, res) => {
 
 
 router.get('/:userId', (req, res) => {
+  console.log(('req.body calendar', req.body))
   if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
   if (!ObjectId.isValid(req.params.userId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
-
+console.log('voici le user id: ', userId)
   Calendar.findOne({ userId: req.params.userId })
     .populate('userId')
     .exec((err, calendar) => {
@@ -37,6 +38,7 @@ router.get('/:userId', (req, res) => {
 
       helper.beforeSendUser(calendar.userId)
       res.status(200).json({ success: true, message: 'Calendar of ' + calendar.userId.email, content: calendar })
+      console.log('here is user calendar', calendar)
     })
 })
 

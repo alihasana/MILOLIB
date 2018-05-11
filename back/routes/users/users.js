@@ -99,11 +99,12 @@ router.post('/', (req, res) => {
 })
 
 // "Soft Delete" user
-router.put('/:id/active', (req, res) => {
+router.put('/:id/:active', (req, res) => {
+  console.log('req.params : ', req.params)
   // if (res.locals.user.role != 'Administrateur') return res.status(403).json({ succes: false, message: 'Forbidden.' })
   if (res.locals.user.role != 'Administrateur' && 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
-  if (req.body.active) {
-    User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
+  if (req.params.active) {
+    User.findByIdAndUpdate(req.params.id, { active: req.params.active }, (err, user) => {
       if (err) {
         if (err.message.match(/^Cast to ObjectId failed.+/)) {
           res.status(400).json({ success: false, message: 'Invalid ID' })
@@ -114,8 +115,8 @@ router.put('/:id/active', (req, res) => {
       }
       else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
       else {
-        if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
-        else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
+        if (req.params.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
+        else if (req.params.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
       }
     })
   } else res.status(400).json({ success: false, message: 'Invalid request.' })

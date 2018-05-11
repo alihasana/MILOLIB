@@ -31,6 +31,7 @@ router.post('/', (req, res) => {
 })
 
 router.get('/', (req, res) => {
+  console.log('Route calendar of calendar.js')
   Calendar.findOne({ userId: res.locals.user.id }, (err, calendar) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
