@@ -33,7 +33,15 @@
 				<b-row class="agendaBodySlots">
 					<b-col class="buttonSlots" v-for="(day,index) in timeRangeToDisplay" :key="index">
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-							<li class="slotLi"><b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" ><span class="slotLi__button_id">{{button.id | displayButtonId}}</span>{{button.apt}}</b-button></li>
+							<li class="slotLi">
+								<b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >
+									<span class="slotLi__button_id">{{button.id | displayButtonId}}</span>
+									<span>{{button.apt.appointmentId}}</span>
+									<!-- <span>{{button.apt.fullName}}</span> -->
+									
+									<!-- <span>{{button.apt}}</span> -->
+								</b-button>
+							</li>
 						</ul>
 					</b-col>
 				</b-row>
@@ -159,12 +167,14 @@ export default {
 	data() {
 		return {
 		//calendar datas
+			slots:[],
+			appointmentTypes:{},
+			minTimeRange:'',
       		hourList:['08:00','08:15','08:30','08:45','09:00','09:15', '09:30', '09:45',
       		'10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45','12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45', '15:00','15:15','15:30','15:45','16:00','16:15','16:30','16:45','17:00','17:15','17:30','17:45'],
       		day:'',
       		weekNumber:'',
       		beginDisplay:'',
-      		minTimeRange:'',
       		buttonId:'',
       		buttonIdList:[],
       		filteredButtonIdList: [],
@@ -197,38 +207,53 @@ export default {
       		hideFooter:true,
       		displaySeeAptDetailsBtn_amend:false,
       		displaySeeAptDetailsBtn:true
-
       	}
 	},
 	created(){
 		this.beginDisplay = 0;
 		this.weekNumber = cHelpers.filterInt(this.week);
-		// this.createButtonId(this.getTimeRange);
 		this.callHttpGetCalendar();
-		// this.updateButtonId(this.getSlots, this.buttonIdList);
 	},
 	methods: {
+		commit : function(){
+			if (this.slots){
+				this.$store.commit('getSlotsAvailables', this.slots);
+				this.$store.commit('getEventTypes',this.appointmentTypes);
+				this.$store.commit('getMinTimeRange', this.minTimeRange);
+			}
+			else{
+				this.$store.commit('getEventTypes',this.appointmentTypes);
+				this.$store.commit('getMinTimeRange', this.minTimeRange);
+				swal({
+		            type: "info",
+		            title: "Affichage de votre Agenda",
+		            text: "Vous devez paramétrer des disponibilités pour voir votre agenda"
+		        });
+			}
+		},
+		setCalendar: function(){
+			this.buttonIdList =[];
+			this.filteredButtonIdList= [];
+			this.createButtonId(this.getTimeRange);
+			this.updateButtonId(this.getSlots, this.buttonIdList);
+					},
 		callHttpGetCalendar: function(){
 			http.get('/calendar')
 					.then(
 						res => {
-						console.log('res:',res);
-						this.$store.commit('getSlotsAvailables', res.data.content.slots);
-						this.$store.commit('getEventTypes', res.data.content.appointmentTypes);
-						this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);
-						this.$store.commit('getMinTimeRange', this.minTimeRange);
-						this.buttonIdList =[];
-						this.filteredButtonIdList= [];
-						this.createButtonId(this.getTimeRange);
-						this.updateButtonId(this.getSlots, this.buttonIdList);
+							this.slots = res.data.content.slots;
+							this.appointmentTypes = res.data.content.appointmentTypes;
+							this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);
+							this.commit();
+							this.setCalendar();
 						})
 					.catch(
 						error => {
 					    // console.log('error:', error.response.data.message);
 					    swal({
-			            type: "error",
-			            title: "probleme de mise à jour",
-			            text: "Votre agenda n'a pas pu être mis à jour"
+			            type: "info",
+			            title: "Affichage de votre agenda",
+			            text: "Merci de paramétrer vos disponibilités et types de RDV"
 			          	});
 					});
 		},
@@ -251,7 +276,6 @@ export default {
 					this.buttonIdList.push(button);
 				}
 			}
-			// console.log('buttonIdList:', this.buttonIdList);
 			return this.buttonIdList;
 		},
 		updateButtonId: function(slots, idList){
@@ -417,7 +441,7 @@ export default {
 						this.confirmedRDV.firstNameRDV = res.data.content.participants.clients.firstName;
 						this.confirmedRDV.phoneRDV = res.data.content.participants.clients.phone;
 						this.confirmedRDV.mailRDV = res.data.content.participants.clients.email;
-						// this.confirmedRDV.textRDV = res.data.content.participants.clients;
+						// this.confirmedRDV.textRDV = res.data.content.participants.clients.x;
 						this.confirmedRDV.allSlots = res.data.content.slots;
 						this.confirmedRDV.TypeRDV.initialSlot = res.data.content.slots[0].start;
 						})
