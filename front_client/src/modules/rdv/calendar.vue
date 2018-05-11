@@ -272,7 +272,7 @@ export default {
             })
           .catch(
             error => {
-              console.log('error:', error.response.data.message);
+              console.log('error:', error);
               swal({
                   type: "error",
                   title: "Confirmation du RDV",
