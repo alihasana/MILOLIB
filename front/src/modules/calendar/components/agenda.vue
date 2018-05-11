@@ -235,7 +235,7 @@ export default {
 						})
 					.catch(
 						error => {
-					    console.log('error:', error.response.data.message);
+					    // console.log('error:', error.response.data.message);
 					    swal({
 			            type: "error",
 			            title: "probleme de mise à jour",
@@ -506,7 +506,6 @@ export default {
 			this.displaySeeAptDetailsBtn_amend = !this.displaySeeAptDetailsBtn_amend;
 			this.displaySeeAptDetailsBtn = !this.displaySeeAptDetailsBtn;
 		}
-
 	},
 	filters: {
 		dateFormatFull: function(date) {

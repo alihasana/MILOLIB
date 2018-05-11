@@ -35,6 +35,8 @@ router.post('/signup', (req, res) => {
     return res.status(400).json({ success: false, message: 'Valid email required.' })
   }
   let newUser = new User(req.body)
+  var calendarId = new ObjectId()
+  newUser.calendar = calendarId
   newUser.password = bcrypt.hashSync(req.body.password, 10)
   newUser.save((err, user) => {
     if (err) {
@@ -42,7 +44,7 @@ router.post('/signup', (req, res) => {
         return res.status(400).json({ success: false, message: 'Email already used' })
       } else return res.status(500).json({ success: false, message: err.message })
     }
-    let newCalendar = new Calendar({ userId: user._id })
+    let newCalendar = new Calendar({ userId: user._id, _id: calendarId })
     newCalendar.save((err, calendar) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       // //WIP a voir avec Luke

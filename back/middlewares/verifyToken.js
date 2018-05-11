@@ -25,7 +25,7 @@ let verifyToken = (req, res, next) => {
             else if (decode.userCollection === 'User' && user.active !== true) res.status(403).json({ success: false, message: 'Inactive account. Please contact an administrator.' }) // TODO : verif active is working 
             else {
               res.locals.user = user
-              console.log('Le User : ', res.locals.user) // WIP : For testing purpose
+              // console.log('Le User : ', res.locals.user) // WIP : For testing purpose
               // res.locals.userUnmodified = JSON.parse(JSON.stringify(user)) // Clone of user for verification purpose
               next()
             }

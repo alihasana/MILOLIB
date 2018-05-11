@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
-  console.log('req:', req);
+  console.log('req.body: ', req.body)
   var messageArray = ['Profile updated.', '', '']
   //'res.locals.user' is the actual connected user
   for (let key of Object.keys(req.body)) {
@@ -30,8 +30,8 @@ router.put('/', (req, res) => {
   res.locals.user.save((err) => {
     if (err) {
       if (err.message.match(/^E11000 duplicate key error.+/)) {
-        res.status(400).json({ success: false, message: 'Profile update failed, new Email already used' })
-      } else res.status(500).json({ success: false, message: err.message })
+        return res.status(400).json({ success: false, message: 'Profile update failed, new Email already used' })
+      } else return res.status(500).json({ success: false, message: err.message })
     }
     if (messageArray[0] !== 'Profile updated.') {
       return res.status(400).json({ success: true, message: messageArray[0] + messageArray[1] + messageArray[2] })

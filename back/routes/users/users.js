@@ -6,6 +6,7 @@ import Calendar from './../calendar/model'
 import helper from '../../helpers/helper'
 import controller from './controller'
 import mail from '../../middlewares/mail' // Mettre mail dans les helpers ?
+const ObjectId = mongoose.Types.ObjectId
 
 let router = express.Router()
 
@@ -21,20 +22,19 @@ router.get('/', (req, res) => {
   })
 })
 
-
 router.get('/:id', (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      if (err.message.match(/^Cast to ObjectId failed.+/)) {
-        res.status(400).json({ success: false, message: 'Invalid ID' })
-      } else res.status(500).json({ success: false, message: err.message })
-    }
-    else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
-    else {
+  User.findById(req.params.id)
+    .populate('calendar', 'appointmentTypes')
+    .exec((err, user) => {
+      if (err) {
+        if (err.message.match(/^Cast to ObjectId failed.+/)) {
+          return res.status(400).json({ success: false, message: 'Invalid ID' })
+        } else return res.status(500).json({ success: false, message: err.message })
+      }
+      else if (!user) return res.status(404).json({ success: false, message: 'User not found.' })
       helper.beforeSendUser(user)
       res.status(200).json({ success: true, message: 'Here is the user profile!', content: user })
-    }
-  })
+    })
 })
 
 router.put('/:id', (req, res) => { // WIP, a voir
@@ -61,40 +61,39 @@ router.put('/:id', (req, res) => { // WIP, a voir
 })
 
 router.post('/', (req, res) => {
-  console.log(res.locals.user.role)
+  // console.log(res.locals.user.role)
   // if (res.locals.user.role != 'Administrateur') return res.status(403).json({ succes: false, message: 'Forbidden.' })
   if (res.locals.user.role != 'Administrateur' && 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
   // console.log('Le Req : ', req) // WIP : For testing purpose
-  console.log(res.locals.user)
+  // console.log(res.locals.user)
   if (!req.body.email || !req.body.password) return res.status(400).json({ success: false, message: 'Missing email and/or password.' })
   if (!helper.regexEmail.test(req.body.email)) return res.status(400).json({ success: false, message: 'Valid email required.' })
   let newUser = new User(req.body)
+  var calendarId = new ObjectId()
+  newUser.calendar = calendarId
   newUser.password = bcrypt.hashSync(req.body.password, 10)
   newUser.save((err, user) => {
     if (err) {
       if (err.message.match(/^E11000 duplicate key error.+/)) {
-        res.status(400).json({ success: false, message: 'Email already used.' })
-      } else res.status(500).json({ success: false, message: err.message })
-    } else {
-      let newCalendar = new Calendar({ userId: user._id })
-      newCalendar.save((err, calendar) => {
-        if (err) res.status(500).json({ success: false, message: err.message })
-        else {
-          // //WIP a voir avec Luke
-          // const msg = {
-          //   to: '',
-          //   from: 'milolib@milolib.com',
-          //   subject: 'Your are register',
-          //   text: 'Congrat you successfully registered into Milolib',
-          // };
-          // //sendMail commenter jusau a ce que compte sendgrid creer
-          // // sendMail(req.body.email, msg)
-          // //WIP
-          helper.beforeSendUser(user)
-          res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
-        }
-      })
+        return res.status(400).json({ success: false, message: 'Email already used.' })
+      } else return res.status(500).json({ success: false, message: err.message })
     }
+    let newCalendar = new Calendar({ userId: user._id, _id: calendarId })
+    newCalendar.save((err, calendar) => {
+      if (err) return res.status(500).json({ success: false, message: err.message })
+      // //WIP a voir avec Luke
+      // const msg = {
+      //   to: '',
+      //   from: 'milolib@milolib.com',
+      //   subject: 'Your are register',
+      //   text: 'Congrat you successfully registered into Milolib',
+      // };
+      // //sendMail commenter jusau a ce que compte sendgrid creer
+      // // sendMail(req.body.email, msg)
+      // //WIP
+      helper.beforeSendUser(user)
+      res.status(200).json({ success: true, message: 'New user successfully created!', content: user })
+    })
   })
 })
 

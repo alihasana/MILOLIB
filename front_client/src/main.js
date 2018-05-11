@@ -7,6 +7,7 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import http from './helpers/http'
 import swal from "sweetalert2"
+import AsyncComputed from 'vue-async-computed'
 import { store } from './store/store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -17,6 +18,7 @@ import 'material-design-icons/iconfont/material-icons.css'
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+Vue.use(AsyncComputed)
 
 /* eslint-disable no-new */
 new Vue({
