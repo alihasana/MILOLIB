@@ -99,6 +99,7 @@ router.get('/appointment/:slotId', (req, res) => {
 
 
 router.post('/appointment', (req, res) => {
+  console.log('req.body: ', req.body);
   // req.body est un array d'id de slots OU array de dates ? + id du calendar.
   // id du calendar en params ? peut être, je sais pas
   // req.body = {

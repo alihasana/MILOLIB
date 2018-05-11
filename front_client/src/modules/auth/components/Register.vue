@@ -102,6 +102,7 @@ export default {
       infAge: 'false',
       status3: 'false',
       commune: null,
+      options:[],
       // options: [
       //   { value: 'A', text: 'Tatooine' },
       //   { value: 'B', text: 'L\'étoile de la mort (ou l\'étoile noire osef)'},
