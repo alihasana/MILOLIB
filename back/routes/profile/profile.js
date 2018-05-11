@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 // import bcrypt from 'bcrypt'
-// import User from './../users/model'
+import User from './../users/model'
 import helper from '../../helpers/helper'
 import controller from './controller'
 // const ObjectId = mongoose.Types.ObjectId
@@ -14,15 +14,18 @@ router.get('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Your profile.', content: res.locals.user })
 })
 
-
 // TODO : réecrire avec full controller (avec promise), sans le 'messageArray'.
 router.put('/', (req, res) => {
   console.log('req.body: ', req.body)
   var messageArray = ['Profile updated.', '', '']
-  //'res.locals.user' is the actual connected user
+
+  var password = req.body.password // TODO: Fix pas terrible, a modifier
+  delete req.body.password // TODO: Fix pas terrible, a modifier
   for (let key of Object.keys(req.body)) {
     res.locals.user[key] = req.body[key];
   }
+  req.body.password = password // TODO: Fix pas terrible, a modifier
+
   res.locals.user.unmarkModified('role')
   if (req.body.password || req.body.email) {
     controller.protectedUpdate(req.body, res.locals, messageArray)
@@ -40,5 +43,7 @@ router.put('/', (req, res) => {
     res.status(200).json({ success: true, message: messageArray[0] })
   })
 })
+
+
 
 export default router

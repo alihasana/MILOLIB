@@ -6,6 +6,7 @@ import User from './../users/model'
 import Calendar from './../calendar/model'
 import Appointment from './../../models/appointment'
 import helper from './../../helpers/helper'
+const ObjectId = mongoose.Types.ObjectId
 
 import profile from './profile/profile'
 let router = express.Router()
@@ -16,21 +17,26 @@ router.get('/appointment/:appointmentType', (req, res) => {
   Calendar.find({ 'appointmentTypes.name': req.params.appointmentType }, (err, calendars) => {
     // Calendar.find({}, (err, calendars) => { // Find({}) for test purpose 
     console.log('A1' + calendars)
+    
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!calendars || !calendars[0]) return res.status(404).json({ success: false, message: 'No calendars found' })
     // TODO: A voir comment filter les slots lors du .find()
     // Filtre provisoire
+    
     for (let calendarKey of Object.keys(calendars)) {
-      for (let key of Object.keys(calendars[calendarKey].slots)) {
-        if (calendars[calendarKey].slots[key].available !== true) {
+      console.log(calendars[calendarKey].slots.length);
+      //for (let key of Object.keys(calendars[calendarKey].slots)) {
+        for(let i = 0 ; i < calendars[calendarKey].slots.length ; i++){// modif Rudy
+        if (calendars[calendarKey].slots[i].available !== true) {
           // delete calendars[calendarKey].slots[key] // output: null
-          calendars[calendarKey].slots.splice(key, 1)
+          calendars[calendarKey].slots.splice(i, 1)
           // calendars[calendarKey].slots[key] = 'lol' // output: 'lol'
           // calendars[calendarKey].slots[key] = null // output: null
           // calendars[calendarKey].slots[key] = undefined // output: null
         }
       }
     }
+    
     console.log('A2' + JSON.stringify(calendars, null, 4))
 
     // res.status(200).json({ success: true, message: 'Calendars with available appointments.', content: calendars })
@@ -54,7 +60,9 @@ router.post('/appointment', (req, res) => {
   // TODO: rdv existe déja dans le cas d'un rdv de groupe, créer une route differente pour ce cas.
 
   if (!req.body && !req.body.slotsId && !req.body.slotsId[0]) {
+    console.log("baq reqeust");
     return res.status(400).json({ success: false, message: 'Bad request' })
+
   }
 
   Calendar.findById(req.body.calendarId, (err, calendar) => {
@@ -65,12 +73,14 @@ router.post('/appointment', (req, res) => {
       if (err) return res.status(500).json({ success: false, message: err.message })
       else if (!user) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
 
-      var appointmentSlots = []
-      var appointmentId = new ObjectId()
+      var appointmentSlots = [];
+      var appointmentId = new ObjectId();
+      console.log(req.body.slotsId);
       for (let key of Object.keys(req.body.slotsId)) {
         if (calendar.slots.id(req.body.slotsId[key]) != null) {
           // Check conflict
           if (calendar.slots.id(req.body.slotsId[key]).available == false) {
+            console.log("create");
             return res.status(400).json({ success: false, message: 'Cannot create appointement, slots unavailable' })
           }
           // Make slot unavailable in calendar
@@ -104,12 +114,13 @@ router.post('/appointment', (req, res) => {
 
           res.locals.user.save(err => {
             if (err) return res.status(500).json({ success: false, message: err.message })
-            client.appointments.push(appointment.id)
-            client.save(err => {
+              res.status(200).send({success: true, message: "Nouveau RDV confirmé"});
+            // client.appointments.push(appointment.id);
+            // client.save(err => {
 
-              if (err) return res.status(500).json({ success: false, message: err.message })
-              res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
-            })
+            //   if (err) return res.status(500).json({ success: false, message: err.message })
+            //   res.status(200).json({ success: true, message: 'New Appointment successfully created!', content: appointment })
+            // })
           })
         })
       })

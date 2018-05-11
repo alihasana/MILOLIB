@@ -26,6 +26,7 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/signup', (req, res) => {
+  console.log(req.body);
   if (!req.body.email || !req.body.password) return res.status(400).json({ success: false, message: 'Missing email and/or password.' })
   if (!helper.regexEmail.test(req.body.email)) return res.status(400).json({ success: false, message: 'Valid email required.' })
   let newClient = new Client(req.body)

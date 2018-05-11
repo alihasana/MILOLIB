@@ -5,6 +5,7 @@ import helper from './../../helpers/helper';
 
 export default {
   protectedUpdate: (body, locals, messageArray) => {
+
     if (body.password) {
       if (!(body.oldPassword && locals.user.comparePasswords(body.oldPassword))) {
         messageArray[1] = ' Actual password incorrect. '
@@ -12,9 +13,10 @@ export default {
         locals.user.password = bcrypt.hashSync(body.password, 10)
       }
     }
-    // TODO :
-    // J'AI DESACTIVER POUR LE MOMENT PARCE QUE C'EST RELOU SI T'EDIT L'ADMIN
-    // QUI A PAS D'EMAIL VALIDE CA BLOQUE, VOIR LE FRONT............
+
+    // // TODO :
+    // // J'AI DESACTIVER POUR LE MOMENT PARCE QUE C'EST RELOU SI T'EDIT L'ADMIN
+    // // QUI A PAS D'EMAIL VALIDE CA BLOQUE, VOIR LE FRONT............
     // if (body.email) {
     //   if (!helper.regexEmail.test(body.email)) {
     //     messageArray[2] = ' Valid email required. '

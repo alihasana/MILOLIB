@@ -31,11 +31,12 @@ Open terminal (if it's not the case)
 Access to : 
 - MILOLIB/back 
 - MILOLIB/front
+- MILOLIB/front_client
 ```
 Install dependencies :
 
 ```
-Make 'npm install' in both path !
+Make 'npm install' in three path !
 ```
 Setup environnement (MILOLIB/back) :
 
@@ -44,16 +45,41 @@ Copy the "example.env" file, paste in the same path (MILOLIB/back) and rename it
 (or just rename the "example.env" into ".env")
 Then setup it if you want to use a custom environnement.
 ```
+Setup seeder (MILOLIB/back) :
+
+```
+In terminal make :
+- "node seeder/babel/allStaff.babel.js" or "npm run s_staff"
+- "node seeder/babel/clients.babel.js" or "npm run s_client"
+
+Then check if the datas are in your database :
+- milolib->collection->users (5 entries) 
+- milolib->collection->clients (3 entries))
+
+Notes Staff Seeder : 
+Email : admin-conseiller Password : admin-conseiller
+Email : conseiller Password : conseiller
+Email : invité Password : invité
+Email : admin Password : admin
+Email : accueil Password : accueil
+
+Notes Client Seeder : 
+Email : client Password : client
+Email : a@a Password : a
+Email : z@z Password : a
+```
 Finally go back to your terminal and write :
 
 ``` 
 - MILOLIB/back : "npm start"
-- MILOLIB/front : "npm run dev"
+- MILOLIB/front : "npm run dev" or "npm start"
+- MILOLIB/front_client : "npm run dev" or "npm start"
 ```
 Go to your localhost (default port on 8080) :
 
 ```
-http://localhost:8080/
+http://localhost:8080/ (first npm run dev [front])
+http://localhost:8081/ (second npm run dev [front_client])
 ```
 Enjoy : 
 
@@ -122,30 +148,37 @@ No versioning for the moment ...
 ## Authors
 
 * **Sandrine Pradier** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit her Github](https://github.com/SandrinePradier)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Asma El Kabir** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit her Github](https://github.com/asmi77)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Yoann Roule** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/TurukTheCook)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Luke Perrey** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/LuckyLaszlo)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Alihasana Shaik Alauddeen** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/alihasana)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Loïc Aublet** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/HanP77)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
 * **Kévin Beauguet** <!-- - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth) -->
+* [Visit his Github](https://github.com/KBSimplon)
 
 <!-- See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 

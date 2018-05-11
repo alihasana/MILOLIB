@@ -127,7 +127,7 @@ export default {
     this.displayCalendar();
   },
   methods: {
-    displayCalendar: function(){
+    displayCalendar: async function(){
       // this.createButtonId(this.getDaysRange)
       // .then(function () {
       //   this.updateButtonId(this.calendarSlots, this.buttonIdList)
@@ -135,9 +135,10 @@ export default {
       // .catch(function (error) { 
       //   console.log(error)
       //   })
-      this.createButtonId(this.getDaysRange)
+      await this.createButtonId(this.getDaysRange)
       //this is not ideal but at least it works for demo
-      setTimeout(this.updateButtonId(this.calendarSlots, this.buttonIdList), 5000);
+      // setTimeout(this.updateButtonId(this.calendarSlots, this.buttonIdList), 5000);
+      await this.updateButtonId(this.calendarSlots, this.buttonIdList)
     },
     getCurrentDayPlus2month: function(now){
       return moment(now).add(1,'month');
@@ -269,16 +270,18 @@ export default {
                   title: "Confirmation du RDV",
                   text: "Votre RDV a bien été confirmé, vous allez recevoir un mail de confirmation (fonctionnalité non effective pour l'instant"
                   });
+            this.apt.allSlots = [];
             })
           .catch(
             error => {
-              console.log('error:', error.response.data.message);
+              console.log('error:', error);
               swal({
                   type: "error",
                   title: "Confirmation du RDV",
                   text: "Votre RDV n'a pas pu être confirmé"
                   });
               });
+            this.apt.allSlots = [];
         //voir avec Anas que ces fonctions s'executent bien l'une quand l'autre est finie, car le résultat de la deuxième dépend de la premiere
       }
     },
