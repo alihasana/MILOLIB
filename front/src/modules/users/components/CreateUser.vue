@@ -25,6 +25,7 @@
             <b-form-select id="" :options="userRole" required v-model="form.userRole">
             </b-form-select>
           </b-form-group>
+          <!-- workPlace -->
           <b-form-group label="Indiquer le lieu d'exercice du nouvel utilisateur">
             <b-form-checkbox-group id="workPlace" name="workPlace" v-model="form.place" :options="workPlace">
             </b-form-checkbox-group>

@@ -49,7 +49,7 @@
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
           <b-btn size="sm" variant="primary" @click.stop="row.toggleDetails" class="mr-2"> {{ row.detailsShowing ? 'Fermer le' : 'Voir'}} Profil</b-btn>
 
-          <b-btn size="sm" variant="success" @click="goUserCalendar(users._id)">Calendrier</b-btn>
+          <b-btn size="sm" variant="success" @click="goUserCalendar(row.item.calendar, row.item._id)">Calendrier</b-btn>
       </template>
       <!-- Toggle Show profile details -->
        <template slot="row-details" slot-scope="row">
@@ -57,33 +57,40 @@
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Nom : </b></b-col>
-          <b-col>{{ row.item.lastName }} </b-col>
+          <b-col class="text-sm-left">{{ row.item.lastName }} </b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Prénom : </b></b-col>
-          <b-col>{{ row.item.firstName }}  </b-col>
+          <b-col class="text-sm-left">{{ row.item.firstName }}  </b-col>
         </b-row>  
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>E-mail : </b></b-col>
-          <b-col>{{ row.item.email }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.email }}</b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Rôle : </b></b-col>
-          <b-col>{{ row.item.role }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.role }}</b-col>
         </b-row>
 
         <b-row class="mb-2">
           <b-col sm="3" class="text-sm-right"><b>Lieu(x) d'exercice : </b></b-col>
-          <b-col>{{ row.item.workPlace }}</b-col>
+          <b-col class="text-sm-left">{{ row.item.workPlace }}</b-col>
         </b-row>
 
-
         <!-- <b-button size="sm" @click="row.toggleDetails">Fermer le profil</b-button> -->
-          <b-btn size="sm" variant="primary" @click.stop="details(row.item)">Modifier</b-btn>
-          <b-btn size="sm" variant="danger" @click.stop="details(row.item)">Désactiver</b-btn>
+       <b-row class="mb-2">
+         <b-col sm="6" class="text-sm-right"> 
+          <b-btn size="sm" variant="primary" @click="goUserDetails(row.item._id)">Modifier</b-btn>
+         </b-col>
+         <b-col sm="6" class="text-sm-left"> 
+           <b-btn v-if="row.item.active !=activity" size="sm" variant="success" @click="enableUser(row.item._id, row.item.active)">Activer l'utilisateur</b-btn>
+          <b-btn v-else size="sm" variant="danger" @click="disableUser(row.item._id, row.item.active)">Désactiver l'utilisateur</b-btn>
+         </b-col>
+       </b-row>
+
       </b-card>
     </template>
     </b-table>
@@ -108,6 +115,7 @@
       title: "Liste des utilisateurs",
       users: [],
       items: items,
+      activity: true,
       // defining the order of the columns, and which columns to display
       fields: [
         { key: 'lastName', label: 'Nom', sortable: true },
@@ -123,6 +131,7 @@
       sortBy: null,
       sortDesc: false,
       filter: null,
+      _rowVariant: "danger", 
       modalInfo: { title: '', content: '' }
       };
     },
@@ -140,6 +149,7 @@
           .get("/users", {})
           .then(res => {
             this.users = res.data.content;
+            console.log('res.data.content de la usersList', this.users)
           })
           .catch(error => {
             if (error)
@@ -150,19 +160,61 @@
               });
           });
       },
-      goUserCalendar(){
-        console.log('user id is: ', this.users)
-        // http.get('calendar/', + userId )
-        // .then(res => {
-        //   console.log("here is your calendar")
-        // })
-        // .catch(error => {
-        //   if (error) {
-        //     console.log('there is an error with user calendar', error)
-        //   }
-        // })
+      //fetch user calendar details
+      goUserCalendar(userCalendar, userId){
+        http.get('/calendar/userCalendar/' + userCalendar + '/' + userId)
+        .then(res => {
+          console.log("User Calendar data : ", res.data)
+          console.log("Here is the calendar of : ", res.data.content.userId.firstName + ' ' + res.data.content.userId.lastName)
+        this.$router.push('/calendar/' + userCalendar + '/' + userId)
+        })
+        .catch(error => {
+          if (error) {
+            console.log('No available calendar has been provided', error)
+            swal({
+              type: "error",
+              title: "No available calendar has been provided"
+            });
+          }
+        })
       }, 
-     
+      goUserDetails(userDetails) {
+      this.$router.push('/users/' + userDetails)
+      }, 
+     disableUser(userId, userActivity) {
+       console.log("deactivate user", userId, "user activity: ", userActivity)
+       http.put('users/disable/' + userId + '/' + userActivity)
+       .then(res => {
+         console.log('User Deactivated', res.data)
+          swal({
+            type: "success",
+                title: "User account has been disabled"
+              });
+              setTimeout( () => location.reload(), 1500);
+        })
+       .catch(error => {
+         if (error) {
+           console.log('deactivate not ok')
+         }
+       })
+     },
+      enableUser(userId, userActivity) {
+       console.log("reactivate user", userId, "user activity: ", userActivity)
+       http.put('users/enable/' + userId + '/' + userActivity)
+       .then(res => {
+         console.log('User Ractivated', res.data)
+          swal({
+            type: "success",
+                title: "User account has been enabled"
+              });
+              setTimeout( () => location.reload(), 1500);
+        })
+       .catch(error => {
+         if (error) {
+           console.log('reactivation not ok')
+         }
+       })
+     },
       info (item, index, button) {
       this.modalInfo.title = `Row index: ${index}`
       this.modalInfo.content = JSON.stringify(item, null, 2)

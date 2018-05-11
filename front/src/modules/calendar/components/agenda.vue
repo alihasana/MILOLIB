@@ -241,6 +241,8 @@ export default {
 			http.get('/calendar')
 					.then(
 						res => {
+							// console.log('callHttpGetCalendar content: ', res);
+							// console.log('res:',res.data.content);
 							this.slots = res.data.content.slots;
 							this.appointmentTypes = res.data.content.appointmentTypes;
 							this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);

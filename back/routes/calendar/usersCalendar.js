@@ -24,19 +24,45 @@ router.post('/:userId', (req, res) => {
   })
 })
 
+// get user calendar
+// router.get('/:userId', (req, res) => {
+//   if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+//   if (!ObjectId.isValid(req.params.userId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
 
-router.get('/:userId', (req, res) => {
-  if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
-  if (!ObjectId.isValid(req.params.userId)) return res.status(400).json({ success: false, message: 'Invalid ID' })
+//   Calendar.findOne({ userId: req.params.userId })
+//     .populate('userId')
+//     .exec((err, calendar) => {
+//       if (err) return res.status(500).json({ success: false, message: err.message })
+//       else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
 
-  Calendar.findOne({ userId: req.params.userId })
+//       helper.beforeSendUser(calendar.userId)
+//       res.status(200).json({ success: true, message: 'Calendar of ' + calendar.userId.email, content: calendar })
+//     })
+// })
+
+// get user calendar with calendarID
+router.get('/userCalendar/:userCalendar/:userId', (req, res) => {
+  let userCalendar = req.params.userCalendar; 
+  console.log(('usercalendar.params', userCalendar))
+  let userId = req.params.userId;
+  console.log(('userId.params', userId))
+  Calendar.findOne({ userId: userId })
     .populate('userId')
     .exec((err, calendar) => {
-      if (err) return res.status(500).json({ success: false, message: err.message })
-      else if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
-
-      helper.beforeSendUser(calendar.userId)
-      res.status(200).json({ success: true, message: 'Calendar of ' + calendar.userId.email, content: calendar })
+      let slots = calendar.slots; 
+      console.log('calendar', slots)
+      if (!slots || !userCalendar) {
+        console.log('Error')
+      }
+      if (slots == 0) {
+        console.log('No calendar is available yet')
+        res.status(404).json({ success: false, message: 'No calendar is available yet', calendar: calendar })
+      } else {
+        console.log('Here is calendar of : ', calendar.userId.firstName, ' ', calendar.userId.lastName)
+        console.log('Calendar content: ', calendar)
+        helper.beforeSendUser(calendar.userId)
+        res.status(200).json({ success: true, message: 'Calendar of ' + calendar.userId.email, content: calendar, calendar: calendar })
+      }
     })
 })
 

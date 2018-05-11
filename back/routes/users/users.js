@@ -98,11 +98,34 @@ router.post('/', (req, res) => {
 })
 
 // "Soft Delete" user
-router.put('/:id/active', (req, res) => {
-  // if (res.locals.user.role != 'Administrateur') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+// router.put('/:id/active', (req, res) => {
+//   // if (res.locals.user.role != 'Administrateur') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+//   if (res.locals.user.role != 'Administrateur' && 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+//   if (req.body.active) {
+//     User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
+//       if (err) {
+//         if (err.message.match(/^Cast to ObjectId failed.+/)) {
+//           res.status(400).json({ success: false, message: 'Invalid ID' })
+//         }
+//         else if (err.message.match(/^Cast to boolean failed.+/)) {
+//           res.status(400).json({ success: false, message: 'Invalid request.' })
+//         } else res.status(500).json({ success: false, message: err.message })
+//       }
+//       else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+//       else {
+//         if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
+//         else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
+//       }
+//     })
+//   } else res.status(400).json({ success: false, message: 'Invalid request.' })
+// })
+
+//Disable a user
+router.put('/disable/:id/:active', (req, res) => {
+  console.log('req.params.id : ', req.params.id, 'req.params.active: ', req.params.active)
   if (res.locals.user.role != 'Administrateur' && 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
-  if (req.body.active) {
-    User.findByIdAndUpdate(req.params.id, { active: req.body.active }, (err, user) => {
+  if (req.params.active) {
+    User.findByIdAndUpdate(req.params.id, { active: req.params.active }, (err, user) => {
       if (err) {
         if (err.message.match(/^Cast to ObjectId failed.+/)) {
           res.status(400).json({ success: false, message: 'Invalid ID' })
@@ -113,11 +136,48 @@ router.put('/:id/active', (req, res) => {
       }
       else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
       else {
-        if (req.body.active == 'true') res.status(200).json({ success: true, message: 'User ' + user.email + ' reactivated =D' })
-        else if (req.body.active == 'false') res.status(200).json({ success: true, message: 'User ' + user.email + ' deactivated =\'(' })
-      }
-    })
+        User.update({_id: req.params.id}, { $set: { active: false}}, (err, activeValue) => {
+        if (err) {
+           console.log('Cannot set user "active" property to false'); 
+        } else {
+           console.log("Active property set to false: ", activeValue)
+           console.log("User details after desactivation", user)
+           res.status(200).json({sucess: true, message: "The user account has been deactivated", user: user})
+        } 
+      })
+    }
+   })
   } else res.status(400).json({ success: false, message: 'Invalid request.' })
-})
+});
+
+// Enable user
+router.put('/enable/:id/:active', (req, res) => {
+  console.log('req.params.id : ', req.params.id, 'req.params.active: ', req.params.active)
+  if (res.locals.user.role != 'Administrateur' && 'Administrateur/Conseiller') return res.status(403).json({ succes: false, message: 'Forbidden.' })
+  if (req.params.active) {
+    User.findByIdAndUpdate(req.params.id, { active: req.params.active }, (err, user) => {
+      if (err) {
+        if (err.message.match(/^Cast to ObjectId failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid ID' })
+        }
+        else if (err.message.match(/^Cast to boolean failed.+/)) {
+          res.status(400).json({ success: false, message: 'Invalid request.' })
+        } else res.status(500).json({ success: false, message: err.message })
+      }
+      else if (!user) res.status(404).json({ success: false, message: 'User not found.' })
+      else {
+        User.update({_id: req.params.id}, { $set: { active: true}}, (err, activeValue) => {
+        if (err) {
+           console.log('Cannot set user "active" property to true'); 
+        } else {
+           console.log("Active property set to true: ", activeValue)
+           console.log("User details after reactivation", user)
+           res.status(200).json({sucess: true, message: "The user account has been reactivated", user: user})
+        } 
+      })
+    }
+   })
+  } else res.status(400).json({ success: false, message: 'Invalid request.' })
+});
 
 export default router
