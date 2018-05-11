@@ -44,6 +44,27 @@ Copy the "example.env" file, paste in the same path (MILOLIB/back) and rename it
 (or just rename the "example.env" into ".env")
 Then setup it if you want to use a custom environnement.
 ```
+Setup seeder (MILOLIB/back) :
+
+```
+In terminal make :
+- node seeder/babel/allStaff.babel.js
+- node seeder/babel/clients.babel.js
+
+Then check if the datas are in your database :
+- milolib->collection->users (5 entries) 
+- milolib->collection->clients (1 entry))
+
+Notes Staff Seeder : 
+Email : admin-conseiller Password : admin-conseiller
+Email : conseiller Password : conseiller
+Email : invité Password : invité
+Email : admin Password : admin
+Email : accueil Password : accueil
+
+Notes Client Seeder : 
+Email : client Password : client
+```
 Finally go back to your terminal and write :
 
 ``` 
