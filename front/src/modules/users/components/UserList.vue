@@ -80,14 +80,14 @@
           <b-col class="text-sm-left">{{ row.item.workPlace }}</b-col>
         </b-row>
 
-
         <!-- <b-button size="sm" @click="row.toggleDetails">Fermer le profil</b-button> -->
        <b-row class="mb-2">
          <b-col sm="6" class="text-sm-right"> 
           <b-btn size="sm" variant="primary" @click="goUserDetails(row.item._id)">Modifier</b-btn>
          </b-col>
          <b-col sm="6" class="text-sm-left"> 
-          <b-btn size="sm" variant="danger" @click="disableUserProfile(row.item._id, row.item.active)">Désactiver</b-btn>
+           <b-btn v-if="row.item.active !=activity" size="sm" variant="success" @click="enableUser(row.item._id, row.item.active)">Activer l'utilisateur</b-btn>
+          <b-btn v-else size="sm" variant="danger" @click="disableUser(row.item._id, row.item.active)">Désactiver l'utilisateur</b-btn>
          </b-col>
        </b-row>
 
@@ -115,6 +115,7 @@
       title: "Liste des utilisateurs",
       users: [],
       items: items,
+      activity: true,
       // defining the order of the columns, and which columns to display
       fields: [
         { key: 'lastName', label: 'Nom', sortable: true },
@@ -130,6 +131,7 @@
       sortBy: null,
       sortDesc: false,
       filter: null,
+      _rowVariant: "danger", 
       modalInfo: { title: '', content: '' }
       };
     },
@@ -163,7 +165,7 @@
         http.get('/calendar/', + userId )
         .then(res => {
           console.log("Available required calendar", res.data)
-        // this.$router.push('/calendar/' + userId)
+        this.$router.push('/calendar/' + userId)
         })
         .catch(error => {
           if (error) {
@@ -178,16 +180,37 @@
       goUserDetails(userDetails) {
       this.$router.push('/users/' + userDetails)
       }, 
-     disableUserProfile(userId, userActivity) {
-      //  this.active = row.item.active
+     disableUser(userId, userActivity) {
        console.log("deactivate user", userId, "user activity: ", userActivity)
-       http.put('users/' + userId + '/' + userActivity)
+       http.put('users/disable/' + userId + '/' + userActivity)
        .then(res => {
-         console.log('deactivate ok', res.data)
-       })
+         console.log('User Deactivated', res.data)
+          swal({
+            type: "success",
+                title: "User account has been disabled"
+              });
+              setTimeout( () => location.reload(), 1500);
+        })
        .catch(error => {
          if (error) {
            console.log('deactivate not ok')
+         }
+       })
+     },
+      enableUser(userId, userActivity) {
+       console.log("reactivate user", userId, "user activity: ", userActivity)
+       http.put('users/enable/' + userId + '/' + userActivity)
+       .then(res => {
+         console.log('User Ractivated', res.data)
+          swal({
+            type: "success",
+                title: "User account has been enabled"
+              });
+              setTimeout( () => location.reload(), 1500);
+        })
+       .catch(error => {
+         if (error) {
+           console.log('reactivation not ok')
          }
        })
      },

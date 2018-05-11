@@ -10,7 +10,7 @@ let UserSchema = new mongoose.Schema(
     firstName: { type: String },
     lastName: { type: String },
     phone: { type: String },
-    workPlace: { type: String },
+    workPlace: [{ type: String }],
     calendar: { type: mongoose.Schema.Types.ObjectId, sparse: true, ref: 'Calendar' },
     appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],     
   },

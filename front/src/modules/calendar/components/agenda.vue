@@ -223,7 +223,8 @@ export default {
 			http.get('/calendar')
 					.then(
 						res => {
-						console.log('res:',res);
+		console.log('callHttpGetCalendar content: ', res)
+						console.log('res:',res.data.content);
 						this.$store.commit('getSlotsAvailables', res.data.content.slots);
 						this.$store.commit('getEventTypes', res.data.content.appointmentTypes);
 						this.minTimeRange = cHelpers.GetMinTimeFromSlotsArray(res.data.content.slots);
@@ -235,7 +236,7 @@ export default {
 						})
 					.catch(
 						error => {
-					    console.log('error:', error.response.data.message);
+					    // console.log('error:', error.response.data.message);
 					    swal({
 			            type: "error",
 			            title: "probleme de mise à jour",
@@ -506,7 +507,6 @@ export default {
 			this.displaySeeAptDetailsBtn_amend = !this.displaySeeAptDetailsBtn_amend;
 			this.displaySeeAptDetailsBtn = !this.displaySeeAptDetailsBtn;
 		}
-
 	},
 	filters: {
 		dateFormatFull: function(date) {

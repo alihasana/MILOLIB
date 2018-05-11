@@ -10,7 +10,6 @@
 import agenda from "./components/agenda";
 import availabilityDatePicker from "./components/availabilityDatePicker";
 import eventTypeSetting from "./components/eventTypeSetting"
-
 import * as cHelpers from './calendarHelpers';
 
 //component description: this component is the main component of the calendar module.
