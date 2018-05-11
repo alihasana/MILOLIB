@@ -126,16 +126,6 @@ export default {
     this.generateHourList(this.calculateSelectedAptTypeDuration);
     this.displayCalendar();
   },
-<<<<<<< HEAD
-  methods:{
-    // updateStore(){
-          //  this.$store.commit('getCalendarId', this.test);
-        //   this.$store.commit('getCalendarId', this._id);
-        //   this.$store.commit('getSlots', this.slots);
-        //   this.$store.commit('getappointmentType', this.appointmentTypes);
-        // },
-    getCurrentDayPlus2month(now){
-=======
   methods: {
     displayCalendar: function(){
       // this.createButtonId(this.getDaysRange)
@@ -150,7 +140,6 @@ export default {
       setTimeout(this.updateButtonId(this.calendarSlots, this.buttonIdList), 5000);
     },
     getCurrentDayPlus2month: function(now){
->>>>>>> 846230c38d9420a4271c89293f8da639ab818ba0
       return moment(now).add(1,'month');
     },
     getDaysOfTheTimeRange: function(start,end){
