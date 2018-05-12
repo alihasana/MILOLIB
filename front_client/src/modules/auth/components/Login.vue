@@ -1,25 +1,48 @@
 <template>
-  <div class="login">
+
+<b-container fluid>
+  <b-row>
+    <b-col cols="4">
    <form v-on:submit.prevent>
     <div class="row login__row">
-      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-        <h1 class="heading-primary">{{ title }}</h1>
+      <div>
+        <h1 class="login__headingPrimary">
+          <span style="color: black;">MILO</span>
+          <span style="color: #195DA8;">LIB</span>
+          </h1>
+          <h5>
+            <span style="color: black;">Entrez vos identifiants pour vous connecter</span>
+            <span style="color: #195DA8;"><b-link class="login__blink" to="register">ou créez un nouveau compte</b-link></span>
+          </h5>
         <hr>
+        <div class="login__formGroup">
+
         <div class="form-group">
-          <label for="email">Email </label>
+          <label for="email">E-mail </label>
           <input v-model="user.email" id="email" class="form-control" name="email" type="text" placeholder="email@example.com" required>
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Mot de passe</label>
           <input v-model="user.password" id="password" class="form-control" name="password" type="password" placeholder="Enter your password" required>
         </div>
-        <button class="btn btn-lg btn--white" v-on:click="signUp">Login</button>
+        </div>
+        <b-button variant="primary" v-on:click="signUp">Se connecter</b-button>
       </div>
     </div>
   </form>
   <br>
-  <button class="btn btn-lg btn--white" v-on:click="goToRegister">Créer un compte</button>
+  <!-- <b-button variant="primary" v-on:click="goToRegister">Créer un compte</b-button> -->
+      
+    </b-col>
+    <b-col cols="8">
+   <b-img height="650"
+        :src="require('../../../assets/images/milolibSuiviBlue.jpg')" />
+    </b-col>
+  </b-row>
+
+  <div class="login">
 </div>
+</b-container>
 </template>
 
 <script>
@@ -31,6 +54,7 @@ export default {
   data() {
     return {
       title: "Login",
+      subTitle: "Entrez vos identifiants pour vous connecter",
       user: {
         email: "",
         password: ""
@@ -38,9 +62,9 @@ export default {
     };
   },
   methods: {
-    goToRegister() {
-      this.$router.push("/register");
-    },
+    // goToRegister() {
+    //   this.$router.push("/register");
+    // },
     signUp() {
       http
         .post("/clientsAuth/login", this.user)
