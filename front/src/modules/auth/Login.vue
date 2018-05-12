@@ -3,8 +3,7 @@
     <b-row>
     <b-col cols="4">
    <form v-on:submit.prevent>
-    
-      <div class="login__row">
+        <div class="login__row">
         <!-- titles -->
         <h1 class="login__headingPrimary">
           <span style="color: black;">MILO</span>
@@ -24,7 +23,6 @@
         </div>
         <b-button variant="primary" v-on:click="signUp">Se connecter</b-button>
       </div>
-  
   </form>
         </b-col>
         <b-col cols="8">
@@ -33,7 +31,6 @@
         </b-col>
     </b-row>
 </b-container>
-
 </template>
 
 <script>
