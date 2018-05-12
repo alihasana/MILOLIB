@@ -4,7 +4,6 @@
     <div class="row login__row">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
         <h1 class="heading-primary">{{ title }}</h1>
-        <hr>
         <div>
           <b-form-select v-model="selected" :options="options" class="mb-3" required>
             <template slot="first">
@@ -24,7 +23,7 @@
           </b-form-select>
           <!-- <div>Selected: <strong>{{ selected }}</strong></div> -->
         </div>
-        <button class="btn btn-lg btn--white" v-on:click="takeRdv">Valider</button>
+        <b-button variant="primary" v-on:click="takeRdv">Valider</b-button>
       </div>
     </div>
   </form>
@@ -41,7 +40,7 @@ export default {
   name: "Rdv",
   data() {
     return {
-      title: "Prendre un rendez-vous :",
+      title: "Prendre un rendez-vous",
       selected: null,
       options:[],
       id: '',
