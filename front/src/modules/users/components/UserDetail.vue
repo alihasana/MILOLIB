@@ -1,61 +1,63 @@
 <template>
-  <b-form @submit.prevent='updateUserProfile' style="cursor: pointer">
+  <b-form class="userdetails" @submit.prevent='updateUserProfile' style="cursor: pointer">
 
   <!-- Lastname input -->
     <b-container fluid>
-    <b-row class="my-1" >
-      <b-col v-if="show" sm="9" class="text-sm-left">
-        <label>Nom: </label><br>
+    <b-row class="my-2" >
+      <b-col v-if="show" sm="6" class="text-sm-left">
+        <label>Nom : </label><br>
         <b-form-input type="text" v-model="user.lastName" placeholder="Nom" >
         </b-form-input></b-col>
-      <b-col v-else sm="3" class="text-sm-left"><label >Nom: </label><span>{{ user.lastName }}</span></b-col>
+      <b-col v-else sm="6" class="text-sm-left"><span class="userdetails__textTitle">Nom : </span><span>{{ user.lastName }}</span></b-col>
     </b-row>
   </b-container>
 
     <!-- Firstname input -->
   <b-container fluid>
-    <b-row class="my-1" >
-      <b-col v-if="show" sm="9" class="text-sm-left">
+    <b-row class="my-2" >
+      <b-col v-if="show" sm="6" class="text-sm-left">
         <label>Prénom: </label><br>
         <b-form-input type="text" v-model="user.firstName" placeholder="Prénom" >
         </b-form-input></b-col>
-      <b-col v-else sm="3" class="text-sm-left"><label >Prénom: </label><span>{{ user.firstName }}</span></b-col>
+      <b-col v-else sm="6" class="text-sm-left"><span class="userdetails__textTitle">Prénom : </span><span>{{ user.firstName }}</span></b-col>
     </b-row>
   </b-container>
 
     <!-- E-mail input -->
      <b-container fluid>
-    <b-row class="my-1" >
-      <b-col v-if="show" sm="9" class="text-sm-left">
+    <b-row class="my-2" >
+      <b-col v-if="show" sm="6" class="text-sm-left">
         <label>E-mail: </label><br>
         <b-form-input type="text" v-model="user.email" placeholder="E-mail" >
         </b-form-input></b-col>
-      <b-col v-else sm="3" class="text-sm-left"><label >E-mail: </label><span>{{ user.email }}</span></b-col>
+      <b-col v-else sm="6" class="text-sm-left"><span class="userdetails__textTitle">E-mail : </span><span>{{ user.email }}</span></b-col>
     </b-row>
   </b-container>
 
     <!-- Role input -->
     <b-container fluid>
-    <b-row class="my-1" >
-      <b-col v-if="show" sm="9" class="text-sm-left">
+    <b-row class="my-2" >
+      <b-col v-if="show" sm="6" class="text-sm-left">
         <label>Rôle: </label><br>
         <b-form-input type="text" v-model="user.role" placeholder="Rôle" >
         </b-form-input></b-col>
-      <b-col v-else sm="3" class="text-sm-left"><label >Rôle: </label><span>{{ user.role }}</span></b-col>
+      <b-col v-else sm="6" class="text-sm-left"><span class="userdetails__textTitle">Rôle : </span><span>{{ user.role }}</span></b-col>
     </b-row>
   </b-container>
 
     <!-- Workplace input -->
     <b-container fluid>
-    <b-row class="my-1" >
-      <b-col v-if="show" sm="9" class="text-sm-left">
+    <b-row class="my-2" >
+      <b-col v-if="show" sm="6" class="text-sm-left">
         <label>Lieu(x) d'exercice: </label><br>
         <b-form-checkbox-group id="workPlace" name="workPlace" v-model="user.workPlace" :options="workPlace">
         </b-form-checkbox-group>
         </b-col>
-      <b-col v-else sm="3" class="text-sm-left"><label >Lieu(x) d'exercice: </label><span>{{ user.workPlace }}</span></b-col>
+      <b-col v-else sm="6" class="text-sm-left"><span class="userdetails__textTitle">Lieu(x) d'exercice: </span><span>{{ user.workPlace }}</span></b-col>
     </b-row>
   </b-container>
+
+  <!-- action buttons -->
   <b-container>
     <b-col sm="6" v-if="show">
       <group-button>
@@ -64,7 +66,7 @@
       </group-button>
     </b-col>
     <b-col sm="6" v-else>
-      <b-button variant="primary" @click="show=!show">Modifier le profil de cet utilisateur</b-button>
+      <b-button class="userdetails__button" variant="primary" @click="show=!show">Modifier le profil de cet utilisateur</b-button>
     </b-col>
   </b-container>  
   </b-form>

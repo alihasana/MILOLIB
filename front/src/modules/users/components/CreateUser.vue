@@ -4,7 +4,7 @@
       <h1>{{ title }}</h1>
       <!-- Create user Form -->
       <div>
-        <b-form @submit="createUser">
+        <b-form class="createUser" @submit="createUser">
         <!-- Name -->
           <b-form-group id="">
             <b-form-input id="" v-model="form.lName" required placeholder="Entrer le nom du nouvel utilisateur">

@@ -1,11 +1,19 @@
 <template>
-  <div class="login">
+    <b-container fluid>
+    <b-row>
+    <b-col cols="4">
    <form v-on:submit.prevent>
-    <div class="row login__row">
-      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-        <h1 class="heading-primary">{{ title }}</h1>
-        <hr>
-        <div class="form-group">
+    
+      <div class="login__row">
+        <!-- titles -->
+        <h1 class="login__headingPrimary">
+          <span style="color: black;">MILO</span>
+          <span style="color: #195DA8;">LIB</span>
+          </h1>
+        <h5 v-html="subTitle"></h5>
+        <!-- form inputs -->
+        <div class="login__formGroup">
+        <div>
           <label for="email">Email </label>
           <input v-model="user.email" id="email" class="form-control" name="email" type="text" placeholder="email@example.com" required>
         </div>
@@ -13,11 +21,19 @@
           <label for="password">Password</label>
           <input v-model="user.password" id="password" class="form-control" name="password" type="password" placeholder="Enter your password" required>
         </div>
-        <button class="btn btn-lg btn--white" v-on:click="signUp">Login</button>
+        </div>
+        <b-button variant="primary" v-on:click="signUp">Se connecter</b-button>
       </div>
-    </div>
+  
   </form>
-</div>
+        </b-col>
+        <b-col cols="8">
+        <b-img height="650"
+        :src="require('../../assets/images/milolib_blue_opacity_image.jpg')" />
+        </b-col>
+    </b-row>
+</b-container>
+
 </template>
 
 <script>
@@ -28,7 +44,7 @@ export default {
   name: "login",
   data() {
     return {
-      title: "Login",
+      subTitle: "Entrez vos identifiants pour vous connecter au back-office", 
       user: {
         email: "",
         password: ""
