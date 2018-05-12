@@ -1,8 +1,8 @@
 <template>
-  <div class="register">
+  <div>
    <form v-on:submit.prevent>
-    <div class="row login__row">
-      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+    <div class="row register__row">
+      <div class="">
         <h1 class="heading-primary">{{ title }}</h1>
         <hr>
         <div class="form-group">
@@ -80,12 +80,14 @@
           <!-- <div>State: <strong>{{status3}}</strong></div> -->
         </div>
         <br>
-        <button class="btn btn-lg btn--white" v-on:click="signIn">Register</button>
+        <b-button variant="primary" v-on:click="signIn">Créer un nouveau compte</b-button>
       </div>
     </div>
   </form>
   <br>
-  <button class="btn btn-lg btn--white" v-on:click="goToLogin">Retourner à l'authentification</button>
+  <b-link class="login__blink" to="/">
+    Se connecter à un compte existant
+  </b-link>
 </div>
 </template>
 
@@ -97,7 +99,7 @@ export default {
   name: "register",
   data() {
     return {
-      title: "Register",
+      title: "Créer un nouveau compte",
       descolarise: 'false',
       infAge: 'false',
       status3: 'false',
@@ -123,9 +125,9 @@ export default {
     };
   },
   methods: {
-    goToLogin() {
-      this.$router.push("/");
-    },
+    // goToLogin() {
+    //   this.$router.push("/");
+    // },
     signIn() {
       // console.log(user.password);
       // console.log(user.confirmPassword);

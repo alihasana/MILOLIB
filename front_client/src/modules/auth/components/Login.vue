@@ -26,7 +26,7 @@
           <input v-model="user.password" id="password" class="form-control" name="password" type="password" placeholder="Enter your password" required>
         </div>
         </div>
-        <b-button variant="primary" v-on:click="signUp">Login</b-button>
+        <b-button variant="primary" v-on:click="signUp">Se connecter</b-button>
       </div>
     </div>
   </form>
