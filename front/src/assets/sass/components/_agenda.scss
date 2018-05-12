@@ -1,0 +1,572 @@
+/*******Agenda structure*******/
+
+.agenda{
+	display: flex;
+  	flex-flow: row wrap;
+  	width: 100%;
+  	border-left: 1px solid #d4d4d4;
+  	border-right: 1px solid #d4d4d4;
+}
+
+.agendaHeader{
+	background-color: $color-one;
+	width: 100%;
+}
+
+.agendaBodyLeftPanel{
+	flex-direction:column;
+	width: 7%;
+	margin-top: 5vw;
+}
+
+.agendaBodyDays{
+	display: flex;
+	flex-direction:row;
+	text-align: center;
+	height: 5vw;
+}
+
+.agendaBody{
+	/*flex-direction:row;*/
+	width: 93%;
+}
+
+.agendaBodySlots{
+	display: flex;
+	flex-direction:row;
+	text-align: center;
+}
+
+/*******Agenda header *******/
+
+.nav{
+	display: flex;
+	flex-direction:row;
+	justify-content: space-between;
+}
+
+.navNavigate {
+	float: right;
+	margin-right: 50px;
+	/*background-color: yellow;
+	padding: 5px;*/
+}
+
+.navDisplay {
+	float: left;
+	/*background-color: pink;
+	padding: 5px;*/
+}
+
+.navNavigate__btn{
+	background-color: transparent;
+	border: none;
+	// border: red;
+	height: 50px;
+}
+
+.navNavigate__btn:visited {
+	text-transform: none;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	// display: inline-block;
+	transition: none;
+	// position: relative;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+.navNavigate__btn:hover {
+	text-transform: none;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	// display: inline-block;
+	transition: none;
+	// position: relative;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+.navNavigate__btn:active {
+	text-transform: none;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	// display: inline-block;
+	transition: none;
+	// position: relative;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+.navNavigate__btn:focus {
+	text-transform: none;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	// display: inline-block;
+	transition: none;
+	// position: relative;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+.navNavigate__btn:selected {
+	text-transform: none;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	// display: inline-block;
+	transition: none;
+	// position: relative;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+.weekNumber{
+	font-weight: bold;
+	font-size: 14px;
+	color: white;
+}
+
+
+/*******Agenda left hours *******/
+
+.hour{
+	float: left;
+	width: 100%;
+	text-align: middle;
+}
+
+.hourli{
+	list-style:none;
+	padding-top: 6px;
+	height: 22px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    vertical-align: center;
+}
+
+
+/*******Agenda top days *******/
+
+.day{
+	width:12%;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+
+.dayName{
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 0px;
+	margin-top: 8px;
+}
+
+.dayNumber{
+	font-weight: bold;
+	font-size: 11px;
+	margin-bottom: 0px;
+}
+
+/*******Agenda button slots *******/
+
+
+.buttonSlots{
+	width:12%;
+	padding: 0px;
+	margin:0px;
+	/*height: 800px;*/
+}
+
+.slotUl{
+	list-style:none;
+	margin: 0;
+}
+
+.slotLi {
+	margin: 0;
+	width: 100%;
+	padding: 0;
+
+}
+
+.slotLi__button_id{
+	float: left;
+	/*text-align: left;*/
+	vertical-align: top;
+}
+
+.aptinfo{
+	font-size: 8px;
+	font-weight: bold;
+	float: right;
+	/*vertical-align: top;*/
+}
+
+#type{
+	font-weight: normal;
+}
+
+
+.A{
+	border-top: 1px dotted #e5e5e5;
+	border-bottom:1px dotted #e5e5e5;
+	border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	background-color: white;
+	color:grey;
+  	border-radius:0;
+  	width: 100%;
+    /*height: 8px;*/
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 6px;
+    text-align: right;
+	vertical-align: top;
+}
+
+.N{
+	border-top: 1px dotted #e5e5e5;
+	border-bottom:1px dotted #e5e5e5;
+	border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	background-color: #BEBEBE;
+	color:#888888;
+  	border-radius:0;
+  	width: 100%;
+    /*height: 8px;*/
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+    text-align: right;
+	vertical-align: top;
+
+}
+
+/*.B{
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
+	/*border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	background-color: #9900FF;
+  	border-radius:0;
+  	width: 100%;*/
+   /* height: 8px;*/
+   /* margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}*/
+
+.aB{
+	@include colorAptType ($apt-color)
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
+	// border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	// background-color: #9900FF;
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+    height: 31.99px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}
+
+.aB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.aB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.aB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
+
+.bB{
+	@include colorAptType ($apt-color)
+	// border-top: 1px dotted #e5e5e5;
+	// border-bottom:1px dotted #e5e5e5;
+	// border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	// background-color: #9900FF;
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+   	height: 63.98px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}
+
+.bB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.bB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.bB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
+.cB{
+	@include colorAptType ($apt-color)
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
+	// border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	// background-color: #9900FF;
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+   	height: 95.97px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}
+
+.cB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.cB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.cB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
+
+.dB{
+	@include colorAptType ($apt-color)
+	// border-top: 1px dotted #9900FF; //a mettre en variable
+	// border-bottom:1px dotted #9900FF; //a mettre en variable
+	// border-left: 12px solid #9900FF; //a mettre en variable
+    border-right: 1px solid #d4d4d4;
+	/*background-color: #9900FF;*/
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+   	height: 127.96px; // a mettre en variable. appeler le mixin
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+    // color: #9900FF; //a mettre en variable
+}
+
+.dB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.dB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.dB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
+.eB{
+	@include colorAptType ($apt-color)
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
+	// border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	// background-color: #9900FF;
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+   	height: 159.95px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}
+
+.eB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.eB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.eB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
+
+
+.fB{
+	@include colorAptType ($apt-color)
+	/*border-top: 1px dotted #e5e5e5;*/
+	/*border-bottom:1px dotted #e5e5e5;*/
+	// border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+	// background-color: #9900FF;
+	background-color: $apt-color-light;
+  	border-radius:0;
+  	width: 100%;
+   	height: 191.94px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-size: 8px;
+}
+
+.fB:visited {
+text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.fB:hover {
+	text-transform: uppercase;
+text-decoration: none;
+// padding: 1.5rem 4rem;
+display: inline-block;
+transition: all 0.2s;
+// position: relative;
+background-color: $apt-color;
+border-color: $apt-color-light;
+color: $apt-color-light;
+}
+
+.fB:active {
+	text-transform: uppercase;
+	text-decoration: none;
+	// padding: 1.5rem 4rem;
+	display: inline-block;
+	transition: all 0.2s;
+	// position: relative;
+	background-color: $apt-color;
+	border-color: $apt-color-light;
+	color: $apt-color-light;
+}
