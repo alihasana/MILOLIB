@@ -117,27 +117,12 @@ export default {
     }
   },
   mounted(){
-    // console.log('je monte le component');
-    // console.log('this.getDaysRange at mounted', this.getDaysRange);
-    // console.log('this.calendarSlots at mounted', this.calendarSlots);
-    // console.log('this.selectedApt at created', this.selectedApt.duration);
-    // console.log('calculateSelectedAptTypeDuration at created', this.calculateSelectedAptTypeDuration);
-    // console.log('this.duration at created', this.duration);
     this.generateHourList(this.calculateSelectedAptTypeDuration);
     this.displayCalendar();
   },
   methods: {
     displayCalendar: async function(){
-      // this.createButtonId(this.getDaysRange)
-      // .then(function () {
-      //   this.updateButtonId(this.calendarSlots, this.buttonIdList)
-      //   })
-      // .catch(function (error) { 
-      //   console.log(error)
-      //   })
       await this.createButtonId(this.getDaysRange)
-      //this is not ideal but at least it works for demo
-      // setTimeout(this.updateButtonId(this.calendarSlots, this.buttonIdList), 5000);
       await this.updateButtonId(this.calendarSlots, this.buttonIdList)
     },
     getCurrentDayPlus2month: function(now){
@@ -197,7 +182,7 @@ export default {
           this.buttonIdList.push(button);
         }
       }
-      console.log('buttonIdList:', this.buttonIdList);
+      // console.log('buttonIdList:', this.buttonIdList);
       return this.buttonIdList;
       }
       else{
@@ -205,9 +190,6 @@ export default {
       }
     },
     updateButtonId: function(slots, idList){
-       // console.log('jpl updateButtonId');
-       // console.log('slots:', slots);
-       // console.log('idList: ', idList);
       //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
       for (let i=0; i<slots.length; i++){
         for (let j=0; j<idList.length; j++){
@@ -226,11 +208,10 @@ export default {
         }
       }
       console.log('les boutons ont bien été updatés avec les slots');
-      console.log('buttonIdList:', this.buttonIdList);
+      // console.log('buttonIdList:', this.buttonIdList);
       return this.buttonIdList;
     },
     filterButtonIdToDisplay: function(timeRange, btnIdList){
-      // console.log('jpl filterButtonIdToDisplay');
       for (let i=0; i<timeRange.length; i++){
         let trday
         trday = moment(timeRange[i]).format('YYYY-MM-DD').toString();
@@ -257,7 +238,7 @@ export default {
         let postBody = {
           calendarId:this.apt.calendarId,
           slotsId: _.pluck(this.apt.allSlots, '_id'),
-          appointmentType:this.apt.appointmentType.name
+          appointmentType:this.apt.appointmentType
           //voir avec Luke si OK ou s'il veut tout l'objet
         };
         console.log('postBody:', postBody);
@@ -282,7 +263,6 @@ export default {
                   });
               });
             this.apt.allSlots = [];
-        //voir avec Anas que ces fonctions s'executent bien l'une quand l'autre est finie, car le résultat de la deuxième dépend de la premiere
       }
     },
     getmatchingInitalSlot: function(btn, slots){
