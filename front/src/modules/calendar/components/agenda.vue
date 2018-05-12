@@ -5,9 +5,9 @@
 				<b-navbar-nav>
 					<b-nav-form class="nav">
 						<li class="navDisplay">
-							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
-							<b-button variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
-							<b-button variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
+							<b-button v-b-popover.hover="'Pour plus tard: ici on pourrait accéder à la vue d une journée'" variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">today</i></b-button>
+							<b-button v-b-popover.hover="'Pour plus tard: ici on pourrait accéder à la vue d une semaine'" variant="primary" type="submit" class="navNavigate__btn" ><i class="material-icons">view_week</i></b-button>
+							<b-button v-b-popover.hover="'Pour plus tard: ici on pourrait accéder à la vue d un mois'" variant="primary" type="submit" class="navNavigate__btn"><i class="material-icons">view_module</i></b-button>
 							<!-- <b-button v-b-modal.TestmodalSeeAptDetails>test modal</b-button> -->
 						</li>
 						<li class="navNavigate">
@@ -35,8 +35,9 @@
 						<ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
 							<li class="slotLi">
 								<b-button v-on:click="getMatchingSlot(button,getSlots)" v-bind:class="classId[index]" v-bind:id="button" >
-									<span class="slotLi__button_id">{{button.id | displayButtonId}}</span>
-									<span>{{button.apt.appointmentId}}</span>
+									<li class="slotLi__button_id">{{button.id | displayButtonId}}</li>
+									<li class="aptinfo">{{button.aptFullName}}</li>
+									<li id="type" class="aptinfo">{{button.aptType}}</li>
 									<!-- <span>{{button.apt.fullName}}</span> -->
 									
 									<!-- <span>{{button.apt}}</span> -->
@@ -175,7 +176,8 @@ export default {
       		day:'',
       		weekNumber:'',
       		beginDisplay:'',
-      		buttonId:'',
+      		// buttonId:'',
+      		button:'',
       		buttonIdList:[],
       		filteredButtonIdList: [],
       		btnIdListToMerge: [],
@@ -273,7 +275,9 @@ export default {
 					let button = {
 						id: id,
 						class:'N',
-						apt:''
+						// apt:'',
+						aptFullName:'',
+						aptType:''
 					}
 					this.buttonIdList.push(button);
 				}
@@ -294,7 +298,18 @@ export default {
 						if(slots[i].available === false){
 							idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
 							idList[j].class = 'B';
-							idList[j].apt = slots[i].appointment;
+							//ça c'etait avant et ça marche.
+							// idList[j].apt = slots[i].appointment;
+							idList[j].aptFullName = slots[i].appointment.fullName;
+							idList[j].aptType = slots[i].appointment.appointmentId.appointmentType.name
+							// console.log('idList[j].apt:', idList[j].apt);
+
+
+
+							//ça c'est OK
+							// console.log('idList[j].apt.appointmentId.appointmentType.name:', idList[j].apt.appointmentId.appointmentType.name);
+							// console.log('idList[j].apt.fullName:', idList[j].apt.fullName);
+							//
 						}
 					}
 				}
@@ -687,12 +702,26 @@ export default {
 	margin: 0;
 	width: 100%;
 	padding: 0;
+
 }
 
 .slotLi__button_id{
-	text-align: right;
+	float: left;
+	/*text-align: left;*/
 	vertical-align: top;
 }
+
+.aptinfo{
+	font-size: 8px;
+	font-weight: bold;
+	float: right;
+	/*vertical-align: top;*/
+}
+
+#type{
+	font-weight: normal;
+}
+
 
 .A{
 	border-top: 1px dotted #e5e5e5;
