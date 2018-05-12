@@ -10,38 +10,33 @@
             <!-- IL faudrait affichcer le role lors du GET sans l'inclure aprés dans la requéte PUT -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.role" placeholder="Rôle" v-if="show" readonly></b-form-input>
-              <div v-else>RÔLE : {{ profile.role }} </div>
+              <div v-else> <span class="profileUser__textTitle"> RÔLE : </span> {{ profile.role }} 
+                </div>
             </b-form-group>
 
              <!-- Workplace -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.workPlace" placeholder="Rôle" v-if="show" readonly></b-form-input>
-              <div v-else>LIEU(X) D'EXERCICE : {{ profile.workPlace }} </div>
+              <div v-else> <span class="profileUser__textTitle"> LIEU(X) D'EXERCICE : </span> {{ profile.workPlace }} </div>
             </b-form-group>
 
             <!-- Name -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.lastName" placeholder="Nom" v-if="show"></b-form-input>
-              <div v-else>NOM : {{ profile.lastName }}</div>
+              <div v-else> <span class="profileUser__textTitle"> NOM : </span> {{ profile.lastName }}</div>
             </b-form-group>
 
             <!-- Firstname -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.firstName" placeholder="Prénom" v-if="show"></b-form-input>
-              <div v-else>PRENOM : {{ profile.firstName }}</div>
+              <div v-else> <span class="profileUser__textTitle"> PRENOM : </span> {{ profile.firstName }}</div>
             </b-form-group>
 
             <!-- E-mail -->
             <b-form-group>
               <b-form-input type="text" v-model="profile.email" placeholder="E-mail" v-if="show"></b-form-input>
-              <div v-else>E-MAIL: {{ profile.email }}</div>
+              <div v-else> <span class="profileUser__textTitle"> E-MAIL : </span> {{ profile.email }}</div>
             </b-form-group>
-            
-            <!-- Phone -->
-            <!-- <b-form-group>
-            <b-form-input type="text" v-model="profile.phone" placeholder="Numéro de téléphone" v-if="show"></b-form-input>
-            <div v-else>NUMERO DE TELEPHONE: {{ profile.phone }}</div>
-          </b-form-group> -->
 
         </div>
         <!-- User change password -->
@@ -62,13 +57,10 @@
         </div>
         <div v-else></div>
         <!-- User's actions buttons -->
-        <div class="class row">
+        <div class="class row profileUser__button">
           <b-button variant="success" type="submit" v-if="show">Enregistrer les modifications</b-button>
           <b-button variant="primary" @click="show=!show" v-else>Modifier votre profil</b-button>
-
         </div>
-
-
       </b-form>
     </div>
   </div>
@@ -124,9 +116,9 @@ export default {
             swal({
                   type: "success",
                   title: "Modification du profile: ",
-                  text: "Les modifications demandées ont bien été executées"
+                  text: "Votre profil a été modifié"
                   });
-            this.$router.push({name: 'users'});
+                  setTimeout( () => location.reload(), 1500);
             })
           .catch(
             error => {
@@ -146,6 +138,4 @@ export default {
   </script>
 
   <style scoped>
-  /* import 'bootstrap/dist/css/bootstrap.css';
-  import 'bootstrap-vue/dist/bootstrap-vue.css'; */
   </style>
