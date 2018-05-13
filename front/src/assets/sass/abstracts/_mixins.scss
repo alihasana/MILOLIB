@@ -1,0 +1,42 @@
+// @mixin btnHeight ($apt-duration){
+
+// 	$apt-durationN : @function($apt-duration){
+// 	@if (/^(\-|\+)?([0-9]+|Infinity)$/.test($apt-duration))
+//     @return Number($apt-duration);
+//   @return NaN;}
+  
+// }
+
+// @for (let $n=1; $n<40 ; $n++)
+// 	@if ( $apt-durationN == nb*15 ){ 
+// 	@return $btn-height : $apt-duration*nb;
+// }
+
+//example de boucle
+// @for $i from 1 through 10 {
+    // .item-#{i} {
+//         flex: $i 1 auto;
+//     }
+// }
+
+// @function getColorValueForApt ($apt-type){
+// 		@if $apt-type == 'Premier RDV individuel'{ $apt-color : $color-one }
+// 	@if $apt-type == 'Formation'{ $apt-color : $color-two }
+// 	@if $apt-type == 'Projet professionnel'{ $apt-color : $color-four }
+// 	@if $apt-type == 'Aide Financiere'{ $apt-color : $color-five }
+// 	@if $apt-type == 'Apprentissage'{ $apt-color : $color-six}
+// 	@if $apt-type == 'Emploi'{ $apt-color : #9900FF}
+// 	@if $apt-type == 'Autre'{ $apt-color : $color-three}
+// 	@return $apt-color;
+// }
+
+
+@mixin colorAptType ($apt-color){
+
+	border-top: 1px dotted $apt-color; 
+	border-bottom:1px dotted $apt-color; 
+	border-left: 12px solid $apt-color; 
+	color: $apt-color; 
+}
+
+

@@ -38,9 +38,6 @@
 									<li class="slotLi__button_id">{{button.id | displayButtonId}}</li>
 									<li class="aptinfo">{{button.aptFullName}}</li>
 									<li id="type" class="aptinfo">{{button.aptType}}</li>
-									<!-- <span>{{button.apt.fullName}}</span> -->
-									
-									<!-- <span>{{button.apt}}</span> -->
 								</b-button>
 							</li>
 						</ul>
@@ -257,7 +254,7 @@ export default {
 					    swal({
 			            type: "info",
 			            title: "Affichage de votre agenda",
-			            text: "Merci de paramétrer vos disponibilités et types de RDV"
+			            text: "Votre Agenda n'a pas pu se mettre à jour. Si vous y accédez pour la première fois, merci de paramétrer vos disponibilités et types de RDV"
 			          	});
 					});
 		},
@@ -277,7 +274,9 @@ export default {
 						class:'N',
 						// apt:'',
 						aptFullName:'',
-						aptType:''
+						aptType:'',
+						aptId:'',
+						aptDuration:''
 					}
 					this.buttonIdList.push(button);
 				}
@@ -297,37 +296,41 @@ export default {
 						}
 						if(slots[i].available === false){
 							idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
-							idList[j].class = 'B';
-							//ça c'etait avant et ça marche.
-							// idList[j].apt = slots[i].appointment;
+							idList[j].aptId = slots[i].appointment.appointmentId._id;
+							idList[j].aptDuration = slots[i].appointment.appointmentId.appointmentType.duration;
 							idList[j].aptFullName = slots[i].appointment.fullName;
-							idList[j].aptType = slots[i].appointment.appointmentId.appointmentType.name
-							// console.log('idList[j].apt:', idList[j].apt);
-
-
-
-							//ça c'est OK
-							// console.log('idList[j].apt.appointmentId.appointmentType.name:', idList[j].apt.appointmentId.appointmentType.name);
-							// console.log('idList[j].apt.fullName:', idList[j].apt.fullName);
-							//
+							idList[j].aptType = slots[i].appointment.appointmentId.appointmentType.name;
+							if (idList[j].aptDuration == '15'){idList[j].class = 'a' +'B'}
+							if (idList[j].aptDuration == '30'){idList[j].class = 'b' +'B'}
+							if (idList[j].aptDuration == '45'){idList[j].class = 'c' +'B'}
+							if (idList[j].aptDuration == '60'){idList[j].class = 'd' +'B'}
+							if (idList[j].aptDuration == '75'){idList[j].class = 'e' +'B'}
+							if (idList[j].aptDuration == '90'){idList[j].class = 'f' +'B'}
 						}
 					}
 				}
 			}
 			console.log('les boutons ont bien été updatés avec les slots');
 			console.log('buttonIdList:', this.buttonIdList);
+			this.cleanButtonId(this.buttonIdList);
+			this.cleanButtonId(this.buttonIdList);
 			return this.buttonIdList;
 		},
-		// mergeButtonId:function(btnIdListToCheck){
-		// 	for (let i=0; i<btnIdListToCheck.length; i++){
-		// 		if (btnIdListToCheck[i].apt = btnIdListToCheck[i+1].apt){
-		// 			this.btnIdListToMerge = [];
-		// 			this.btnIdListToMerge.push(btnIdListToCheck[i]);
-		// 			this.btnIdListToMerge.push(btnIdListToCheck[i+1]);
-		// 			console.log('les buttonsID suivant ont le même RDV: ',this.btnIdListToMerge);
-		// 		}
-		// 	}
-		// },
+		cleanButtonId:function(btnIdListToCheck){
+			for (let i=0; i<btnIdListToCheck.length; i++){
+				if(btnIdListToCheck[i].id.charAt(btnIdListToCheck[i].id.length - 1) == 'B'){
+					if (btnIdListToCheck[i].aptId == btnIdListToCheck[i+1].aptId){
+					// on va lui dire d'enlever le i+1//
+					//il n'en  restera que 2 identiques, le premier et le dernier.
+					// on relancera la fonction pour supprimer le dernier.
+					// Oui je sais c'est dégueulasse comme code :)
+					//pour l'urgence ça ira bien
+					btnIdListToCheck.splice(i+1,1);
+					console.log('btnIdListToCheck:', btnIdListToCheck)
+					}
+				}
+			}
+		},
 		filterButtonIdToDisplay: function(timeRange, btnIdList){
 			for (let i=0; i<timeRange.length; i++){
 				let trday
@@ -393,8 +396,8 @@ export default {
 							this.displayedModal = this.$refs.modalSeeAptDetails;
 							this.getApt();
 							//si le bouton est en B, je propose:
-							//- voir les détails du RDV : A finaliser car je ne récupère pas les bonnes infos et il faut faire un affichage qui permette la modification
-							//- Annuler le RDV: A finalise, car pas de route
+							//- voir les détails du RDV : OK
+							//- Annuler le RDV: A finaliser
 							//- Confirmer la présence du RDV et l'archiver?
 							//- Modifier le RDV
 						}
@@ -565,210 +568,6 @@ export default {
 </script>
 
 <style scoped>
-/*******Agenda structure*******/
-
-.agenda{
-	display: flex;
-  	flex-flow: row wrap;
-  	width: 100%;
-  	border-left: 1px solid #d4d4d4;
-  	border-right: 1px solid #d4d4d4;
-}
-
-.agendaHeader{
-	background-color: #007bff;
-	width: 100%;
-}
-
-.agendaBodyLeftPanel{
-	flex-direction:column;
-	width: 7%;
-	margin-top: 5vw;
-}
-
-.agendaBodyDays{
-	display: flex;
-	flex-direction:row;
-	text-align: center;
-	height: 5vw;
-}
-
-.agendaBody{
-	/*flex-direction:row;*/
-	width: 93%;
-}
-
-.agendaBodySlots{
-	display: flex;
-	flex-direction:row;
-	text-align: center;
-}
-
-/*******Agenda header *******/
-
-.nav{
-	display: flex;
-	flex-direction:row;
-	justify-content: space-between;
-}
-
-.navNavigate {
-	float: right;
-	margin-right: 50px;
-	/*background-color: yellow;
-	padding: 5px;*/
-}
-
-.navDisplay {
-	float: left;
-	/*background-color: pink;
-	padding: 5px;*/
-}
-
-.navNavigate__btn{
-	background: transparent;
-	border: red;
-	height: 50px;
-}
-
-/*.navNavigate__btn:hover{
-	background: transparent;
-	border: none;
-	height: 40px;
-}*/
-
-.weekNumber{
-	font-weight: bold;
-	font-size: 14px;
-	color: white;
-}
 
 
-/*******Agenda left hours *******/
-
-.hour{
-	float: left;
-	width: 100%;
-	text-align: middle;
-}
-
-.hourli{
-	list-style:none;
-	padding-top: 6px;
-	height: 22px;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    vertical-align: center;
-}
-
-
-/*******Agenda top days *******/
-
-.day{
-	width:12%;
-	padding: 0px;
-	margin-bottom: 0px;
-}
-
-.dayName{
-	font-weight: bold;
-	font-size: 14px;
-	margin-bottom: 0px;
-	margin-top: 8px;
-}
-
-.dayNumber{
-	font-weight: bold;
-	font-size: 11px;
-	margin-bottom: 0px;
-}
-
-/*******Agenda button slots *******/
-
-
-.buttonSlots{
-	width:12%;
-	padding: 0px;
-	margin:0px;
-	/*height: 800px;*/
-}
-
-.slotUl{
-	list-style:none;
-	margin: 0;
-}
-
-.slotLi {
-	margin: 0;
-	width: 100%;
-	padding: 0;
-
-}
-
-.slotLi__button_id{
-	float: left;
-	/*text-align: left;*/
-	vertical-align: top;
-}
-
-.aptinfo{
-	font-size: 8px;
-	font-weight: bold;
-	float: right;
-	/*vertical-align: top;*/
-}
-
-#type{
-	font-weight: normal;
-}
-
-
-.A{
-	border-top: 1px dotted #e5e5e5;
-	border-bottom:1px dotted #e5e5e5;
-	border-left: 1px solid #d4d4d4;
-    border-right: 1px solid #d4d4d4;
-	background-color: white;
-	color:grey;
-  	border-radius:0;
-  	width: 100%;
-    /*height: 8px;*/
-    margin-bottom: 0px;
-    margin-top: 0px;
-    font-size: 6px;
-    text-align: right;
-	vertical-align: top;
-}
-
-.N{
-	border-top: 1px dotted #e5e5e5;
-	border-bottom:1px dotted #e5e5e5;
-	border-left: 1px solid #d4d4d4;
-    border-right: 1px solid #d4d4d4;
-	background-color: #BEBEBE;
-	color:#888888;
-  	border-radius:0;
-  	width: 100%;
-    /*height: 8px;*/
-    margin-bottom: 0px;
-    margin-top: 0px;
-    font-size: 8px;
-    text-align: right;
-	vertical-align: top;
-
-}
-
-.B{
-	/*border-top: 1px dotted #e5e5e5;*/
-	/*border-bottom:1px dotted #e5e5e5;*/
-	border-left: 1px solid #d4d4d4;
-    border-right: 1px solid #d4d4d4;
-	background-color: #9900FF;
-  	border-radius:0;
-  	width: 100%;
-   /* height: 8px;*/
-    margin-bottom: 0px;
-    margin-top: 0px;
-    font-size: 8px;
-}
 </style>

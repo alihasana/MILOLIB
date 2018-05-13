@@ -2,12 +2,18 @@
 $color-primary: #FFF;
 $color-secondary: #FAFAFA;
 
-$color-one: #00AEE9;
-$color-two: #195DA8;
-$color-three: #ffc107;
-$color-four: #8bc34a;
-$color-five: #e91e63;
-$color-six: #607d8b;
+$color-one: #00AEE9; //bleu turquoise
+$color-one-light: #e9f9ff;
+$color-two: #195DA8; //bleu roy
+$color-two-light:#c9dff7;
+$color-three: #ffc107; //jaune
+$color-three-light:#fff4d3;
+$color-four: #8bc34a; //vert
+$color-four-light:#d5e9bd;
+$color-five: #e91e63; //rose
+$color-five-light:#fbd8e4;
+$color-six: #607d8b; // bleu gris
+$color-six-light: #d5dee2;
 
 $color-grey-light-1: #f7f7f7;
 $color-grey-light-2: #eee;
@@ -27,3 +33,10 @@ $grid-width: 114rem;
 $gutter-vertical: 8rem;
 $gutter-vertical-small: 6rem;
 $gutter-horizontal: 6rem;
+
+//CALENDAR
+// $btn-height: 31.99px;
+// $apt-duration:'15';
+$apt-color: $color-one;
+$apt-color-light : $color-white;
+// $apt-durationN:'';
