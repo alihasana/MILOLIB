@@ -16,7 +16,7 @@
 
              <!-- Workplace -->
             <b-form-group>
-              <b-form-input type="text" v-model="profile.workPlace" placeholder="Rôle" v-if="show" readonly></b-form-input>
+              <b-form-input type="text" v-model="profile.workPlace" placeholder="Lieu(x) d'exercice" v-if="show" readonly></b-form-input>
               <div v-else> <span class="profileUser__textTitle"> LIEU(X) D'EXERCICE : </span> {{ profile.workPlace }} </div>
             </b-form-group>
 
@@ -52,15 +52,22 @@
           </b-form-group>
           <!--Confirm new password-->
           <b-form-group>
-            <b-form-input type="password" v-model="profile.confirmPassword" placeholder="Confirmer le nouveau de passe"></b-form-input>
+            <b-form-input type="password" v-model="profile.confirmNewPassword" placeholder="Confirmer le nouveau de passe"></b-form-input>
           </b-form-group>
         </div>
         <div v-else></div>
         <!-- User's actions buttons -->
-        <div class="class row profileUser__button">
-          <b-button variant="success" type="submit" v-if="show">Enregistrer les modifications</b-button>
-          <b-button variant="primary" @click="show=!show" v-else>Modifier votre profil</b-button>
-        </div>
+        <b-container>
+        <b-col sm="6" class="class row profileUser__button" v-if="show">
+          <group-button>
+          <b-button variant="success" type="submit">Enregistrer les modifications</b-button>
+          <b-button variant="" @click="cancel">Annuler</b-button>
+          </group-button>
+        </b-col>
+        <b-col sm="6" v-else>
+          <b-button class="userdetails__button" variant="primary" @click="show=!show">Modifier votre profil</b-button>
+        </b-col>
+  </b-container>  
       </b-form>
     </div>
   </div>
@@ -86,7 +93,7 @@ export default {
             firstName: '', 
             email: '', 
             password: '', 
-            newPassword: '', 
+            oldPassword: '', 
             confirmNewPassword: '', 
         }, 
         show: false
@@ -106,13 +113,10 @@ export default {
     },
     methods: {
       updateUserProfile() {
-        // check new and confirm new password here
-        if (this.profile.newPassword === this.profile.confirmNewPassword) {
-          // send only new and old
-          console.log('pswd sent data: ', this.profile);
-          http.put('/profile', this.profile)
+        let profile = this.profile; 
+          http.put('/profile', profile)
           .then(res => {
-            console.log('res', res);
+            console.log('res', res.data);
             swal({
                   type: "success",
                   title: "Modification du profile: ",
@@ -129,7 +133,10 @@ export default {
                   text:error.response.data.message
                   });
             })
-        }
+        
+      },
+      cancel() {
+        location.reload();
       }
     }
 

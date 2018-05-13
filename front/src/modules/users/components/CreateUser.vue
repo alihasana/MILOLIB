@@ -35,9 +35,15 @@
             <b-form-input v-model="form.userPassword" placeholder="Entrer un mot de passe"></b-form-input>
           </b-form-group>
           <!-- Admin's actions buttons -->
-          <b-button-group>
-            <b-button type="submit" variant="success">Enregistrer</b-button>
-          </b-button-group>
+          <b-container>
+          <b-col sm="6" class="class row profileUser__button" >
+          <group-button>
+          <b-button variant="success" type="submit">Créer un nouvel utilisateur</b-button>
+          <b-button variant="" @click="cancel">Annuler</b-button>
+          </group-button>
+          </b-col>
+          </b-container>  
+
         </b-form>
       </div>
     </div>
@@ -110,6 +116,9 @@ export default {
         console.log("Error", error)
       })
     },
+    cancel() {
+      this.$router.push('/users');
+      }
   }
 };
 </script>

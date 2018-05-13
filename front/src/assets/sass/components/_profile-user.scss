@@ -4,7 +4,7 @@
 	// margin: 8vh auto;
 	// // background-color: $color-primary;
 	// // box-shadow: 0 1.5rem 4rem rgba($color-black, 0.5);
-	padding: 7rem;
+	padding: 2rem;
 	// transition: transform 1s;
 
 	// &__row {
@@ -16,11 +16,15 @@
 	&__form {
 		margin: auto;
 		width: 50vw;
-		margin-top: 3vw;
+		margin-top: 1vw;
 	}
 
 	&__textTitle {
 		font-weight: bolder; 
+	}
+
+	&__passwordForm {
+		padding-top: 4rem; 
 	}
 
 	// &__button {
