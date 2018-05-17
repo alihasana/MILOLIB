@@ -114,7 +114,7 @@ router.post('/appointment', (req, res) => {
     return res.status(400).json({ success: false, message: 'Bad request' })
   }
 
-  Client.findOne({ email: req.body.mailClient }, (err, client) => {
+  Client.findOne({ email: helper.caseInsensitive(req.body.mailClient) }, (err, client) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!client) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
 

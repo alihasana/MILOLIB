@@ -3,7 +3,8 @@ var helper = {
     return { $regex: new RegExp('^' + word + '$', 'i') }
   },
 
-  regexEmail: new RegExp(/^[A-Z0-9.+]+@[A-Z0-9.+]+$/, 'i'), // C'est de la merde cette RegEx
+  regexEmail: new RegExp(/^[A-Z0-9.!#$%&'*+\-/=?^_`{|}~]+@[A-Z0-9.!#$%&'*+\-/=?^_`{|}~]+$/, 'i'), // La Regex "parfaite" ?
+  // regexEmail: new RegExp(/^[A-Z0-9.+]+@[A-Z0-9.+]+$/, 'i'), // C'est de la merde cette RegEx
   // ".+@.+" aussi c'est naze, il y a une erreur "Invalid regular expression" avec certains characters speciaux qui fait crasher l'app
   
   beforeSend: (data) => {

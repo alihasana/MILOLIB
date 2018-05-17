@@ -9,10 +9,12 @@ export default {
 
   checkSlotsConflict: (arr, val) => {
     return arr.some(function (arrElement) {
-      if (val === arrElement.start) {
+      if (val.start === arrElement.start) {
         return arrElement.available === false
+        // TODO : test de suprimmer 'val', puis test de suprimmer 'req.body[key]'
+        // TODO : si ça ne fonctionne pas, tester une boucle suplementaire findIndex()
+        // Lien utile : https://stackoverflow.com/questions/10024866/remove-object-from-array-using-javascript
       }
-      // return val === arrElement.start
     })
   },
 
@@ -37,7 +39,7 @@ export default {
     // Verify slots conflicts 
 
     for (let key of Object.keys(req.body)) {
-      if (controller.checkSlotsConflict(calendar.slots, req.body[key].start)) {
+      if (controller.checkSlotsConflict(calendar.slots, req.body[key])) {
         return res.status(400).json({ success: false, message: 'Your slots request conflict with slots already present in the calendar' })
       }
     }

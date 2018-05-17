@@ -49,6 +49,7 @@ router.get('/userCalendar/:userCalendar/:userId', (req, res) => {
   Calendar.findOne({ userId: userId })
     .populate('userId')
     .exec((err, calendar) => {
+      if (!calendar) return res.status(404).json({ success: false, message: 'Calendar not found' })
       let slots = calendar.slots; 
       console.log('calendar', slots)
       if (!slots || !userCalendar) {
@@ -112,7 +113,7 @@ router.post('/:userId/appointment', (req, res) => {
   if (res.locals.user.role != 'Chargé d\'accueil') return res.status(403).json({ succes: false, message: 'Forbidden.' })
   if (!ObjectId.isValid(req.params.userId)) return res.status(400).json({ success: false, message: 'Invalid ID' })  
 
-  Client.findOne({ email: req.body.mailClient }, (err, client) => {
+  Client.findOne({ email: helper.caseInsensitive(req.body.mailClient) }, (err, client) => {
     if (err) return res.status(500).json({ success: false, message: err.message })
     else if (!client) return res.status(404).json({ success: false, message: 'Bad email, client not found' })
 
